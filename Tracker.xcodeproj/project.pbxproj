@@ -13,6 +13,7 @@
 		9425F0902E69B592009A884A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9425F0842E69B592009A884A /* Assets.xcassets */; };
 		9425F0922E69B592009A884A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9425F0872E69B592009A884A /* LaunchScreen.storyboard */; };
 		9425F0932E69B592009A884A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9425F0892E69B592009A884A /* Main.storyboard */; };
+		9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F0972E6AC8AA009A884A /* UIViewController+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		9425F0882E69B592009A884A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9425F08A2E69B592009A884A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		9425F08B2E69B592009A884A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9425F0972E6AC8AA009A884A /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		9425F08C2E69B592009A884A /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				9425F0962E6AC8A1009A884A /* Extensions */,
 				9425F0952E69B6BA009A884A /* Presentation */,
 				9425F0942E69B5A9009A884A /* Resources */,
 				9425F08A2E69B592009A884A /* SceneDelegate.swift */,
@@ -81,6 +84,14 @@
 				9425F08B2E69B592009A884A /* ViewController.swift */,
 			);
 			path = Presentation;
+			sourceTree = "<group>";
+		};
+		9425F0962E6AC8A1009A884A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9425F0972E6AC8AA009A884A /* UIViewController+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,6 +168,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */,
 				9425F08D2E69B592009A884A /* AppDelegate.swift in Sources */,
 				9425F08E2E69B592009A884A /* SceneDelegate.swift in Sources */,
 				9425F08F2E69B592009A884A /* ViewController.swift in Sources */,
