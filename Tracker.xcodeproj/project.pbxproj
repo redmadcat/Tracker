@@ -16,6 +16,9 @@
 		9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F0972E6AC8AA009A884A /* UIViewController+Extensions.swift */; };
 		9468BEB52E6EB4D700419591 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEB42E6EB4C900419591 /* StatsViewController.swift */; };
 		9468BEB72E6EB52100419591 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEB62E6EB50E00419591 /* TrackersViewController.swift */; };
+		9468BEB92E6ED0B800419591 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEB82E6ED0B300419591 /* UIView+Extensions.swift */; };
+		9468BEBB2E6ED9B100419591 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEBA2E6ED9A400419591 /* UIButton+Extensions.swift */; };
+		9468BEBD2E700FFD00419591 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEBC2E700FF100419591 /* UILabel+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		9425F0972E6AC8AA009A884A /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		9468BEB42E6EB4C900419591 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		9468BEB62E6EB50E00419591 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
+		9468BEB82E6ED0B300419591 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
+		9468BEBA2E6ED9A400419591 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
+		9468BEBC2E700FF100419591 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +101,9 @@
 		9425F0962E6AC8A1009A884A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9468BEBC2E700FF100419591 /* UILabel+Extensions.swift */,
+				9468BEBA2E6ED9A400419591 /* UIButton+Extensions.swift */,
+				9468BEB82E6ED0B300419591 /* UIView+Extensions.swift */,
 				9425F0972E6AC8AA009A884A /* UIViewController+Extensions.swift */,
 			);
 			path = Extensions;
@@ -198,7 +207,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9468BEB92E6ED0B800419591 /* UIView+Extensions.swift in Sources */,
+				9468BEBB2E6ED9B100419591 /* UIButton+Extensions.swift in Sources */,
 				9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */,
+				9468BEBD2E700FFD00419591 /* UILabel+Extensions.swift in Sources */,
 				9425F08D2E69B592009A884A /* AppDelegate.swift in Sources */,
 				9425F08E2E69B592009A884A /* SceneDelegate.swift in Sources */,
 				9468BEB52E6EB4D700419591 /* StatsViewController.swift in Sources */,
@@ -243,7 +255,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -271,7 +283,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
