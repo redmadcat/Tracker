@@ -95,7 +95,7 @@ final class TrackersViewController: UIViewController {
         view.addSubview(stubStackView)
                 
         NSLayoutConstraint.activate([
-            headerStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 45),
+            headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45),
             headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             headerStackView.heightAnchor.constraint(equalToConstant: 42),
