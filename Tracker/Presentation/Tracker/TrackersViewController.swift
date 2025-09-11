@@ -73,6 +73,9 @@ final class TrackersViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
+    
+    var categories: [TrackerCategory] = []
+    var completedTrackers: [TrackerRecord] = []
         
     override func viewDidLoad() {
         super.viewDidLoad()
