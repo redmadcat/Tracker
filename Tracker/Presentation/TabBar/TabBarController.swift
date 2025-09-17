@@ -22,7 +22,7 @@ final class TabBarController: UITabBarController {
         
         trackersViewController.tabBarItem = UITabBarItem(
             title: "trackers",
-            image: UIImage(named: "StatsActive"),
+            image: UIImage(named: "TrackersNoActive"),
             selectedImage: nil
         )
         
