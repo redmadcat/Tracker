@@ -19,20 +19,21 @@ final class TabBarController: UITabBarController {
     private func configureTabBarItems() {
         let trackersViewController = TrackersViewController()
         let statsViewController = StatsViewController()
+        let navigationController = UINavigationController(rootViewController: trackersViewController)
         
-        trackersViewController.tabBarItem = UITabBarItem(
-            title: "trackers",
+        navigationController.tabBarItem = UITabBarItem(
+            title: "Трекеры",
             image: UIImage(named: "TrackersNoActive"),
             selectedImage: nil
         )
         
         statsViewController.tabBarItem = UITabBarItem(
-            title: "stats",
+            title: "Статистика",
             image: UIImage(named: "StatsNoActive"),
             selectedImage: nil
         )
         
-        viewControllers = [trackersViewController, statsViewController]
+        viewControllers = [navigationController, statsViewController]
     }
     
     private func configureTabBar() {
