@@ -9,13 +9,10 @@ import UIKit
 import Foundation
 
 final class TrackersViewController: UIViewController {
-    
-    private let addButton =
-        UIButton.createCustomButton(withImage: "Add")
-    
+        
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
-        datePicker.locale = Locale(identifier: "en-US")
+        datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
@@ -49,15 +46,7 @@ final class TrackersViewController: UIViewController {
         font:.systemFont(ofSize: 12, weight: .medium),
         textAlighment: .center)
     }()
-                    
-    private lazy var headerStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .fill
-        stackView.axis = .horizontal
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
+                        
     private lazy var searchStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fill
@@ -84,8 +73,16 @@ final class TrackersViewController: UIViewController {
     }
         
     private func configureLayout() {
-        headerStackView.addSubview(addButton)
-        headerStackView.addSubview(datePicker)
+        if let navigationBar = navigationController?.navigationBar {
+            let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            leftButton.image = UIImage(named: "AddTracker")
+            leftButton.tintColor = .ypBlack
+            leftButton.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+            navigationBar.topItem?.setLeftBarButton(leftButton, animated: false)
+            
+            let rightButton = UIBarButtonItem(customView: datePicker)
+            navigationBar.topItem?.setRightBarButton(rightButton, animated: false)
+        }
         
         searchStackView.addSubview(headerLabel)
         searchStackView.addSubview(searchField)
@@ -93,17 +90,11 @@ final class TrackersViewController: UIViewController {
         stubStackView.addSubview(imageView)
         stubStackView.addSubview(stubLabel)
         
-        view.addSubview(headerStackView)
         view.addSubview(searchStackView)
         view.addSubview(stubStackView)
                 
         NSLayoutConstraint.activate([
-            headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 45),
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerStackView.heightAnchor.constraint(equalToConstant: 42),
-            
-            searchStackView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 1),
+            searchStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
             searchStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             searchStackView.heightAnchor.constraint(equalToConstant: 84),
@@ -113,13 +104,7 @@ final class TrackersViewController: UIViewController {
             stubStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stubStackView.heightAnchor.constraint(equalToConstant: 106),
             
-            addButton.leadingAnchor.constraint(equalTo: headerStackView.leadingAnchor, constant: 6),
-            addButton.widthAnchor.constraint(equalToConstant: 42),
-            addButton.heightAnchor.constraint(equalToConstant: 42),
-            
-            datePicker.trailingAnchor.constraint(equalTo: headerStackView.trailingAnchor, constant: -16),
-            datePicker.topAnchor.constraint(equalTo: headerStackView.topAnchor, constant: 4),
-            datePicker.widthAnchor.constraint(equalToConstant: 77),
+            datePicker.widthAnchor.constraint(equalToConstant: 94),
             datePicker.heightAnchor.constraint(equalToConstant: 34),
             
             headerLabel.leadingAnchor.constraint(equalTo: searchStackView.leadingAnchor, constant: 16),
