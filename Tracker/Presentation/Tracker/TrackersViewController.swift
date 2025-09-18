@@ -74,7 +74,7 @@ final class TrackersViewController: UIViewController {
         
     private func configureLayout() {
         if let navigationBar = navigationController?.navigationBar {
-            let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+            let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(addTracker))
             leftButton.image = UIImage(named: "AddTracker")
             leftButton.tintColor = .ypBlack
             leftButton.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
@@ -126,6 +126,12 @@ final class TrackersViewController: UIViewController {
         ])
                                     
         view.backgroundColor = .ypWhite
+    }
+        
+    @objc private func addTracker() {
+        let creationViewController = TrackerCreationViewController()
+        creationViewController.modalPresentationStyle = .pageSheet
+        navigationController?.present(creationViewController, animated: true, completion: nil)
     }
 }
 
