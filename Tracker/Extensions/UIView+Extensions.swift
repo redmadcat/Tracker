@@ -16,7 +16,7 @@ extension UIView {
         case right
     }
             
-    func addBorder(to: Side, width borderWidth: CGFloat, color: UIColor?) {
+    func addBorder(to: Side, width borderWidth: CGFloat, color: UIColor?, inset: CGFloat = 0) {
         let border = UIView()
         border.backgroundColor = color
         
@@ -29,11 +29,18 @@ extension UIView {
             border.autoresizingMask = [.flexibleHeight, .flexibleRightMargin]
         case .bottom:
             border.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
-            border.frame = CGRect(x: 0, y: frame.size.height - borderWidth, width: frame.size.width, height: borderWidth)
+            border.frame = CGRect(x: inset, y: frame.size.height - borderWidth, width: frame.size.width - (inset * 2.0), height: borderWidth)
         case .right:
             border.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
             border.frame = CGRect(x: frame.size.width - borderWidth, y: 0, width: borderWidth, height: frame.size.height)
         }
         addSubview(border)
+    }
+    
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        layer.mask = mask
     }
 }
