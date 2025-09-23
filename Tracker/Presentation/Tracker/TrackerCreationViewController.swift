@@ -14,7 +14,6 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         tableView.dataSource = self
         tableView.delegate = self
         tableView.isScrollEnabled = false
-        tableView.separatorColor = .red
         tableView.register(TrackerNameCell.self, forCellReuseIdentifier: TrackerNameCell.reuseIdentifier)
         tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.reuseIdentifier)
         tableView.register(TrackerScheduleCell.self, forCellReuseIdentifier: TrackerScheduleCell.reuseIdentifier)
@@ -79,36 +78,40 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
             
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                return TrackerNameCell(style: .default, reuseIdentifier: TrackerNameCell.reuseIdentifier)
-            }
-        } else if indexPath.section == 1 {
-            if indexPath.row == 0 {
-                return TrackerCategoryCell(style: .subtitle, reuseIdentifier: TrackerCategoryCell.reuseIdentifier)
-            } else if indexPath.row == 1 {
-                return TrackerScheduleCell(style: .subtitle, reuseIdentifier: TrackerScheduleCell.reuseIdentifier)
-            }
+        switch indexPath.section {
+        case 0:
+            return indexPath.row == 0 ?
+                TrackerNameCell(style: .default, reuseIdentifier: TrackerNameCell.reuseIdentifier) :
+                UITableViewCell()
+        case 1:
+            return indexPath.row == 0 ?
+                TrackerCategoryCell(style: .subtitle, reuseIdentifier: TrackerCategoryCell.reuseIdentifier) :
+                TrackerScheduleCell(style: .subtitle, reuseIdentifier: TrackerScheduleCell.reuseIdentifier)
+        default:
+            return UITableViewCell()
         }
-            
-        return UITableViewCell()
     }
     
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                return 75
-            } else if indexPath.row == 1 {
-                return 24
-            }
-        } else if indexPath.section == 1 {
-            if (indexPath.row == 0 || indexPath.row == 1) {
-                return 75
+        switch indexPath.section {
+        case 0:
+            return indexPath.row == 0 ? 75 : 24
+        case 1:
+            return indexPath.row == 0 || indexPath.row == 1 ? 75 : 0
+        default:
+            return UITableView.automaticDimension
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            if indexPath.row == 1 {
+                let scheduleViewController = TrackerScheduleViewController()
+                scheduleViewController.modalPresentationStyle = .pageSheet
+                present(scheduleViewController, animated: true, completion: nil)
             }
         }
-        
-        return UITableView.automaticDimension
     }
         
     // MARK: - Private func
