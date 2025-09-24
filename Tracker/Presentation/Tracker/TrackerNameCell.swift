@@ -34,6 +34,8 @@ final class TrackerNameCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        selectionStyle = .none
+        
         addSubview(textField)
         
         NSLayoutConstraint.activate([

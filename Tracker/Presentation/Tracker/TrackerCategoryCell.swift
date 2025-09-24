@@ -16,6 +16,7 @@ final class TrackerCategoryCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         accessoryType = .disclosureIndicator
+        selectionStyle = .none
         textLabel?.text = "Категория"
         textLabel?.textColor = .ypBlack
         detailTextLabel?.text = "Важное"

@@ -16,6 +16,7 @@ final class TrackerScheduleCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         accessoryType = .disclosureIndicator
+        selectionStyle = .none
         textLabel?.text = "Расписание"
         textLabel?.textColor = .ypBlack
         detailTextLabel?.font = .systemFont(ofSize: 17)
