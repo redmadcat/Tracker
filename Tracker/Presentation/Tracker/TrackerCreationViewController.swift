@@ -13,8 +13,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.isScrollEnabled = false
-        tableView.register(TrackerNameCell.self, forCellReuseIdentifier: TrackerNameCell.reuseIdentifier)
+        tableView.register(TrackerNameCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
+        tableView.register(TrackerStubCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
         tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.reuseIdentifier)
         tableView.register(TrackerScheduleCell.self, forCellReuseIdentifier: TrackerScheduleCell.reuseIdentifier)
         tableView.separatorStyle = .none
@@ -30,13 +30,14 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         return footerView
     }()
     
-    private var cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let cancelButton = UIButton()
         cancelButton.setTitle("Отменить", for: .normal)
         cancelButton.setTitleColor(.ypRed, for: .normal)
         cancelButton.layer.borderWidth = 1
         cancelButton.layer.borderColor = UIColor.ypRed.cgColor
         cancelButton.layer.cornerRadius = 16
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         return cancelButton
     }()
@@ -65,11 +66,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-                         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-                
+        
+        hideKeyboardWhenTappedAround()
         configureLayout()
     }
     
@@ -86,12 +84,12 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         switch indexPath.section {
         case 0:
             return indexPath.row == 0 ?
-                TrackerNameCell(style: .default, reuseIdentifier: TrackerNameCell.reuseIdentifier) :
-                UITableViewCell()
+                TrackerNameCell(style: .default, delegate: self) :
+                TrackerStubCell(style: .default)
         case 1:
             return indexPath.row == 0 ?
-                TrackerCategoryCell(style: .subtitle, reuseIdentifier: TrackerCategoryCell.reuseIdentifier) :
-                TrackerScheduleCell(style: .subtitle, reuseIdentifier: TrackerScheduleCell.reuseIdentifier)
+                TrackerCategoryCell(style: .subtitle) :
+                TrackerScheduleCell(style: .subtitle)
         default:
             return UITableViewCell()
         }
@@ -110,14 +108,10 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
-            if indexPath.row == 1 {
-                let scheduleViewController = TrackerScheduleViewController()
-                scheduleViewController.modalPresentationStyle = .pageSheet
-                //        selectedDays.joined(separator: ", ")
-                present(scheduleViewController, animated: true, completion: nil)
-            }
-        }
+        guard let cell = tableView.cellForRow(at: indexPath) as? TrackerScheduleCell  else { return }
+        let scheduleViewController = TrackerScheduleViewController()
+        scheduleViewController.modalPresentationStyle = .pageSheet
+        present(scheduleViewController, animated: true, completion: nil)
     }
     
     // MARK: - UITextFieldDelegate
@@ -125,6 +119,14 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         return true
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        return true
+    }
         
     // MARK: - Private func
     private func configureLayout() {
@@ -163,12 +165,12 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         view.backgroundColor = .ypWhite
     }
     
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
+    @objc private func cancelButtonTapped() {
+        dismiss(animated: true)
     }
     
     @objc private func createButtonTapped() {
-//        dismiss(animated: true)
+
     }
 }
 
