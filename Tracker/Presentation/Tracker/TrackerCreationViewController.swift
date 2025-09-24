@@ -63,6 +63,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         return headerLabel
     }()
     
+    var onTrackerCreated: ((Tracker) -> Void)?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,7 +172,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     @objc private func createButtonTapped() {
-
+        let tracker = Tracker(id: UUID(), name: "nameOfTracker", color: .ypSelection1, emoji: "", schedule: Calendar.current)
+        onTrackerCreated?(tracker)
     }
 }
 
