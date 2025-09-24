@@ -8,8 +8,15 @@
 import UIKit
 import Foundation
 
-final class TrackersViewController: UIViewController {
-        
+final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    // MARK: - Definition
+    private lazy var collectionView: UICollectionView = {
+        var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        return collectionView
+    }()
+    
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
@@ -66,13 +73,35 @@ final class TrackersViewController: UIViewController {
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
         
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
              
         hideKeyboardWhenTappedAround()
         configureLayout()
     }
+    
+    // MARK: - UICollectionViewDataSource
+    func collectionView(_: UICollectionView, numberOfItemsInSection numberOFItemsInSection: Int) -> Int {
+        return categories.count
+    }
+    
+    func collectionView(_: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return UICollectionViewCell()
+    }
+    
+    // MARK: - UICollectionViewDelegateFlowLayout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width / 2, height: 50)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
         
+    // MARK: - Private func
     private func configureLayout() {
         if let navigationBar = navigationController?.navigationBar {
             let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(addTracker))
@@ -105,7 +134,6 @@ final class TrackersViewController: UIViewController {
             stubStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stubStackView.heightAnchor.constraint(equalToConstant: 106),
             
-            datePicker.widthAnchor.constraint(equalToConstant: 94),
             datePicker.heightAnchor.constraint(equalToConstant: 34),
             
             headerLabel.leadingAnchor.constraint(equalTo: searchStackView.leadingAnchor, constant: 16),
