@@ -30,5 +30,15 @@ extension UIViewController {
         // inject self (the current view controller) for the preview
         Preview(viewController: self)
     }
+    
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 #endif
