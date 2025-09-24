@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     // MARK: - Definition
     private lazy var tableView: UITableView = {
         var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
@@ -41,12 +41,13 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         return cancelButton
     }()
     
-    private var createButton: UIButton = {
+    private lazy var createButton: UIButton = {
         let createButton = UIButton()
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.ypWhite, for: .normal)
         createButton.backgroundColor = .ypBlack
         createButton.layer.cornerRadius = 16
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         createButton.translatesAutoresizingMaskIntoConstraints = false
         return createButton
     }()
@@ -64,7 +65,11 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-                                                
+                         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+                
         configureLayout()
     }
     
@@ -109,10 +114,17 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
             if indexPath.row == 1 {
                 let scheduleViewController = TrackerScheduleViewController()
                 scheduleViewController.modalPresentationStyle = .pageSheet
+                //        selectedDays.joined(separator: ", ")
                 present(scheduleViewController, animated: true, completion: nil)
             }
         }
     }
+    
+    // MARK: - UITextFieldDelegate
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return true
+    }
+    
         
     // MARK: - Private func
     private func configureLayout() {
@@ -149,6 +161,14 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         ])
         
         view.backgroundColor = .ypWhite
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc private func createButtonTapped() {
+//        dismiss(animated: true)
     }
 }
 
