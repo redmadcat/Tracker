@@ -9,7 +9,6 @@ import UIKit
 
 final class TrackerWeekdayCell: UITableViewCell {
     // MARK: - Definition
-    static let reuseIdentifier = "TrackerWeekdayCell"
     private(set) var isWeekdaySelected: Bool = false
     
     weak var delegate: TrackerWeekdayCellDelegate?
@@ -33,7 +32,7 @@ final class TrackerWeekdayCell: UITableViewCell {
     }()
     
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, index: Int, delegate: TrackerWeekdayCellDelegate) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerWeekdayCell.reuseIdentifier, index: Int, delegate: TrackerWeekdayCellDelegate) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         self.delegate = delegate

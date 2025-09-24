@@ -9,8 +9,6 @@ import UIKit
 
 final class TrackerNameCell: UITableViewCell {
     // MARK: - Definition
-    static let reuseIdentifier = "TrackerNameCell"
-    
     private weak var delegate: UITextFieldDelegate?
     
     private lazy var textField: UITextField = {
@@ -29,13 +27,12 @@ final class TrackerNameCell: UITableViewCell {
     }()
                         
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, delegate: UITextFieldDelegate?) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerNameCell.reuseIdentifier, delegate: UITextFieldDelegate?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.delegate = delegate
         
         selectionStyle = .none
-        
-        self.contentView.addSubview(textField)
+        contentView.addSubview(textField)
         
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: topAnchor),

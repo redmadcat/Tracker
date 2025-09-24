@@ -8,11 +8,8 @@
 import UIKit
 
 final class TrackerScheduleCell: UITableViewCell {
-    // MARK: - Definition
-    static let reuseIdentifier = "TrackerScheduleCell"
-    
     // MARK: - Lifecycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerScheduleCell.reuseIdentifier) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         accessoryType = .disclosureIndicator
