@@ -10,6 +10,9 @@ import UIKit
 final class TrackerWeekdayCell: UITableViewCell {
     // MARK: - Definition
     static let reuseIdentifier = "TrackerWeekdayCell"
+    private(set) var isWeekdaySelected: Bool = false
+    
+    weak var delegate: TrackerWeekdayCellDelegate?
     
     private lazy var toggleSwitch: UISwitch = {
         let toggleSwitch = UISwitch()
@@ -30,8 +33,10 @@ final class TrackerWeekdayCell: UITableViewCell {
     }()
     
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, index: Int) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, index: Int, delegate: TrackerWeekdayCellDelegate) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        self.delegate = delegate
         self.index = index
         label.text = Calendar.weekday[safe: index]?.firstUppercased
                 
@@ -68,7 +73,7 @@ final class TrackerWeekdayCell: UITableViewCell {
     }
     
     @objc private func changeSwitch() {
-        print(toggleSwitch.isOn)
-    //  delegate?.selectWeekDay(isON: weekDaySwitch.isOn, weekDay: weekDay)
+        isWeekdaySelected = toggleSwitch.isOn
+        delegate?.weekdayCellDidTapLike(self)
     }
 }

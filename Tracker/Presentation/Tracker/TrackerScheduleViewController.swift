@@ -8,7 +8,8 @@
 import UIKit
 import Foundation
 
-final class TrackerScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class TrackerScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
+                                            TrackerWeekdayCellDelegate {
     // MARK: - Definition
     private lazy var tableView: UITableView = {
         var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
@@ -19,7 +20,19 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-        
+    
+    private lazy var createButton: UIButton = {
+        let createButton = UIButton()
+        createButton.setTitle("Готово", for: .normal)
+        createButton.setTitleColor(.ypWhite, for: .normal)
+        createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        createButton.backgroundColor = .ypBlack
+        createButton.layer.cornerRadius = 16
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        return createButton
+    }()
+    
     private let headerLabel: UILabel = {
         let headerLabel = UILabel(
             text: "Расписание",
@@ -28,17 +41,6 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
             textAlighment: .center)
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
         return headerLabel
-    }()
-    
-    private var createButton: UIButton = {
-        let createButton = UIButton()
-        createButton.setTitle("Готово", for: .normal)
-        createButton.setTitleColor(.ypWhite, for: .normal)
-        createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        createButton.backgroundColor = .ypBlack
-        createButton.layer.cornerRadius = 16
-        createButton.translatesAutoresizingMaskIntoConstraints = false
-        return createButton
     }()
     
     private var selectedWeekday = [Int]()
@@ -60,7 +62,7 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return TrackerWeekdayCell(style: .default, reuseIdentifier: TrackerWeekdayCell.reuseIdentifier, index: indexPath.row)
+        return TrackerWeekdayCell(style: .default, reuseIdentifier: TrackerWeekdayCell.reuseIdentifier, index: indexPath.row, delegate: self)
     }
     
     // MARK: - UITableViewDelegate
@@ -70,6 +72,17 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+    }
+        
+    // MARK: - TrackerWeekdayCellDelegate
+    func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        if cell.isWeekdaySelected {
+            selectedWeekday.append(indexPath.row)
+        } else {
+            selectedWeekday = selectedWeekday.filter() { $0 != indexPath.row }
+        }
+        print(selectedWeekday.sorted { $0 < $1 })
     }
         
     // MARK: - Private func
@@ -96,6 +109,10 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
         ])
         
         view.backgroundColor = .ypWhite
+    }
+    
+    @objc private func createButtonTapped() {
+        dismiss(animated: true)
     }
 }
 
