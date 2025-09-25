@@ -9,6 +9,10 @@ import UIKit
 import Foundation
 
 extension UIView {
+    static var reuseIdentifier: String {
+        return String(describing: self.self)
+    }
+    
     enum Side {
         case top
         case left
