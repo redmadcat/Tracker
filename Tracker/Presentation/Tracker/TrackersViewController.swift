@@ -8,12 +8,17 @@
 import UIKit
 import Foundation
 
-final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
+    
     // MARK: - Definition
     private lazy var collectionView: UICollectionView = {
-        var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.register(TrackerCardCell.self, forCellWithReuseIdentifier: TrackerCardCell.reuseIdentifier)
+        collectionView.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerHeaderView.reuseIdentifier)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -21,24 +26,11 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_RU")
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
-    
-    private let headerLabel: UILabel = {
-        return UILabel(
-        text: "Трекеры",
-        textColor: .ypBlack,
-        font:.systemFont(ofSize: 34, weight: .bold))
-    }()
-    
-    private let searchField: UISearchTextField = {
-        let searchField = UISearchTextField()
-        searchField.placeholder = "Поиск"
-        searchField.translatesAutoresizingMaskIntoConstraints = false
-        return searchField
-    }()
-        
+            
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -53,19 +45,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         font:.systemFont(ofSize: 12, weight: .medium),
         textAlighment: .center)
     }()
-                        
-    private lazy var searchStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .fill
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
+                            
     private lazy var stubStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .equalCentering
         stackView.axis = .vertical
+        stackView.backgroundColor = .clear
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -82,68 +67,94 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     // MARK: - UICollectionViewDataSource
-    func collectionView(_: UICollectionView, numberOfItemsInSection numberOFItemsInSection: Int) -> Int {
-        return categories.count
+    func collectionView(_: UICollectionView, numberOfItemsInSection: Int) -> Int {
+        return 2
+//        return categories.count
     }
     
     func collectionView(_: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell
+        return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+            guard kind == UICollectionView.elementKindSectionHeader else {
+                return UICollectionReusableView()
+            }
+            
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: TrackerHeaderView.reuseIdentifier,
+                for: indexPath) as? TrackerHeaderView else {
+                return UICollectionReusableView()
+            }
+                    
+            header.setHeader(with: "Header")
+            return header
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width / 2, height: 50)
+        let width = (collectionView.frame.width - 9) / 2
+        return CGSize(width: width, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 9
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 46)
+    }
+    
+    // MARK: - UISearchResultsUpdating
+    func updateSearchResults(for searchController: UISearchController) {
+        
     }
         
     // MARK: - Private func
     private func configureLayout() {
-        if let navigationBar = navigationController?.navigationBar {
-            let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(addTracker))
-            leftButton.image = UIImage(named: "AddTracker")
-            leftButton.tintColor = .ypBlack
-            leftButton.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
-            navigationBar.topItem?.setLeftBarButton(leftButton, animated: false)
-            
-            let rightButton = UIBarButtonItem(customView: datePicker)
-            navigationBar.topItem?.setRightBarButton(rightButton, animated: false)
-        }
+        navigationController?.navigationBar.prefersLargeTitles = true
+        title = "Трекеры"
         
-        searchStackView.addSubview(headerLabel)
-        searchStackView.addSubview(searchField)
+        let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(addTracker))
+        leftButton.image = UIImage(named: "AddTracker")
+        leftButton.tintColor = .ypBlack
+        leftButton.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
+
+        let rightButton = UIBarButtonItem(customView: datePicker)
+                                                        
+        let searchBar = UISearchController(searchResultsController: nil)
+        searchBar.searchResultsUpdater = self
+        searchBar.obscuresBackgroundDuringPresentation = false
+        searchBar.searchBar.placeholder = "Поиск"
+        searchBar.hidesNavigationBarDuringPresentation = false
+        searchBar.searchBar.setValue("Отменить", forKey: "cancelButtonText")
         
+        navigationItem.leftBarButtonItem = leftButton
+        navigationItem.rightBarButtonItem = rightButton
+        navigationItem.searchController = searchBar
+                        
         stubStackView.addSubview(imageView)
         stubStackView.addSubview(stubLabel)
         
-        view.addSubview(searchStackView)
         view.addSubview(stubStackView)
+        view.addSubview(collectionView)
                 
         NSLayoutConstraint.activate([
-            searchStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1),
-            searchStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchStackView.heightAnchor.constraint(equalToConstant: 84),
-            
-            stubStackView.topAnchor.constraint(equalTo: searchStackView.bottomAnchor, constant: 230),
-            stubStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stubStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stubStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stubStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             stubStackView.heightAnchor.constraint(equalToConstant: 106),
             
             datePicker.heightAnchor.constraint(equalToConstant: 34),
-            
-            headerLabel.leadingAnchor.constraint(equalTo: searchStackView.leadingAnchor, constant: 16),
-            headerLabel.widthAnchor.constraint(equalToConstant: 254),
-            headerLabel.heightAnchor.constraint(equalToConstant: 41),
-                                    
-            searchField.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 7),
-            searchField.leadingAnchor.constraint(equalTo: searchStackView.leadingAnchor, constant: 16),
-            searchField.trailingAnchor.constraint(equalTo: searchStackView.trailingAnchor, constant: -16),
-            searchField.heightAnchor.constraint(equalToConstant: 36),
+                        
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 80),
