@@ -9,8 +9,6 @@ import UIKit
 
 final class TrackerWeekdayCell: UITableViewCell {
     // MARK: - Definition
-    private(set) var isWeekdaySelected: Bool = false
-    
     weak var delegate: TrackerWeekdayCellDelegate?
     
     private lazy var toggleSwitch: UISwitch = {
@@ -20,9 +18,7 @@ final class TrackerWeekdayCell: UITableViewCell {
         toggleSwitch.translatesAutoresizingMaskIntoConstraints = false
         return toggleSwitch
     }()
-    
-    private var index: Int = 0
-    
+        
     private let label: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -31,14 +27,13 @@ final class TrackerWeekdayCell: UITableViewCell {
         return label
     }()
     
+    private var index: Int = 0
+    
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerWeekdayCell.reuseIdentifier, index: Int, delegate: TrackerWeekdayCellDelegate) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerWeekdayCell.reuseIdentifier) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         selectionStyle = .none
-        self.delegate = delegate
-        self.index = index
-        label.text = Calendar.weekday[safe: index]?.firstUppercased
-                
         contentView.addSubview(label)
         contentView.addSubview(toggleSwitch)
         
@@ -52,7 +47,7 @@ final class TrackerWeekdayCell: UITableViewCell {
         
         contentView.superview?.backgroundColor = .ypBackground
     }
-    
+        
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -71,8 +66,14 @@ final class TrackerWeekdayCell: UITableViewCell {
         }
     }
     
+    func configure(index: Int, delegate: TrackerWeekdayCellDelegate, isOn: Bool) {
+        self.delegate = delegate
+        self.index = index
+        toggleSwitch.isOn = isOn
+        label.text = Calendar.weekday[safe: index]?.firstUppercased
+    }
+    
     @objc private func changeSwitch() {
-        isWeekdaySelected = toggleSwitch.isOn
-        delegate?.weekdayCellDidTapLike(self)
+        delegate?.weekdayCellDidTapLike(self, isOn: toggleSwitch.isOn)
     }
 }
