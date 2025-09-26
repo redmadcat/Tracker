@@ -19,4 +19,10 @@ extension Calendar {
         weekdaySymbols.append(weekdaySymbols.remove(at: weekdaySymbols.startIndex))
         return weekdaySymbols
     }()
+    
+    static let shortWeekday: [String] = {
+        var weekdaySymbols = calendar.shortWeekdaySymbols
+        weekdaySymbols.append(weekdaySymbols.remove(at: weekdaySymbols.startIndex))
+        return weekdaySymbols
+    }()
 }
