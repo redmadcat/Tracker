@@ -6,5 +6,5 @@
 //
 
 protocol TrackerWeekdayCellDelegate: AnyObject {
-    func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell)
+    func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell, isOn: Bool)
 }
