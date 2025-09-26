@@ -11,4 +11,8 @@ extension Array {
     subscript(safe index: Index) -> Element? {
         indices ~= index ? self[index] : nil
     }
+    
+    mutating func reduce(_ index: Element) where Element: Equatable {
+        self = self.filter() { $0 != index }
+    }
 }
