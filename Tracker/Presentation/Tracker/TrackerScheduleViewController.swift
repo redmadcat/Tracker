@@ -43,13 +43,18 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
         return headerLabel
     }()
     
-    private var selectedWeekday = [Int]()
+    private var selectedDays = [Int]()
+    var onScheduleSelected: (([Int]) -> Void)?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureLayout()
+    }
+    
+    func setDays(_ selectedDays: [Int]) {
+        self.selectedDays = selectedDays
     }
     
     // MARK: - UITableViewDataSource
@@ -62,27 +67,27 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return TrackerWeekdayCell(style: .default, reuseIdentifier: TrackerWeekdayCell.reuseIdentifier, index: indexPath.row, delegate: self)
+        if let cell = tableView.dequeueReusableCell(withIdentifier: TrackerWeekdayCell.reuseIdentifier, for: indexPath) as? TrackerWeekdayCell {
+            let isOn = selectedDays.contains(indexPath.row) ? true : false
+            cell.configure(index: indexPath.row, delegate: self, isOn: isOn)
+            return cell
+        }
+        return UITableViewCell()
     }
     
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
         
     // MARK: - TrackerWeekdayCellDelegate
-    func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell) {
+    func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell, isOn: Bool) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        if cell.isWeekdaySelected {
-            selectedWeekday.append(indexPath.row)
+        if isOn {
+            selectedDays.append(indexPath.row)
         } else {
-            selectedWeekday = selectedWeekday.filter() { $0 != indexPath.row }
+            selectedDays.reduce(indexPath.row)
         }
-        print(selectedWeekday.sorted { $0 < $1 })
     }
         
     // MARK: - Private func
@@ -112,6 +117,7 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
     
     @objc private func createButtonTapped() {
+        onScheduleSelected?(selectedDays.sorted { $0 < $1 })
         dismiss(animated: true)
     }
 }
