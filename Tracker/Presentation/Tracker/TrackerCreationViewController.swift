@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
+final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {    
     // MARK: - Definition
     private lazy var tableView: UITableView = {
         var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
@@ -65,12 +65,16 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     
     var onTrackerCreated: ((Tracker) -> Void)?
     
+    private var selectedDays = [Int]()
+    private var trackerName: String?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         hideKeyboardWhenTappedAround()
         configureLayout()
+        updateCreateButtonStatus()
     }
     
     // MARK: - UITableViewDataSource
@@ -112,24 +116,27 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? TrackerScheduleCell  else { return }
         let scheduleViewController = TrackerScheduleViewController()
+        scheduleViewController.setDays(selectedDays)
+        scheduleViewController.onScheduleSelected = { selectedDays in
+            cell.setDetailsBased(on: selectedDays)
+            self.selectedDays = selectedDays
+            self.updateCreateButtonStatus()
+        }
         scheduleViewController.modalPresentationStyle = .pageSheet
         present(scheduleViewController, animated: true, completion: nil)
     }
     
     // MARK: - UITextFieldDelegate
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return true
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        trackerName = textField.text
+        updateCreateButtonStatus()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-    
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        return true
-    }
-        
+            
     // MARK: - Private func
     private func configureLayout() {
         view.addSubview(headerLabel)
@@ -167,13 +174,27 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         view.backgroundColor = .ypWhite
     }
     
+    private func updateCreateButtonStatus() {
+        createButton.isEnabled = !selectedDays.isEmpty && trackerNameIsValid()
+        createButton.backgroundColor = createButton.isEnabled ? .ypBlack : .ypGray
+    }
+    
+    private func trackerNameIsValid() -> Bool {
+        if let trackerName {
+            return !trackerName.isEmpty
+        }
+        return false
+    }
+    
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }
     
     @objc private func createButtonTapped() {
-        let tracker = Tracker(id: UUID(), name: "nameOfTracker", color: .ypSelection1, emoji: "", schedule: Calendar.current)
-        onTrackerCreated?(tracker)
+        if let trackerName {
+            let tracker = Tracker(id: UUID(), name: trackerName, color: .ypSelection5, emoji: "", schedule: selectedDays)
+            onTrackerCreated?(tracker)
+        }
     }
 }
 
