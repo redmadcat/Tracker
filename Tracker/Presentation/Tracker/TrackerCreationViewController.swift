@@ -63,7 +63,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         return headerLabel
     }()
     
-    var onTrackerCreated: ((Tracker) -> Void)?
+    var onTrackerCreated: ((TrackerCategory) -> Void)?
     
     private var selectedDays = [Int]()
     private var trackerName: String?
@@ -192,9 +192,12 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     
     @objc private func createButtonTapped() {
         if let trackerName {
-            let tracker = Tracker(id: UUID(), name: trackerName, color: .ypSelection5, emoji: "", schedule: selectedDays)
-            onTrackerCreated?(tracker)
+            var trackers = [Tracker]()
+            trackers.append(Tracker(id: UUID(), name: trackerName, color: .ypSelection5, emoji: "", schedule: selectedDays))
+            let category = TrackerCategory(header: "Важное", trackers: trackers)
+            onTrackerCreated?(category)
         }
+        dismiss(animated: true)
     }
 }
 
