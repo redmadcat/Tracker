@@ -29,4 +29,10 @@ final class TrackerScheduleCell: UITableViewCell {
         super.layoutSubviews()
         roundCorners(corners: [.bottomLeft, .bottomRight], radius: 16)
     }
+    
+    func setDetailsBased(on selectedDays: [Int]) {
+        detailTextLabel?.text = selectedDays.count == 7 ?
+            "Каждый день" :
+            Calendar.shortWeekday.elements(at: selectedDays).joined(separator: ", ")
+    }
 }
