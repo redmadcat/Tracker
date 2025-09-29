@@ -9,7 +9,6 @@ import UIKit
 import Foundation
 
 final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
-    
     // MARK: - Definition
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -64,33 +63,45 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
              
         hideKeyboardWhenTappedAround()
         configureLayout()
+        updateStubStatus()
     }
     
     // MARK: - UICollectionViewDataSource
-    func collectionView(_: UICollectionView, numberOfItemsInSection: Int) -> Int {
-        return 2
-//        return categories.count
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return categories.count
+    }
+    
+    func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return categories[section].trackers.count
     }
     
     func collectionView(_: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell
-        return cell!
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell {
+            if let category = categories[safe: indexPath.section] {
+                let tracker = category.trackers[indexPath.row]
+                cell.titleLabel.text = tracker.name
+            }
+            return cell
+        }
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-            guard kind == UICollectionView.elementKindSectionHeader else {
-                return UICollectionReusableView()
-            }
-            
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: TrackerHeaderView.reuseIdentifier,
-                for: indexPath) as? TrackerHeaderView else {
-                return UICollectionReusableView()
-            }
-                    
-            header.setHeader(with: "Header")
-            return header
+        guard kind == UICollectionView.elementKindSectionHeader else {
+            return UICollectionReusableView()
+        }
+        
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: TrackerHeaderView.reuseIdentifier,
+            for: indexPath) as? TrackerHeaderView else {
+            return UICollectionReusableView()
+        }
+                        
+        if let category = categories[safe: indexPath.section] {
+            header.setHeader(with: category.header)
+        }
+        return header
     }
     
     // MARK: - UICollectionViewDelegateFlowLayout
@@ -167,9 +178,31 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                                     
         view.backgroundColor = .ypWhite
     }
+    
+    private func updateStubStatus() {
+        let isHidden = categories.count > 0 ? true : false
+        stubStackView.isHidden = isHidden
+    }
+    
+    private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
+        return self.categories.first(where: { $0.header == category.header }) ?? nil
+    }
         
     @objc private func addTracker() {
         let creationViewController = TrackerCreationViewController()
+        creationViewController.onTrackerCreated = { category in
+            if var oldCategory = self.checkExistingCategory(category: category) {
+                let newTrackers = oldCategory.trackers + category.trackers
+                oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
+                self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
+            } else {
+                let trackers = category.trackers
+                let newCategory = TrackerCategory(header: category.header, trackers: trackers)
+                self.categories.append(newCategory)
+            }
+            self.collectionView.reloadData()
+            self.updateStubStatus()
+        }
         creationViewController.modalPresentationStyle = .pageSheet
         navigationController?.present(creationViewController, animated: true, completion: nil)
     }
