@@ -54,20 +54,20 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }()
     
     private let headerLabel: UILabel = {
-        let headerLabel = UILabel(
+        return UILabel(
             text: "Новая привычка",
             textColor: .ypBlack,
             font:.systemFont(ofSize: 16, weight: .medium),
             textAlighment: .center)
-        headerLabel.translatesAutoresizingMaskIntoConstraints = false
-        return headerLabel
     }()
     
-    var onTrackerCreated: ((TrackerCategory) -> Void)?
-    
+    private let textLengthLimit = 38
+    private var warningCellVisible: Bool = false
     private var selectedDays = [Int]()
     private var trackerName: String?
-    
+        
+    var onTrackerCreated: ((TrackerCategory) -> Void)?
+            
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,7 +105,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return indexPath.row == 0 ? 75 : 24
+            return indexPath.row == 0 ? 75 : warningCellVisible ? 62 : 24
         case 1:
             return indexPath.row == 0 || indexPath.row == 1 ? 75 : 0
         default:
@@ -132,11 +132,25 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         updateCreateButtonStatus()
     }
     
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        updateWarningCellVisibilityTo(false)
+        return true
+    }
+                    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        
+        let textLength = text.count + string.count - range.length
+        let shouldWarn = textLength <= textLengthLimit ? false : true
+        updateWarningCellVisibilityTo(shouldWarn)
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
-            
+                
     // MARK: - Private func
     private func configureLayout() {
         view.addSubview(headerLabel)
@@ -174,8 +188,18 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         view.backgroundColor = .ypWhite
     }
     
+    private func updateWarningCellVisibilityTo(_ value: Bool, at indexPath: IndexPath = IndexPath(row: 1, section: 0)) {
+        if warningCellVisible != value {
+            warningCellVisible = value
+            tableView.reloadRows(at: [indexPath], with: .fade)
+            if let cell = tableView.cellForRow(at: indexPath) as? TrackerStubCell {
+                cell.showWarning(value)
+            }
+        }
+    }
+    
     private func updateCreateButtonStatus() {
-        createButton.isEnabled = !selectedDays.isEmpty && trackerNameIsValid()
+        createButton.isEnabled = !selectedDays.isEmpty && trackerNameIsValid() && !warningCellVisible
         createButton.backgroundColor = createButton.isEnabled ? .ypBlack : .ypGray
     }
     
