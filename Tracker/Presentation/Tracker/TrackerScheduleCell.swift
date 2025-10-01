@@ -31,8 +31,8 @@ final class TrackerScheduleCell: UITableViewCell {
     }
     
     func setDetailsBased(on selectedDays: [Int]) {
-        detailTextLabel?.text = selectedDays.count == 7 ?
+        detailTextLabel?.text = selectedDays.count == Calendar.weekdayCount ?
             "Каждый день" :
-            Calendar.shortWeekday.elements(at: selectedDays).joined(separator: ", ")
+            Calendar.shortWeedaySymbols(at: selectedDays)
     }
 }
