@@ -59,7 +59,7 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Calendar.weekday.count
+        return Calendar.weekdayCount
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -68,8 +68,9 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: TrackerWeekdayCell.reuseIdentifier, for: indexPath) as? TrackerWeekdayCell {
-            let isOn = selectedDays.contains(indexPath.row) ? true : false
-            cell.configure(index: indexPath.row, delegate: self, isOn: isOn)
+            let dayIndex = weekDayIndex(at: indexPath.row)
+            let isOn = selectedDays.contains(dayIndex) ? true : false
+            cell.configure(index: dayIndex, delegate: self, isOn: isOn)
             return cell
         }
         return UITableViewCell()
@@ -82,11 +83,10 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
         
     // MARK: - TrackerWeekdayCellDelegate
     func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell, isOn: Bool) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
         if isOn {
-            selectedDays.append(indexPath.row)
+            selectedDays.append(cell.dayIndex)
         } else {
-            selectedDays.reduce(indexPath.row)
+            selectedDays.reduce(cell.dayIndex)
         }
     }
         
@@ -117,7 +117,10 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
     
     @objc private func createButtonTapped() {
-        onScheduleSelected?(selectedDays.sorted { $0 < $1 })
+        onScheduleSelected?(selectedDays.sorted {
+            ($0 == 0 ? Int.max : $0) <
+            ($1 == 0 ? Int.max : $1)
+        })
         dismiss(animated: true)
     }
 }
