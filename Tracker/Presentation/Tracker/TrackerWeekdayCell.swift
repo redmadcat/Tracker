@@ -27,7 +27,7 @@ final class TrackerWeekdayCell: UITableViewCell {
         return label
     }()
     
-    private var index: Int = 0
+    var dayIndex: Int = 0
     
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerWeekdayCell.reuseIdentifier) {
@@ -55,11 +55,11 @@ final class TrackerWeekdayCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        switch index {
-        case 0:
+        switch dayIndex {
+        case 1:
             addBorder(to: .bottom, width: 0.5, color: .ypGray, inset: 20)
             roundCorners(corners: [.topLeft, .topRight], radius: 16)
-        case 6:
+        case 0:
             roundCorners(corners: [.bottomLeft, .bottomRight], radius: 16)
         default:
             addBorder(to: .bottom, width: 0.5, color: .ypGray, inset: 20)
@@ -68,9 +68,9 @@ final class TrackerWeekdayCell: UITableViewCell {
     
     func configure(index: Int, delegate: TrackerWeekdayCellDelegate, isOn: Bool) {
         self.delegate = delegate
-        self.index = index
+        self.dayIndex = index
         toggleSwitch.isOn = isOn
-        label.text = Calendar.weekday[safe: index]?.firstUppercased
+        label.text = Calendar.weekdaySymbol(at: index)
     }
     
     @objc private func changeSwitch() {
