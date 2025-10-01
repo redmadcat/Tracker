@@ -21,11 +21,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         return collectionView
     }()
     
-    private let datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
         datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.addTarget(self, action: #selector (dateChanged(_:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
@@ -54,30 +55,40 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         return stackView
     }()
     
+    private var currentDate: Date = Date()
+    
     var categories: [TrackerCategory] = []
     var completedTrackers: [TrackerRecord] = []
+    
+    var categoriesResults: [TrackerCategory] {
+        return categories.compactMap { category in
+            guard let weekday = Calendar.weekdayNumber(for: currentDate) else { return nil }
+            let filteredResults = category.trackers.filter { $0.schedule.contains(weekday) }
+            return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
+        }
+    }
         
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-             
+        
         hideKeyboardWhenTappedAround()
         configureLayout()
-        updateStubStatus()
+        updateStubIsHiddenStatus()
     }
     
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categories.count
+        return categoriesResults.count
     }
     
     func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories[section].trackers.count
+        return categoriesResults[section].trackers.count
     }
     
     func collectionView(_: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell {
-            if let category = categories[safe: indexPath.section] {
+            if let category = categoriesResults[safe: indexPath.section] {
                 let tracker = category.trackers[indexPath.row]
                 cell.titleLabel.text = tracker.name
             }
@@ -179,13 +190,19 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         view.backgroundColor = .ypWhite
     }
     
-    private func updateStubStatus() {
-        let isHidden = categories.count > 0 ? true : false
+    private func updateStubIsHiddenStatus() {
+        let isHidden = categoriesResults.count > 0 ? true : false
         stubStackView.isHidden = isHidden
     }
     
     private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
         return self.categories.first(where: { $0.header == category.header }) ?? nil
+    }
+        
+    @objc private func dateChanged(_ sender: UIDatePicker) {
+        currentDate = sender.date
+        collectionView.reloadData()
+        updateStubIsHiddenStatus()
     }
         
     @objc private func addTracker() {
@@ -201,7 +218,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 self.categories.append(newCategory)
             }
             self.collectionView.reloadData()
-            self.updateStubStatus()
+            self.updateStubIsHiddenStatus()
         }
         creationViewController.modalPresentationStyle = .pageSheet
         navigationController?.present(creationViewController, animated: true, completion: nil)
