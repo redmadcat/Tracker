@@ -42,6 +42,8 @@ final class TrackerCardCell: UICollectionViewCell {
         label.text = "Some habbit"
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypWhite
+        label.numberOfLines = 2
+        label.baselineAdjustment = .alignBaselines
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -59,7 +61,7 @@ final class TrackerCardCell: UICollectionViewCell {
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
         button.tintColor = .ypWhite
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), for: .normal)
         button.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -124,7 +126,9 @@ final class TrackerCardCell: UICollectionViewCell {
         self.isCompletedToday = isCompletedToday
         self.indexPath = indexPath
                 
-        let image = isCompletedToday ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+        let image = isCompletedToday ?
+            UIImage(systemName: "checkmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)) :
+            UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(weight: .medium))
         cardStackView.backgroundColor = tracker.color
         completeButton.backgroundColor = tracker.color
         completeButton.setImage(image, for: .normal)
