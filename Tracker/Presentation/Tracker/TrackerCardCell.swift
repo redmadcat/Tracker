@@ -8,8 +8,10 @@
 import UIKit
 
 final class TrackerCardCell: UICollectionViewCell {
-    // MARK: - Definition
-    let cardStackView: UIStackView = {
+    // MARK: - Definition    
+    weak var delegate: TrackerCardCellDelegate?
+    
+    private let cardStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.layer.cornerRadius = 16
@@ -20,7 +22,7 @@ final class TrackerCardCell: UICollectionViewCell {
         return stackView
     }()
         
-    let emojiFrame: UIStackView = {
+    private let emojiFrame: UIStackView = {
         let stackView = UIStackView()
         stackView.layer.cornerRadius = 12
         stackView.layer.backgroundColor = UIColor.white.withAlphaComponent(0.3).cgColor
@@ -29,14 +31,14 @@ final class TrackerCardCell: UICollectionViewCell {
         return stackView
     }()
     
-    let emojiLabel: UILabel = {
+    private let emojiLabel: UILabel = {
         let label = UILabel()
         label.text = "🥹"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Some habbit"
         label.font = .systemFont(ofSize: 12, weight: .medium)
@@ -45,25 +47,30 @@ final class TrackerCardCell: UICollectionViewCell {
         return label
     }()
     
-    let countLabel: UILabel = {
+    private let countLabel: UILabel = {
         let label = UILabel()
-        label.text = "0 дней"
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let completeButton: UIButton = {
+    private lazy var completeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 17
         button.contentHorizontalAlignment = .center
         button.contentVerticalAlignment = .center
         button.tintColor = .ypWhite
         button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .ypSelection5
         return button
     }()
+    
+    private var isCompletedToday = false
+    private var trackerId: UUID?
+    private var daysCounter: Int = 0
+    private var indexPath: IndexPath?
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -109,5 +116,26 @@ final class TrackerCardCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with tracker: Tracker, counter daysCounter: Int, completion isCompletedToday: Bool, date selectedDate: Date, at indexPath: IndexPath) {
+        trackerId = tracker.id
+        titleLabel.text = tracker.name
+        countLabel.text = numberToStringDaysForm(to: daysCounter)
+                    
+        self.isCompletedToday = isCompletedToday
+        self.indexPath = indexPath
+                
+        let image = isCompletedToday ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+        completeButton.setImage(image, for: .normal)
+        completeButton.isEnabled = selectedDate.isLessThan(date: Date(), granularity: .day)
+    }
+                
+    // MARK: - Private func
+    @objc private func completionButtonTapped() {
+        guard let trackerId,
+              let indexPath else { return }
+        
+        delegate?.setCompletionTo(completion: isCompletedToday, with: trackerId, at: indexPath)
     }
 }
