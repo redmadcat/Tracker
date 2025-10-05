@@ -44,17 +44,6 @@ final class TabBarController: UITabBarController {
     }
 }
 
-#if DEBUG
-import SwiftUI
-
-@available(iOS 13, *)
-struct TabBarControllerPreview: PreviewProvider {
-    static var previews: some View {
-        ForEach(UIViewController.devices, id: \.self) { deviceName in
-            TabBarController().toPreview()
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
+#Preview {
+    TabBarController()
 }
-#endif

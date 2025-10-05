@@ -125,17 +125,6 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
 }
 
-#if DEBUG
-import SwiftUI
-
-@available(iOS 13, *)
-struct TrackerScheduleViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        ForEach(UIViewController.devices, id: \.self) { deviceName in
-            TrackerScheduleViewController().toPreview()
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
+#Preview {
+    TrackerScheduleViewController()
 }
-#endif

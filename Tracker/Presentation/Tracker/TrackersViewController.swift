@@ -180,8 +180,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         view.addSubview(collectionView)
                 
         NSLayoutConstraint.activate([
-            stubStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stubStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stubStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stubStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stubStackView.heightAnchor.constraint(equalToConstant: 106),
             
             datePicker.heightAnchor.constraint(equalToConstant: 34),
@@ -252,17 +252,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
 }
 
-#if DEBUG
-import SwiftUI
-
-@available(iOS 13, *)
-struct TrackersViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        ForEach(UIViewController.devices, id: \.self) { deviceName in
-            TrackersViewController().toPreview()
-                .previewDevice(PreviewDevice(rawValue: deviceName))
-                .previewDisplayName(deviceName)
-        }
-    }
+#Preview {
+    TrackerCreationViewController()
 }
-#endif
