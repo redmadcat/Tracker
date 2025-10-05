@@ -22,6 +22,7 @@
 		9468BEBD2E700FFD00419591 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEBC2E700FF100419591 /* UILabel+Extensions.swift */; };
 		949866442E928389005C5C42 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866432E928380005C5C42 /* Date+Extensions.swift */; };
 		949866472E92958F005C5C42 /* DaysCounterHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866462E92955F005C5C42 /* DaysCounterHelper.swift */; };
+		9498664A2E92C69E005C5C42 /* TrackerCategoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866492E92C693005C5C42 /* TrackerCategoryMock.swift */; };
 		94C109B92E8D106C00589CB7 /* TrackerScheduleViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C109B82E8D105E00589CB7 /* TrackerScheduleViewController+Extensions.swift */; };
 		94C109BB2E8D1C9900589CB7 /* TrackerCardCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */; };
 		94ED0F7F2E826E0E00D155C3 /* TrackerScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ED0F7E2E826E0400D155C3 /* TrackerScheduleViewController.swift */; };
@@ -60,6 +61,7 @@
 		9468BEBC2E700FF100419591 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
 		949866432E928380005C5C42 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		949866462E92955F005C5C42 /* DaysCounterHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysCounterHelper.swift; sourceTree = "<group>"; };
+		949866492E92C693005C5C42 /* TrackerCategoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryMock.swift; sourceTree = "<group>"; };
 		94C109B82E8D105E00589CB7 /* TrackerScheduleViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackerScheduleViewController+Extensions.swift"; sourceTree = "<group>"; };
 		94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCardCellDelegate.swift; sourceTree = "<group>"; };
 		94ED0F7E2E826E0400D155C3 /* TrackerScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerScheduleViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		9425F08C2E69B592009A884A /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				949866482E92C683005C5C42 /* Mock */,
 				949866452E929554005C5C42 /* Helpers */,
 				94FF964D2E72C0F800B75A0F /* Models */,
 				9425F0962E6AC8A1009A884A /* Extensions */,
@@ -200,6 +203,14 @@
 				949866462E92955F005C5C42 /* DaysCounterHelper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		949866482E92C683005C5C42 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				949866492E92C693005C5C42 /* TrackerCategoryMock.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 		94FF964D2E72C0F800B75A0F /* Models */ = {
@@ -293,6 +304,7 @@
 				94ED0F892E82C62B00D155C3 /* Calendar+Extensions.swift in Sources */,
 				9468BEBB2E6ED9B100419591 /* UIButton+Extensions.swift in Sources */,
 				94FF964F2E72C10E00B75A0F /* Tracker.swift in Sources */,
+				9498664A2E92C69E005C5C42 /* TrackerCategoryMock.swift in Sources */,
 				9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */,
 				9468BEBD2E700FFD00419591 /* UILabel+Extensions.swift in Sources */,
 				94F478742E7C06D900EE187D /* TrackerNameCell.swift in Sources */,

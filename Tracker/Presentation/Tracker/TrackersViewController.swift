@@ -57,7 +57,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }()
     
     private let defaultCategory = "Без категории"
-    private lazy var categories: [TrackerCategory] = [TrackerCategory(header: self.defaultCategory, trackers: [])]
+    private lazy var categories: [TrackerCategory] =
+        [TrackerCategory(header: self.defaultCategory, trackers: [])] + TrackerCategoryMock.categories
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = Date()
     
