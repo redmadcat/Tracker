@@ -15,7 +15,6 @@ final class TrackerCardCell: UICollectionViewCell {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.layer.cornerRadius = 16
-        stackView.backgroundColor = .ypSelection5
         stackView.layer.borderWidth = 1
         stackView.layer.borderColor = UIColor.ypBackgroundAlpha30.cgColor
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,7 +62,6 @@ final class TrackerCardCell: UICollectionViewCell {
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .ypSelection5
         return button
     }()
     
@@ -127,6 +125,8 @@ final class TrackerCardCell: UICollectionViewCell {
         self.indexPath = indexPath
                 
         let image = isCompletedToday ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
+        cardStackView.backgroundColor = tracker.color
+        completeButton.backgroundColor = tracker.color
         completeButton.setImage(image, for: .normal)
         completeButton.isEnabled = selectedDate.isLessThan(date: Date(), granularity: .day)
     }
