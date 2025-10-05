@@ -88,7 +88,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     func collectionView(_: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell else { return UICollectionViewCell() }
-        if let category = categories[safe: indexPath.section] {
+        if let category = visibleCategories[safe: indexPath.section] {
             let tracker = category.trackers[indexPath.row]
             
             let daysCounter = completedTrackers.filter { $0.trackerId == tracker.id }.count
@@ -112,7 +112,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             return UICollectionReusableView()
         }
                         
-        if let category = categories[safe: indexPath.section] {
+        if let category = visibleCategories[safe: indexPath.section] {
             header.setHeader(with: category.header)
         }
         return header
@@ -225,7 +225,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
-        return self.categories.first(where: { $0.header == category.header }) ?? nil
+        return visibleCategories.first(where: { $0.header == category.header }) ?? nil
     }
         
     @objc private func dateChanged(_ sender: UIDatePicker) {
