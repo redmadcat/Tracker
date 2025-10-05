@@ -8,7 +8,7 @@
 import UIKit
 import Foundation
 
-final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating,
+final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
                                     TrackerCardCellDelegate {
     // MARK: - Definition
     private lazy var collectionView: UICollectionView = {
@@ -135,12 +135,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 46)
     }
-    
-    // MARK: - UISearchResultsUpdating
-    func updateSearchResults(for searchController: UISearchController) {
         
-    }
-    
     // MARK: - TrackerCardCellDelegate
     func setCompletionTo(completion: Bool, with id: UUID, at indexPath: IndexPath) {
         if completion {
