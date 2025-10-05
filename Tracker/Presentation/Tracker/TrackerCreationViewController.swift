@@ -218,7 +218,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         if let trackerName {
             var trackers = [Tracker]()
             trackers.append(Tracker(id: UUID(), name: trackerName, color: .ypSelection5, emoji: "", schedule: selectedDays))
-            let category = TrackerCategory(header: "Важное", trackers: trackers)
+            let category = TrackerCategory(header: "", trackers: trackers)
             onTrackerCreated?(category)
         }
         dismiss(animated: true)
