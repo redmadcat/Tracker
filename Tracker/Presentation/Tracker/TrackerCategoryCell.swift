@@ -17,7 +17,6 @@ final class TrackerCategoryCell: UITableViewCell {
         selectionStyle = .none
         textLabel?.text = "Категория"
         textLabel?.textColor = .ypBlack
-        detailTextLabel?.text = "Важное"
         detailTextLabel?.font = .systemFont(ofSize: 17)
         detailTextLabel?.textColor = .ypGray
         contentView.superview?.backgroundColor = .ypBackground
