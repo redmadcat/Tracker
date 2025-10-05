@@ -8,7 +8,8 @@
 import UIKit
 import Foundation
 
-final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating {
+final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchResultsUpdating,
+                                    TrackerCardCellDelegate {
     // MARK: - Definition
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -56,11 +57,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }()
     
     private var currentDate: Date = Date()
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
     
-    var categories: [TrackerCategory] = []
-    var completedTrackers: [TrackerRecord] = []
-    
-    var categoriesResults: [TrackerCategory] {
+    var visibleCategories: [TrackerCategory] {
         return categories.compactMap { category in
             guard let weekday = Calendar.weekdayNumber(for: currentDate) else { return nil }
             let filteredResults = category.trackers.filter { $0.schedule.contains(weekday) }
@@ -79,22 +79,25 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categoriesResults.count
+        return visibleCategories.count
     }
     
     func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoriesResults[section].trackers.count
+        return visibleCategories[section].trackers.count
     }
     
     func collectionView(_: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell {
-            if let category = categoriesResults[safe: indexPath.section] {
-                let tracker = category.trackers[indexPath.row]
-                cell.titleLabel.text = tracker.name
-            }
-            return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell else { return UICollectionViewCell() }
+        if let category = categories[safe: indexPath.section] {
+            let tracker = category.trackers[indexPath.row]
+            
+            let daysCounter = completedTrackers.filter { $0.trackerId == tracker.id }.count
+            let isCompleted = iTrackerCompletedToday(id: tracker.id)
+            
+            cell.configure(with: tracker, counter: daysCounter, completion: isCompleted, date: currentDate, at: indexPath)
+            cell.delegate = self
         }
-        return UICollectionViewCell()
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -136,7 +139,21 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     func updateSearchResults(for searchController: UISearchController) {
         
     }
+    
+    // MARK: - TrackerCardCellDelegate
+    func setCompletionTo(completion: Bool, with id: UUID, at indexPath: IndexPath) {
+        if completion {
+            completedTrackers.removeAll { trackerRecord in
+                isSameTrackerRecord(trackerRecord: trackerRecord, id: id)
+            }
+        } else {
+            let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
+            completedTrackers.append(trackerRecord)
+        }
         
+        collectionView.reloadItems(at: [indexPath])
+    }
+                
     // MARK: - Private func
     private func configureLayout() {
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -190,8 +207,20 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         view.backgroundColor = .ypWhite
     }
     
+    private func iTrackerCompletedToday(id: UUID) -> Bool {
+        completedTrackers.contains { trackerRecord in
+            let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: currentDate)
+            return  trackerRecord.trackerId == id && isSameDay
+        }
+    }
+    
+    private func isSameTrackerRecord(trackerRecord: TrackerRecord, id: UUID) -> Bool {
+        let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: currentDate)
+        return trackerRecord.trackerId == id && isSameDay
+    }
+    
     private func updateStubIsHiddenStatus() {
-        let isHidden = categoriesResults.count > 0 ? true : false
+        let isHidden = visibleCategories.count > 0 ? true : false
         stubStackView.isHidden = isHidden
     }
     
