@@ -163,7 +163,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         let rightButton = UIBarButtonItem(customView: datePicker)
                                                         
         let searchBar = UISearchController(searchResultsController: nil)
-        searchBar.searchResultsUpdater = self
         searchBar.obscuresBackgroundDuringPresentation = false
         searchBar.searchBar.placeholder = "Поиск"
         searchBar.hidesNavigationBarDuringPresentation = false
