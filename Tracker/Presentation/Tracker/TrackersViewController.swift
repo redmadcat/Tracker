@@ -31,7 +31,16 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
     }()
-            
+                                        
+    private lazy var stubStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.distribution = .equalCentering
+        stackView.axis = .vertical
+        stackView.backgroundColor = .clear
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,19 +55,11 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         font:.systemFont(ofSize: 12, weight: .medium),
         textAlighment: .center)
     }()
-                            
-    private lazy var stubStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .equalCentering
-        stackView.axis = .vertical
-        stackView.backgroundColor = .clear
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
     
-    private var currentDate: Date = Date()
-    private var categories: [TrackerCategory] = []
+    private let defaultCategory = "Без категории"
+    private lazy var categories: [TrackerCategory] = [TrackerCategory(header: self.defaultCategory, trackers: [])]
     private var completedTrackers: [TrackerRecord] = []
+    private var currentDate: Date = Date()
     
     var visibleCategories: [TrackerCategory] {
         return categories.compactMap { category in
@@ -225,7 +226,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
-        return visibleCategories.first(where: { $0.header == category.header }) ?? nil
+        return category.header.isEmpty ?
+            categories.first(where: { $0.header == defaultCategory }) :
+            categories.first(where: { $0.header == category.header })
     }
         
     @objc private func dateChanged(_ sender: UIDatePicker) {
