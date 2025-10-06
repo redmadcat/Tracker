@@ -170,7 +170,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
             
             footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             footerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            footerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             footerView.heightAnchor.constraint(equalToConstant: 80),
             
             cancelButton.leadingAnchor.constraint(equalTo: footerView.leadingAnchor),
