@@ -121,7 +121,7 @@ final class TrackerCardCell: UICollectionViewCell {
     func configure(with tracker: Tracker, counter daysCounter: Int, completion isCompletedToday: Bool, date selectedDate: Date, at indexPath: IndexPath) {
         trackerId = tracker.id
         titleLabel.text = tracker.name
-        countLabel.text = numberToStringDaysForm(to: daysCounter)
+        countLabel.text = daysCounter.daysWordForm
                     
         self.isCompletedToday = isCompletedToday
         self.indexPath = indexPath
