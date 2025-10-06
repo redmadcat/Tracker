@@ -8,11 +8,9 @@
 import UIKit
 
 final class TrackerCategoryCell: UITableViewCell {
-    
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerCategoryCell.reuseIdentifier) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         accessoryType = .disclosureIndicator
         selectionStyle = .none
         textLabel?.text = "Категория"
@@ -24,7 +22,7 @@ final class TrackerCategoryCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func layoutSubviews() {

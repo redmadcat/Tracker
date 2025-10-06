@@ -11,8 +11,27 @@ final class TrackerNameCell: UITableViewCell {
     // MARK: - Definition
     private weak var delegate: UITextFieldDelegate?
     
-    private lazy var textField: UITextField = {
-        let textField = TrackerTextField()
+    private lazy var textField = TrackerTextField()
+                        
+    // MARK: - Lifecycle
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerNameCell.reuseIdentifier, delegate: UITextFieldDelegate?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.delegate = delegate
+        configureUI()
+        configureLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        textField.becomeFirstResponder()
+    }
+    
+    // MARK: - Private func
+    private func configureUI() {
+        // textField
         textField.backgroundColor = .ypBackground
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Введите название трекера"
@@ -23,17 +42,14 @@ final class TrackerNameCell: UITableViewCell {
         textField.returnKeyType = UIReturnKeyType.go
         textField.clearButtonMode = .whileEditing
         textField.clearsOnBeginEditing = false
-        return textField
-    }()
-                        
-    // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerNameCell.reuseIdentifier, delegate: UITextFieldDelegate?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.delegate = delegate
-        
+                
         selectionStyle = .none
-        contentView.addSubview(textField)
         
+        // hierarchy
+        contentView.addSubview(textField)
+    }
+    
+    private func configureLayout() {
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: topAnchor),
             textField.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -41,13 +57,5 @@ final class TrackerNameCell: UITableViewCell {
             textField.bottomAnchor.constraint(equalTo: bottomAnchor),
             textField.heightAnchor.constraint(equalToConstant: 36),
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        textField.becomeFirstResponder()
     }
 }

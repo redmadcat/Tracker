@@ -11,7 +11,6 @@ final class TabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
         configureTabBarItems()
         configureTabBar()
     }
@@ -32,7 +31,6 @@ final class TabBarController: UITabBarController {
             image: UIImage(named: "StatsNoActive"),
             selectedImage: nil
         )
-        
         viewControllers = [navigationController, statsViewController]
     }
     

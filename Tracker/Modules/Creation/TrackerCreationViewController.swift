@@ -9,58 +9,17 @@ import UIKit
 
 final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {    
     // MARK: - Definition
-    private lazy var tableView: UITableView = {
-        var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(TrackerNameCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
-        tableView.register(TrackerStubCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
-        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.reuseIdentifier)
-        tableView.register(TrackerScheduleCell.self, forCellReuseIdentifier: TrackerScheduleCell.reuseIdentifier)
-        tableView.separatorStyle = .none
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
+    private lazy var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
+    private lazy var footerView = UIStackView()
+    private lazy var cancelButton = UIButton()
+    private lazy var createButton = UIButton()
     
-    private lazy var footerView: UIStackView = {
-        let footerView = UIStackView()
-        footerView.translatesAutoresizingMaskIntoConstraints = false
-        footerView.addSubview(cancelButton)
-        footerView.addSubview(createButton)
-        return footerView
-    }()
-    
-    private lazy var cancelButton: UIButton = {
-        let cancelButton = UIButton()
-        cancelButton.setTitle("Отменить", for: .normal)
-        cancelButton.setTitleColor(.ypRed, for: .normal)
-        cancelButton.layer.borderWidth = 1
-        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
-        cancelButton.layer.cornerRadius = 16
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        return cancelButton
-    }()
-    
-    private lazy var createButton: UIButton = {
-        let createButton = UIButton()
-        createButton.setTitle("Создать", for: .normal)
-        createButton.setTitleColor(.ypWhite, for: .normal)
-        createButton.backgroundColor = .ypBlack
-        createButton.layer.cornerRadius = 16
-        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        createButton.translatesAutoresizingMaskIntoConstraints = false
-        return createButton
-    }()
-    
-    private let headerLabel: UILabel = {
-        return UILabel(
-            text: "Новая привычка",
-            textColor: .ypBlack,
-            font:.systemFont(ofSize: 16, weight: .medium),
-            textAlighment: .center)
-    }()
-    
+    private let headerLabel = UILabel(
+        text: "Новая привычка",
+        textColor: .ypBlack,
+        font:.systemFont(ofSize: 16, weight: .medium),
+        textAlighment: .center)
+        
     private let textLengthLimit = 38
     private var warningCellVisible: Bool = false
     private var selectedDays = [Int]()
@@ -71,8 +30,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         hideKeyboardWhenTappedAround()
+        configureUI()
         configureLayout()
         updateCreateButtonStatus()
     }
@@ -139,7 +98,6 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
                     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else { return true }
-        
         let textLength = text.count + string.count - range.length
         let shouldWarn = textLength <= textLengthLimit ? false : true
         updateWarningCellVisibilityTo(shouldWarn)
@@ -152,11 +110,48 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
                 
     // MARK: - Private func
-    private func configureLayout() {
+    private func configureUI() {
+        // tableView
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(TrackerNameCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
+        tableView.register(TrackerStubCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
+        tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.reuseIdentifier)
+        tableView.register(TrackerScheduleCell.self, forCellReuseIdentifier: TrackerScheduleCell.reuseIdentifier)
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // footerView
+        footerView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // cancelButton
+        cancelButton.setTitle("Отменить", for: .normal)
+        cancelButton.setTitleColor(.ypRed, for: .normal)
+        cancelButton.layer.borderWidth = 1
+        cancelButton.layer.borderColor = UIColor.ypRed.cgColor
+        cancelButton.layer.cornerRadius = 16
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // createButton
+        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitleColor(.ypWhite, for: .normal)
+        createButton.backgroundColor = .ypBlack
+        createButton.layer.cornerRadius = 16
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.backgroundColor = .ypWhite
+        
+        // hierarchy
+        footerView.addSubview(cancelButton)
+        footerView.addSubview(createButton)
         view.addSubview(headerLabel)
         view.addSubview(tableView)
         view.addSubview(footerView)
-
+    }
+    
+    private func configureLayout() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34),
             headerLabel.widthAnchor.constraint(equalToConstant: 133),
@@ -184,8 +179,6 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
             createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
             createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8)
         ])
-        
-        view.backgroundColor = .ypWhite
     }
     
     private func updateWarningCellVisibilityTo(_ value: Bool, at indexPath: IndexPath = IndexPath(row: 1, section: 0)) {
@@ -210,6 +203,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         return false
     }
     
+    // MARK: - Actions
     @objc private func cancelButtonTapped() {
         dismiss(animated: true)
     }

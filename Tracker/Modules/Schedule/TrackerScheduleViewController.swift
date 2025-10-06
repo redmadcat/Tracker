@@ -11,37 +11,14 @@ import Foundation
 final class TrackerScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
                                             TrackerWeekdayCellDelegate {
     // MARK: - Definition
-    private lazy var tableView: UITableView = {
-        var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(TrackerWeekdayCell.self, forCellReuseIdentifier: TrackerWeekdayCell.reuseIdentifier)
-        tableView.separatorStyle = .none
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
+    private lazy var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
+    private lazy var createButton = UIButton()
     
-    private lazy var createButton: UIButton = {
-        let createButton = UIButton()
-        createButton.setTitle("Готово", for: .normal)
-        createButton.setTitleColor(.ypWhite, for: .normal)
-        createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        createButton.backgroundColor = .ypBlack
-        createButton.layer.cornerRadius = 16
-        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        createButton.translatesAutoresizingMaskIntoConstraints = false
-        return createButton
-    }()
-    
-    private let headerLabel: UILabel = {
-        let headerLabel = UILabel(
-            text: "Расписание",
-            textColor: .ypBlack,
-            font:.systemFont(ofSize: 16, weight: .medium),
-            textAlighment: .center)
-        headerLabel.translatesAutoresizingMaskIntoConstraints = false
-        return headerLabel
-    }()
+    private let headerLabel = UILabel(
+        text: "Расписание",
+        textColor: .ypBlack,
+        font:.systemFont(ofSize: 16, weight: .medium),
+        textAlighment: .center)
     
     private var selectedDays = [Int]()
     var onScheduleSelected: (([Int]) -> Void)?
@@ -49,7 +26,7 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureUI()
         configureLayout()
     }
     
@@ -91,11 +68,32 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
         
     // MARK: - Private func
-    private func configureLayout() {
+    private func configureUI() {
+        // tableView
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(TrackerWeekdayCell.self, forCellReuseIdentifier: TrackerWeekdayCell.reuseIdentifier)
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // createButton
+        createButton.setTitle("Готово", for: .normal)
+        createButton.setTitleColor(.ypWhite, for: .normal)
+        createButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        createButton.backgroundColor = .ypBlack
+        createButton.layer.cornerRadius = 16
+        createButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
+                
+        view.backgroundColor = .ypWhite
+        
+        // hierarchy
         view.addSubview(headerLabel)
         view.addSubview(tableView)
         view.addSubview(createButton)
+    }
         
+    private func configureLayout() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34),
             headerLabel.widthAnchor.constraint(equalToConstant: 133),
@@ -112,10 +110,9 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
             createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             createButton.heightAnchor.constraint(equalToConstant: 60),
         ])
-        
-        view.backgroundColor = .ypWhite
     }
     
+    // MARK: - Actions
     @objc private func createButtonTapped() {
         onScheduleSelected?(selectedDays.sorted {
             ($0 == 0 ? Int.max : $0) <

@@ -20,7 +20,6 @@ final class TrackerHeaderView: UICollectionReusableView {
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         addSubview(headerLabel)
         
         NSLayoutConstraint.activate([

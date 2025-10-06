@@ -11,51 +11,16 @@ import Foundation
 final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
                                     TrackerCardCellDelegate {
     // MARK: - Definition
-    private lazy var collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(TrackerCardCell.self, forCellWithReuseIdentifier: TrackerCardCell.reuseIdentifier)
-        collectionView.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerHeaderView.reuseIdentifier)
-        collectionView.backgroundColor = .clear
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        return collectionView
-    }()
-    
-    private lazy var datePicker: UIDatePicker = {
-        let datePicker = UIDatePicker()
-        datePicker.preferredDatePickerStyle = .compact
-        datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
-        datePicker.addTarget(self, action: #selector (dateChanged(_:)), for: .valueChanged)
-        datePicker.translatesAutoresizingMaskIntoConstraints = false
-        return datePicker
-    }()
-                                        
-    private lazy var stubStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.distribution = .equalCentering
-        stackView.axis = .vertical
-        stackView.backgroundColor = .clear
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "DizzyScreenLogo")
-        return imageView
-    }()
-    
-    private let stubLabel: UILabel = {
-        return UILabel(
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var datePicker = UIDatePicker()
+    private lazy var stubStackView = UIStackView()
+    private let imageView = UIImageView ()
+    private let stubLabel = UILabel(
         text: "Что будем отслеживать ?",
         textColor: .ypBlack,
         font:.systemFont(ofSize: 12, weight: .medium),
         textAlighment: .center)
-    }()
-    
+        
     private let defaultCategory = "Без категории"
     private lazy var categories: [TrackerCategory] =
         [TrackerCategory(header: self.defaultCategory, trackers: [])] + TrackerCategory.mock
@@ -73,8 +38,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         hideKeyboardWhenTappedAround()
+        configureUI()
         configureLayout()
         updateStubIsHiddenStatus()
     }
@@ -103,17 +68,13 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else {
-            return UICollectionReusableView()
-        }
-        
+        guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
         guard let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: TrackerHeaderView.reuseIdentifier,
             for: indexPath) as? TrackerHeaderView else {
             return UICollectionReusableView()
         }
-                        
         if let category = visibleCategories[safe: indexPath.section] {
             header.setHeader(with: category.header)
         }
@@ -147,22 +108,25 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
             completedTrackers.append(trackerRecord)
         }
-        
         collectionView.reloadItems(at: [indexPath])
     }
                 
     // MARK: - Private func
-    private func configureLayout() {
+    private func configureUI() {
+        // navigationController
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Трекеры"
         
+        // leftButton
         let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(addTracker))
         leftButton.image = UIImage(named: "AddTracker")
         leftButton.tintColor = .ypBlack
         leftButton.imageInsets = UIEdgeInsets(top: 0, left: -10, bottom: 0, right: 0)
 
+        // rightButton
         let rightButton = UIBarButtonItem(customView: datePicker)
-                                                        
+        
+        // searchBar
         let searchBar = UISearchController(searchResultsController: nil)
         searchBar.obscuresBackgroundDuringPresentation = false
         searchBar.searchBar.placeholder = "Поиск"
@@ -172,13 +136,42 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.searchController = searchBar
-                        
+        
+        // collectionView
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(TrackerCardCell.self, forCellWithReuseIdentifier: TrackerCardCell.reuseIdentifier)
+        collectionView.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerHeaderView.reuseIdentifier)
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // datePicker
+        datePicker.preferredDatePickerStyle = .compact
+        datePicker.datePickerMode = .date
+        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.addTarget(self, action: #selector (dateChanged(_:)), for: .valueChanged)
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        
+        // stubStackView
+        stubStackView.distribution = .equalCentering
+        stubStackView.axis = .vertical
+        stubStackView.backgroundColor = .clear
+        stubStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // imageView
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "DizzyScreenLogo")
+        
+        view.backgroundColor = .ypWhite
+        
+        // hierarchy
         stubStackView.addSubview(imageView)
         stubStackView.addSubview(stubLabel)
-        
         view.addSubview(stubStackView)
         view.addSubview(collectionView)
-                
+    }
+    
+    private func configureLayout() {
         NSLayoutConstraint.activate([
             stubStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             stubStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
@@ -199,8 +192,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             stubLabel.leadingAnchor.constraint(equalTo: stubStackView.leadingAnchor, constant: 16),
             stubLabel.trailingAnchor.constraint(equalTo: stubStackView.trailingAnchor, constant: -16)
         ])
-                                    
-        view.backgroundColor = .ypWhite
     }
     
     private func iTrackerCompletedToday(id: UUID) -> Bool {
@@ -226,6 +217,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             categories.first(where: { $0.header == category.header })
     }
         
+    // MARK: - Actions
     @objc private func dateChanged(_ sender: UIDatePicker) {
         currentDate = sender.date
         collectionView.reloadData()

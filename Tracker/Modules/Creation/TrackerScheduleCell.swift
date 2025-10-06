@@ -11,7 +11,6 @@ final class TrackerScheduleCell: UITableViewCell {
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerScheduleCell.reuseIdentifier) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         accessoryType = .disclosureIndicator
         selectionStyle = .none
         textLabel?.text = "Расписание"
@@ -22,7 +21,7 @@ final class TrackerScheduleCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {

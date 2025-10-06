@@ -11,79 +11,90 @@ final class TrackerCardCell: UICollectionViewCell {
     // MARK: - Definition    
     weak var delegate: TrackerCardCellDelegate?
     
-    private let cardStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.layer.cornerRadius = 16
-        stackView.layer.borderWidth = 1
-        stackView.layer.borderColor = UIColor.ypBackgroundAlpha30.cgColor
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-        
-    private let emojiFrame: UIStackView = {
-        let stackView = UIStackView()
-        stackView.layer.cornerRadius = 12
-        stackView.layer.backgroundColor = UIColor.white.withAlphaComponent(0.3).cgColor
-        stackView.distribution = .equalCentering
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
-    private let emojiLabel: UILabel = {
-        let label = UILabel()
-        label.text = "🥹"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Some habbit"
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.textColor = .ypWhite
-        label.numberOfLines = 2
-        label.baselineAdjustment = .alignBaselines
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let countLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var completeButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 17
-        button.contentHorizontalAlignment = .center
-        button.contentVerticalAlignment = .center
-        button.tintColor = .ypWhite
-        button.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(weight: .medium)), for: .normal)
-        button.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private let cardStackView = UIStackView()
+    private let emojiFrame = UIStackView()
+    private let emojiLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let countLabel = UILabel()
+    private lazy var completeButton = UIButton()
     
     private var isCompletedToday = false
     private var trackerId: UUID?
-    private var daysCounter: Int = 0
     private var indexPath: IndexPath?
     
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configureUI()
+        configureLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with tracker: Tracker, counter daysCounter: Int, completion isCompletedToday: Bool, date selectedDate: Date, at indexPath: IndexPath) {
+        trackerId = tracker.id
+        titleLabel.text = tracker.name
+        countLabel.text = daysCounter.daysWordForm
+                    
+        self.isCompletedToday = isCompletedToday
+        self.indexPath = indexPath
+                
+        let image = isCompletedToday ?
+            UIImage(systemName: "checkmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)) :
+            UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(weight: .medium))
+        cardStackView.backgroundColor = tracker.color
+        completeButton.backgroundColor = tracker.color
+        completeButton.setImage(image, for: .normal)
+        completeButton.isEnabled = selectedDate.isLessThan(date: Date(), granularity: .day)
+    }
+    
+    // MARK: - Private func
+    private func configureUI() {
+        // cardStackView
+        cardStackView.axis = .horizontal
+        cardStackView.layer.cornerRadius = 16
+        cardStackView.layer.borderWidth = 1
+        cardStackView.layer.borderColor = UIColor.ypBackgroundAlpha30.cgColor
+        cardStackView.translatesAutoresizingMaskIntoConstraints = false
         
+        // emojiFrame
+        emojiFrame.layer.cornerRadius = 12
+        emojiFrame.layer.backgroundColor = UIColor.white.withAlphaComponent(0.3).cgColor
+        emojiFrame.distribution = .equalCentering
+        emojiFrame.translatesAutoresizingMaskIntoConstraints = false
+        
+        // emojiLabel
+        emojiLabel.text = "🥹"
+        emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // titleLabel
+        titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        titleLabel.textColor = .ypWhite
+        titleLabel.numberOfLines = 2
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // countLabel
+        countLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        // completeButton
+        completeButton.layer.cornerRadius = 17
+        completeButton.tintColor = .ypWhite
+        completeButton.addTarget(self, action: #selector(completionButtonTapped), for: .touchUpInside)
+        completeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // hierarchy
         emojiFrame.addSubview(emojiLabel)
         cardStackView.addSubview(emojiFrame)
         cardStackView.addSubview(titleLabel)
-                
         contentView.addSubview(cardStackView)
         contentView.addSubview(countLabel)
         contentView.addSubview(completeButton)
-        
+    }
+    
+    private func configureLayout() {
         NSLayoutConstraint.activate([
             cardStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -114,32 +125,9 @@ final class TrackerCardCell: UICollectionViewCell {
         ])
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure(with tracker: Tracker, counter daysCounter: Int, completion isCompletedToday: Bool, date selectedDate: Date, at indexPath: IndexPath) {
-        trackerId = tracker.id
-        titleLabel.text = tracker.name
-        countLabel.text = daysCounter.daysWordForm
-                    
-        self.isCompletedToday = isCompletedToday
-        self.indexPath = indexPath
-                
-        let image = isCompletedToday ?
-            UIImage(systemName: "checkmark", withConfiguration: UIImage.SymbolConfiguration(weight: .bold)) :
-            UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(weight: .medium))
-        cardStackView.backgroundColor = tracker.color
-        completeButton.backgroundColor = tracker.color
-        completeButton.setImage(image, for: .normal)
-        completeButton.isEnabled = selectedDate.isLessThan(date: Date(), granularity: .day)
-    }
-                
-    // MARK: - Private func
+    // MARK: - Actions
     @objc private func completionButtonTapped() {
-        guard let trackerId,
-              let indexPath else { return }
-        
+        guard let trackerId, let indexPath else { return }
         delegate?.setCompletionTo(completion: isCompletedToday, with: trackerId, at: indexPath)
     }
 }
