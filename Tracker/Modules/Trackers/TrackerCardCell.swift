@@ -33,10 +33,11 @@ final class TrackerCardCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with tracker: Tracker, counter daysCounter: Int, completion isCompletedToday: Bool, date selectedDate: Date, at indexPath: IndexPath) {
+    func configure(with tracker: Tracker, daysCounter counter: Int, completion isCompletedToday: Bool, date selectedDate: Date, at indexPath: IndexPath) {
         trackerId = tracker.id
+        emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.name
-        countLabel.text = daysCounter.daysWordForm
+        countLabel.text = counter.daysWordForm
                     
         self.isCompletedToday = isCompletedToday
         self.indexPath = indexPath
@@ -66,7 +67,6 @@ final class TrackerCardCell: UICollectionViewCell {
         emojiFrame.translatesAutoresizingMaskIntoConstraints = false
         
         // emojiLabel
-        emojiLabel.text = "🥹"
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // titleLabel

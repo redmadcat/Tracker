@@ -61,7 +61,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             let daysCounter = completedTrackers.filter { $0.trackerId == tracker.id }.count
             let isCompleted = iTrackerCompletedToday(id: tracker.id)
             
-            cell.configure(with: tracker, counter: daysCounter, completion: isCompleted, date: currentDate, at: indexPath)
+            cell.configure(with: tracker, daysCounter: daysCounter, completion: isCompleted, date: currentDate, at: indexPath)
             cell.delegate = self
         }
         return cell

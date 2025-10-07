@@ -11,6 +11,15 @@ final class TrackerColorCell: UICollectionViewCell {
     // MARK: - Definition
     private let colorRect = UIView()
     
+    override var isSelected: Bool {
+        didSet {
+            contentView.layer.borderWidth = isSelected ? 3 : 0
+            contentView.layer.borderColor = isSelected ?
+                colorRect.backgroundColor?.withAlphaComponent(0.3).cgColor :
+                UIColor.clear.cgColor
+        }
+    }
+    
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,6 +43,7 @@ final class TrackerColorCell: UICollectionViewCell {
         colorRect.translatesAutoresizingMaskIntoConstraints = false
         
         // hierarchy
+        contentView.layer.cornerRadius = 16
         contentView.addSubview(colorRect)
     }
     

@@ -7,8 +7,9 @@
 
 import UIKit
     
-final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     // MARK: - Definition
+    private weak var delegate: TrackerCreationViewController?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     private var emojis: [String] = [
@@ -18,8 +19,9 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
     ]
     
     // MARK: - Lifecycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerEmojiListCell.reuseIdentifier) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerEmojiListCell.reuseIdentifier, delegate: TrackerCreationViewController?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.delegate = delegate
         configureUI()
         configureLayout()
     }
@@ -74,6 +76,18 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
         return 0
     }
     
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedEmoji = emojis[indexPath.row]
+        delegate?.setEmoji(selectedEmoji)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? TrackerEmojiCell {
+            cell.isSelected = false
+        }
+    }
+    
     // MARK: - Private func
     private func configureUI() {
         // collectionView
@@ -99,9 +113,4 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    TrackerEmojiListCell()
 }

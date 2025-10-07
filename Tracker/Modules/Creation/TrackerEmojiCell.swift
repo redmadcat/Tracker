@@ -11,6 +11,14 @@ final class TrackerEmojiCell: UICollectionViewCell {
     // MARK: - Definition
     private let label = UILabel()
     
+    override var isSelected: Bool {
+        didSet {
+            contentView.layer.backgroundColor = isSelected ?
+                UIColor.ypLightGray.cgColor :
+                UIColor.clear.cgColor
+        }
+    }
+    
     // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)

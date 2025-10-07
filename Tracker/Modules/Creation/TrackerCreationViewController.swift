@@ -24,6 +24,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     private var warningCellVisible: Bool = false
     private var selectedDays = [Int]()
     private var trackerName: String?
+    private var trackerEmoji: String?
+    private var trackerColor: UIColor?
         
     var onTrackerCreated: ((TrackerCategory) -> Void)?
             
@@ -57,8 +59,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
                 TrackerScheduleCell(style: .subtitle)
         case 2:
             return indexPath.row == 0 ?
-                TrackerEmojiListCell(style: .default) :
-                TrackerColorListCell(style: .default)
+                TrackerEmojiListCell(style: .default, delegate: self) :
+                TrackerColorListCell(style: .default, delegate: self)
         default:
             return UITableViewCell()
         }
@@ -113,7 +115,18 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         textField.resignFirstResponder()
         return true
     }
-                
+    
+    // MARK: - Color/Emoji Picker
+    func setColor(_ color: UIColor) {
+        trackerColor = color
+        updateCreateButtonStatus()
+    }
+    
+    func setEmoji(_ emoji: String) {
+        trackerEmoji = emoji
+        updateCreateButtonStatus()
+    }
+    
     // MARK: - Private func
     private func configureUI() {
         // tableView
@@ -198,13 +211,13 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     private func updateCreateButtonStatus() {
-        createButton.isEnabled = !selectedDays.isEmpty && trackerNameIsValid() && !warningCellVisible
+        createButton.isEnabled = !selectedDays.isEmpty && trackerIsValid() && !warningCellVisible
         createButton.backgroundColor = createButton.isEnabled ? .ypBlack : .ypGray
     }
     
-    private func trackerNameIsValid() -> Bool {
-        if let trackerName {
-            return !trackerName.isEmpty
+    private func trackerIsValid() -> Bool {
+        if let trackerName, let trackerEmoji {
+            return !trackerName.isEmpty && !trackerEmoji.isEmpty && trackerColor != nil
         }
         return false
     }
@@ -215,9 +228,9 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     @objc private func createButtonTapped() {
-        if let trackerName {
+        if let trackerName, let trackerEmoji, let trackerColor {
             var trackers = [Tracker]()
-            trackers.append(Tracker(id: UUID(), name: trackerName, color: .ypSelection5, emoji: "", schedule: selectedDays))
+            trackers.append(Tracker(id: UUID(), name: trackerName, color: trackerColor, emoji: trackerEmoji, schedule: selectedDays))
             let category = TrackerCategory(header: "", trackers: trackers)
             onTrackerCreated?(category)
         }

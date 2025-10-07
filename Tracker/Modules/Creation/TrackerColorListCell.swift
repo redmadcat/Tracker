@@ -8,8 +8,9 @@
 import UIKit
 import Foundation
 
-final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
     // MARK: - Definition
+    private weak var delegate: TrackerCreationViewController?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     private var colors: [UIColor] = [
@@ -19,8 +20,9 @@ final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, U
     ]
     
     // MARK: - Lifecycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerColorListCell.reuseIdentifier) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerColorListCell.reuseIdentifier, delegate: TrackerCreationViewController?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.delegate = delegate
         configureUI()
         configureLayout()
     }
@@ -73,6 +75,18 @@ final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedColor = colors[indexPath.row]
+        delegate?.setColor(selectedColor)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? TrackerColorCell {
+            cell.isSelected = false
+        }
     }
     
     // MARK: - Private func
