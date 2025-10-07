@@ -6,7 +6,7 @@
 //
 
 extension TrackerScheduleViewController {
-    func weekDayIndex(at index: Int) -> Int {
+    func weekdayIndex(at index: Int) -> Int {
         return index < 6 ? index + 1 : 0
     }
 }
