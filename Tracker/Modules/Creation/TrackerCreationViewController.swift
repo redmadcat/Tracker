@@ -58,7 +58,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         case 2:
             return indexPath.row == 0 ?
                 TrackerEmojiListCell(style: .default) :
-                UITableViewCell()
+                TrackerColorListCell(style: .default)
         default:
             return UITableViewCell()
         }
