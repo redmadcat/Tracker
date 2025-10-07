@@ -73,9 +73,10 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
             return indexPath.row == 0 ? 75 : warningCellVisible ? 62 : 24
         case 1:
             return indexPath.row == 0 || indexPath.row == 1 ? 75 : 0
-        default:
+        case 2:
             return 204 + 50
-//            return UITableView.automaticDimension
+        default:
+            return UITableView.automaticDimension
         }
     }
     
