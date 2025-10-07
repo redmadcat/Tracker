@@ -42,7 +42,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
             
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,6 +55,10 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
             return indexPath.row == 0 ?
                 TrackerCategoryCell(style: .subtitle) :
                 TrackerScheduleCell(style: .subtitle)
+        case 2:
+            return indexPath.row == 0 ?
+                TrackerEmojiListCell(style: .default) :
+                UITableViewCell()
         default:
             return UITableViewCell()
         }
@@ -68,7 +72,8 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         case 1:
             return indexPath.row == 0 || indexPath.row == 1 ? 75 : 0
         default:
-            return UITableView.automaticDimension
+            return 204 + 50
+//            return UITableView.automaticDimension
         }
     }
     
@@ -118,6 +123,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         tableView.register(TrackerStubCell.self, forCellReuseIdentifier: TrackerStubCell.reuseIdentifier)
         tableView.register(TrackerCategoryCell.self, forCellReuseIdentifier: TrackerCategoryCell.reuseIdentifier)
         tableView.register(TrackerScheduleCell.self, forCellReuseIdentifier: TrackerScheduleCell.reuseIdentifier)
+        tableView.register(TrackerEmojiListCell.self, forCellReuseIdentifier: TrackerEmojiListCell.reuseIdentifier)
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         

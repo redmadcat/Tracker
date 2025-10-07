@@ -16,6 +16,8 @@
 		943CC29F2E93A9640023BE15 /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943CC29E2E93A95D0023BE15 /* Int+Extensions.swift */; };
 		9440AFF72E8535B100966482 /* TrackerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9440AFF62E8535A800966482 /* TrackerHeaderView.swift */; };
 		9440AFFD2E866C4700966482 /* RandomAccessCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9440AFFC2E866C3800966482 /* RandomAccessCollection+Extensions.swift */; };
+		9452A5CE2E94F6A900F62A91 /* TrackerEmojiListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452A5CD2E94F67E00F62A91 /* TrackerEmojiListCell.swift */; };
+		9452A5D02E94FC3F00F62A91 /* TrackerEmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9452A5CF2E94FC3600F62A91 /* TrackerEmojiCell.swift */; };
 		9468BEB52E6EB4D700419591 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEB42E6EB4C900419591 /* StatsViewController.swift */; };
 		9468BEB72E6EB52100419591 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEB62E6EB50E00419591 /* TrackersViewController.swift */; };
 		9468BEB92E6ED0B800419591 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468BEB82E6ED0B300419591 /* UIView+Extensions.swift */; };
@@ -54,6 +56,8 @@
 		943CC29E2E93A95D0023BE15 /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		9440AFF62E8535A800966482 /* TrackerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerHeaderView.swift; sourceTree = "<group>"; };
 		9440AFFC2E866C3800966482 /* RandomAccessCollection+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extensions.swift"; sourceTree = "<group>"; };
+		9452A5CD2E94F67E00F62A91 /* TrackerEmojiListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerEmojiListCell.swift; sourceTree = "<group>"; };
+		9452A5CF2E94FC3600F62A91 /* TrackerEmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerEmojiCell.swift; sourceTree = "<group>"; };
 		9468BEB42E6EB4C900419591 /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		9468BEB62E6EB50E00419591 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		9468BEB82E6ED0B300419591 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
@@ -199,6 +203,8 @@
 		9468BEB32E6EB49500419591 /* Creation */ = {
 			isa = PBXGroup;
 			children = (
+				9452A5CF2E94FC3600F62A91 /* TrackerEmojiCell.swift */,
+				9452A5CD2E94F67E00F62A91 /* TrackerEmojiListCell.swift */,
 				94F478712E7BDCB300EE187D /* TrackerCreationViewController.swift */,
 				94F478732E7C06D200EE187D /* TrackerNameCell.swift */,
 				94ED0F8E2E840FBC00D155C3 /* TrackerStubCell.swift */,
@@ -297,6 +303,7 @@
 				94ED0F8B2E82CF4E00D155C3 /* TrackerWeekdayCellDelegate.swift in Sources */,
 				9468BEB92E6ED0B800419591 /* UIView+Extensions.swift in Sources */,
 				94ED0F832E82820300D155C3 /* TrackerWeekdayCell.swift in Sources */,
+				9452A5D02E94FC3F00F62A91 /* TrackerEmojiCell.swift in Sources */,
 				94ED0F892E82C62B00D155C3 /* Calendar+Extensions.swift in Sources */,
 				9468BEBB2E6ED9B100419591 /* UIButton+Extensions.swift in Sources */,
 				94FF964F2E72C10E00B75A0F /* Tracker.swift in Sources */,
@@ -310,6 +317,7 @@
 				94ED0F872E82C01500D155C3 /* StringProtocol+Extensions.swift in Sources */,
 				94ED0F7F2E826E0E00D155C3 /* TrackerScheduleViewController.swift in Sources */,
 				943CC29F2E93A9640023BE15 /* Int+Extensions.swift in Sources */,
+				9452A5CE2E94F6A900F62A91 /* TrackerEmojiListCell.swift in Sources */,
 				94ED0F8D2E8408A600D155C3 /* TrackerTextField.swift in Sources */,
 				9468BEB52E6EB4D700419591 /* StatsViewController.swift in Sources */,
 				9425F08F2E69B592009A884A /* TabBarController.swift in Sources */,
