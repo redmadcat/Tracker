@@ -44,13 +44,12 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: TrackerWeekdayCell.reuseIdentifier, for: indexPath) as? TrackerWeekdayCell {
-            let dayIndex = weekDayIndex(at: indexPath.row)
-            let isOn = selectedDays.contains(dayIndex) ? true : false
-            cell.configure(index: dayIndex, delegate: self, isOn: isOn)
-            return cell
-        }
-        return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackerWeekdayCell.reuseIdentifier, for: indexPath) as? TrackerWeekdayCell else { return UITableViewCell() }
+        let weekdayIndex = weekdayIndex(at: indexPath.row)
+        let weekdayIsOn = selectedDays.contains(weekdayIndex) ? true : false
+        cell.configure(weekdayIndex: weekdayIndex, weekdayIsOn: weekdayIsOn)
+        cell.delegate = self
+        return cell
     }
     
     // MARK: - UITableViewDelegate
@@ -59,12 +58,8 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
         
     // MARK: - TrackerWeekdayCellDelegate
-    func weekdayCellDidTapLike(_ cell: TrackerWeekdayCell, isOn: Bool) {
-        if isOn {
-            selectedDays.append(cell.dayIndex)
-        } else {
-            selectedDays.reduce(cell.dayIndex)
-        }
+    func weekdayCellDidTapLike(weekdayIndex: Int, isOn: Bool) {
+        isOn ? selectedDays.append(weekdayIndex) : selectedDays.reduce(weekdayIndex)
     }
         
     // MARK: - Private func

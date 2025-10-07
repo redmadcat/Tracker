@@ -13,8 +13,7 @@ final class TrackerWeekdayCell: UITableViewCell {
     
     private lazy var toggleSwitch = UISwitch()
     private let label = UILabel()
-    
-    var dayIndex: Int = 0
+    private var weekdayIndex: Int = 0
     
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerWeekdayCell.reuseIdentifier) {
@@ -29,7 +28,7 @@ final class TrackerWeekdayCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        switch dayIndex {
+        switch weekdayIndex {
         case 1:
             addBorder(to: .bottom, width: 0.5, color: .ypGray, inset: 20)
             roundCorners(corners: [.topLeft, .topRight], radius: 16)
@@ -40,11 +39,10 @@ final class TrackerWeekdayCell: UITableViewCell {
         }
     }
     
-    func configure(index: Int, delegate: TrackerWeekdayCellDelegate, isOn: Bool) {
-        self.delegate = delegate
-        self.dayIndex = index
-        toggleSwitch.isOn = isOn
-        label.text = Calendar.weekdaySymbol(at: index)
+    func configure(weekdayIndex: Int, weekdayIsOn: Bool) {
+        self.weekdayIndex = weekdayIndex
+        toggleSwitch.isOn = weekdayIsOn
+        label.text = Calendar.weekdaySymbol(at: weekdayIndex)
     }
     
     // MARK: - Private func
@@ -79,6 +77,6 @@ final class TrackerWeekdayCell: UITableViewCell {
     
     // MARK: - Actions
     @objc private func changeSwitch() {
-        delegate?.weekdayCellDidTapLike(self, isOn: toggleSwitch.isOn)
+        delegate?.weekdayCellDidTapLike(weekdayIndex: weekdayIndex, isOn: toggleSwitch.isOn)
     }
 }
