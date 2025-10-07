@@ -192,7 +192,6 @@
 				94ED0F922E844DAA00D155C3 /* TrackerCardCell.swift */,
 				9440AFF62E8535A800966482 /* TrackerHeaderView.swift */,
 				94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */,
-				94ED0F8E2E840FBC00D155C3 /* TrackerStubCell.swift */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -202,6 +201,7 @@
 			children = (
 				94F478712E7BDCB300EE187D /* TrackerCreationViewController.swift */,
 				94F478732E7C06D200EE187D /* TrackerNameCell.swift */,
+				94ED0F8E2E840FBC00D155C3 /* TrackerStubCell.swift */,
 				94F478752E7C075F00EE187D /* TrackerCategoryCell.swift */,
 				94F478772E7C079500EE187D /* TrackerScheduleCell.swift */,
 				94ED0F8C2E84089E00D155C3 /* TrackerTextField.swift */,
