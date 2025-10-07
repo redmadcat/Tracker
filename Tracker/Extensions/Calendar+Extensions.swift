@@ -27,6 +27,10 @@ extension Calendar {
         return local.weekdaySymbols.firstIndex(of: local.weekdaySymbols[weekday - 1])
     }
     
+    static func weekdayIndex(at index: Int) -> Int {
+        return index < weekdayCount - 1 ? index + 1 : 0
+    }
+    
     static let weekdayCount: Int = {
         return local.shortWeekdaySymbols.count
     }()

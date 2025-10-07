@@ -45,7 +45,7 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackerWeekdayCell.reuseIdentifier, for: indexPath) as? TrackerWeekdayCell else { return UITableViewCell() }
-        let weekdayIndex = weekdayIndex(at: indexPath.row)
+        let weekdayIndex = Calendar.weekdayIndex(at: indexPath.row)
         let weekdayIsOn = selectedDays.contains(weekdayIndex) ? true : false
         cell.configure(weekdayIndex: weekdayIndex, weekdayIsOn: weekdayIsOn)
         cell.delegate = self
