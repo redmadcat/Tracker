@@ -244,6 +244,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
     TrackerCreationViewController()
 }

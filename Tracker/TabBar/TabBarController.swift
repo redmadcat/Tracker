@@ -8,7 +8,7 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTabBarItems()
@@ -42,6 +42,7 @@ final class TabBarController: UITabBarController {
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
     TabBarController()
 }

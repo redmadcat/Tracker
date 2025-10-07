@@ -219,6 +219,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
     TrackerCreationViewController()
 }

@@ -122,6 +122,7 @@ final class TrackerScheduleViewController: UIViewController, UITableViewDataSour
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
     TrackerScheduleViewController()
 }

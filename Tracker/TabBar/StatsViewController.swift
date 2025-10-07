@@ -9,13 +9,14 @@ import UIKit
 import Foundation
 
 final class StatsViewController: UIViewController {
-    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
     StatsViewController()
 }
