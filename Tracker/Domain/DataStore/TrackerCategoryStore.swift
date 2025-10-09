@@ -19,7 +19,7 @@ final class TrackerCategoryStore {
         self.context = context
     }
     
-    func addTrackerRecord(_ trackerCategory: TrackerCategory) throws {
+    func addTrackerCategory(_ trackerCategory: TrackerCategory) throws {
         let tracker = TrackerCategoryCoreData(context: context)
         tracker.header = trackerCategory.header
         try context.save()
