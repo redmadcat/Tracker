@@ -23,7 +23,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
     private let defaultCategory = "Без категории"
     private lazy var categories: [TrackerCategory] =
-        [TrackerCategory(header: self.defaultCategory, trackers: [])] + TrackerCategory.mock
+        [TrackerCategory(header: self.defaultCategory, trackers: [])] //+ TrackerCategory.mock
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = Date()
     
@@ -34,6 +34,13 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
         }
     }
+    
+    private let dataProvider: TrackerDataProviderProtocol? = {
+        let categoryStore = TrackerCategoryStore()
+        let trackerStore = TrackerStore()
+        let dataProvider = try? TrackerDataProvider(categoryStore, trackerStore)
+        return dataProvider
+    }()
         
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -231,10 +238,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 let newTrackers = oldCategory.trackers + category.trackers
                 oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
                 self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
+                
+                try? self.dataProvider?.addTrackerCategory(oldCategory)
             } else {
                 let trackers = category.trackers
                 let newCategory = TrackerCategory(header: category.header, trackers: trackers)
                 self.categories.append(newCategory)
+                
+                try? self.dataProvider?.addTrackerCategory(newCategory)
             }
             self.collectionView.reloadData()
             self.updateStubIsHiddenStatus()
