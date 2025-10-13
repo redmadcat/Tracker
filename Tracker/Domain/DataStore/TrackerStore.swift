@@ -19,15 +19,17 @@ final class TrackerStore {
     init(context: NSManagedObjectContext) {
         self.context = context
     }
-    
+        
     func addTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
-        let tracker = TrackerCoreData(context: context)
-        tracker.id = tracker.id
-        tracker.name = tracker.name
-        tracker.emoji = tracker.emoji
-        tracker.color = tracker.color
-        tracker.schedule = tracker.schedule
-        tracker.category = category
+        let schedule = tracker.schedule.map { String($0) }.joined(separator: "")
+        
+        let newTracker = TrackerCoreData(context: context)
+        newTracker.id = tracker.id
+        newTracker.name = tracker.name
+        newTracker.emoji = tracker.emoji
+        newTracker.color = tracker.color
+        newTracker.schedule = schedule
+        newTracker.category = category
         try context.save()
     }
 }
