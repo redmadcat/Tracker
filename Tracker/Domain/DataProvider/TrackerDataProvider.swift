@@ -76,7 +76,7 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
             break
         }
     }
-    
+        
     // MARK: - TrackerDataProviderProtocol
     var numberOfSections: Int {
         fetchedResultsController.sections?.count ?? 0
@@ -87,6 +87,14 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }
     
     func addTrackerCategory(_ category: TrackerCategory) throws {
-        try? categoryStore.addTrackerCategory(category)
+        if let categoryCoreData = try? categoryStore.addTrackerCategory(category) {
+            if let tracker = category.trackers.last {
+                try? addTracker(tracker, category: categoryCoreData)
+            }
+        }
+    }
+    
+    private func addTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
+        try? trackerStore.addTracker(tracker, category: category)
     }
 }
