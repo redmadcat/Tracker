@@ -51,7 +51,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         switch indexPath.section {
         case 0:
             return indexPath.row == 0 ?
-                TrackerNameCell(style: .default, delegate: self) :
+                TrackerNameCell(style: .default, text: trackerName, delegate: self) :
                 TrackerStubCell(style: .default)
         case 1:
             return indexPath.row == 0 ?

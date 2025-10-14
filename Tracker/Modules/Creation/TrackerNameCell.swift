@@ -10,13 +10,13 @@ import UIKit
 final class TrackerNameCell: UITableViewCell {
     // MARK: - Definition
     private weak var delegate: UITextFieldDelegate?
-    
     private lazy var textField = TrackerTextField()
                         
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerNameCell.reuseIdentifier, delegate: UITextFieldDelegate?) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerNameCell.reuseIdentifier, text: String?, delegate: UITextFieldDelegate?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.delegate = delegate
+        textField.text = text
         configureUI()
         configureLayout()
     }
