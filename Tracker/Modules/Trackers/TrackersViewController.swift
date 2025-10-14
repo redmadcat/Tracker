@@ -22,8 +22,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         textAlighment: .center)
         
     private let defaultCategory = "Без категории"
-    private lazy var categories: [TrackerCategory] =
-        [TrackerCategory(header: self.defaultCategory, trackers: [])] //+ TrackerCategory.mock
+    private lazy var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = Date()
     
@@ -204,6 +203,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     private func configureStartupData() {
         categories = dataProvider?.categories ?? []
+        categories += [TrackerCategory(header: self.defaultCategory, trackers: [])]
     }
     
     private func iTrackerCompletedToday(id: UUID) -> Bool {
@@ -242,6 +242,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             if var oldCategory = self.checkExistingCategory(category: category) {
                 let newTrackers = oldCategory.trackers + category.trackers
                 oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
+                
+                // TODO: duplicated issue
                 self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
                 
                 try? self.dataProvider?.addTrackerCategory(oldCategory)
