@@ -203,7 +203,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     private func configureStartupData() {
         categories = dataProvider?.categories ?? []
-        categories += [TrackerCategory(header: self.defaultCategory, trackers: [])]
+        if !categories.contains(where: { $0.header == defaultCategory }) {
+            categories += [TrackerCategory(header: self.defaultCategory, trackers: [])]
+        }
     }
     
     private func iTrackerCompletedToday(id: UUID) -> Bool {
@@ -242,8 +244,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             if var oldCategory = self.checkExistingCategory(category: category) {
                 let newTrackers = oldCategory.trackers + category.trackers
                 oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
-                
-                // TODO: duplicated issue
                 self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
                 
                 try? self.dataProvider?.addTrackerCategory(oldCategory)
