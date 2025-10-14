@@ -22,7 +22,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         textAlighment: .center)
         
     private let defaultCategory = "Без категории"
-    private lazy var categories: [TrackerCategory] = []
+    private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = Date()
     
