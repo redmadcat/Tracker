@@ -48,6 +48,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         hideKeyboardWhenTappedAround()
         configureUI()
         configureLayout()
+        configureStartupData()
         updateStubIsHiddenStatus()
     }
     
@@ -199,6 +200,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             stubLabel.leadingAnchor.constraint(equalTo: stubStackView.leadingAnchor, constant: 16),
             stubLabel.trailingAnchor.constraint(equalTo: stubStackView.trailingAnchor, constant: -16)
         ])
+    }
+    
+    private func configureStartupData() {
+        categories = dataProvider?.categories ?? []
     }
     
     private func iTrackerCompletedToday(id: UUID) -> Bool {
