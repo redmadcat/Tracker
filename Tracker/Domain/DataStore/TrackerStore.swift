@@ -13,6 +13,7 @@ private enum TrackerTransformError: Error {
 }
 
 final class TrackerStore {
+    private let colorMarshalling = UIColorMarshalling()
     private let context: NSManagedObjectContext
     
     convenience init() {
@@ -29,7 +30,7 @@ final class TrackerStore {
         newTracker.id = tracker.id
         newTracker.name = tracker.name
         newTracker.emoji = tracker.emoji
-        newTracker.color = tracker.color
+        newTracker.color = colorMarshalling.hexString(from: tracker.color)
         newTracker.schedule = tracker.schedule.map { String($0) }.joined(separator: "")
         newTracker.category = category
         try context.save()
@@ -38,12 +39,13 @@ final class TrackerStore {
     func transformToTracker(from coreDataObject: TrackerCoreData) throws -> Tracker {
         guard let id = coreDataObject.id,
               let name = coreDataObject.name,
-              let color = coreDataObject.color as? UIColor,
+              let hexColor = coreDataObject.color,
               let emoji = coreDataObject.emoji,
               let values = coreDataObject.schedule
         else { throw TrackerTransformError.transformErrorInvalidData }
         
         let schedule = values.compactMap { $0.wholeNumberValue }
+        let color = colorMarshalling.color(from: hexColor)
         
         return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
     }
