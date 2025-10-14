@@ -17,6 +17,7 @@
 		94124B832E97D21C00DC18A8 /* TrackerDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B822E97D21100DC18A8 /* TrackerDataProvider.swift */; };
 		94124B852E97E75100DC18A8 /* TrackerDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B842E97E74900DC18A8 /* TrackerDataProviderProtocol.swift */; };
 		94124B872E97EB5D00DC18A8 /* TrackerDataProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B862E97EB5400DC18A8 /* TrackerDataProviderDelegate.swift */; };
+		94124B8A2E9E293100DC18A8 /* UIColorMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B892E9E292800DC18A8 /* UIColorMarshalling.swift */; };
 		9425F08D2E69B592009A884A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F0832E69B592009A884A /* AppDelegate.swift */; };
 		9425F08E2E69B592009A884A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F08A2E69B592009A884A /* SceneDelegate.swift */; };
 		9425F08F2E69B592009A884A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F08B2E69B592009A884A /* TabBarController.swift */; };
@@ -67,6 +68,7 @@
 		94124B822E97D21100DC18A8 /* TrackerDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataProvider.swift; sourceTree = "<group>"; };
 		94124B842E97E74900DC18A8 /* TrackerDataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataProviderProtocol.swift; sourceTree = "<group>"; };
 		94124B862E97EB5400DC18A8 /* TrackerDataProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataProviderDelegate.swift; sourceTree = "<group>"; };
+		94124B892E9E292800DC18A8 /* UIColorMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorMarshalling.swift; sourceTree = "<group>"; };
 		9425F06B2E69B548009A884A /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9425F0832E69B592009A884A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9425F0842E69B592009A884A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -159,6 +161,14 @@
 			path = DataProvider;
 			sourceTree = "<group>";
 		};
+		94124B882E9E291400DC18A8 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				94124B892E9E292800DC18A8 /* UIColorMarshalling.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		9425F0622E69B548009A884A = {
 			isa = PBXGroup;
 			children = (
@@ -179,6 +189,7 @@
 			isa = PBXGroup;
 			children = (
 				943CC29C2E93A83F0023BE15 /* App */,
+				94124B882E9E291400DC18A8 /* Helpers */,
 				94FF964D2E72C0F800B75A0F /* Models */,
 				94124B6A2E9660A900DC18A8 /* Domain */,
 				94124B5C2E9639BA00DC18A8 /* CoreData */,
@@ -387,6 +398,7 @@
 				9425F08E2E69B592009A884A /* SceneDelegate.swift in Sources */,
 				94124B692E9654EF00DC18A8 /* DomainDataLayer.swift in Sources */,
 				94ED0F872E82C01500D155C3 /* StringProtocol+Extensions.swift in Sources */,
+				94124B8A2E9E293100DC18A8 /* UIColorMarshalling.swift in Sources */,
 				94124B832E97D21C00DC18A8 /* TrackerDataProvider.swift in Sources */,
 				94124B732E97A09600DC18A8 /* TrackerRecordDataProvider.swift in Sources */,
 				94124B872E97EB5D00DC18A8 /* TrackerDataProviderDelegate.swift in Sources */,
