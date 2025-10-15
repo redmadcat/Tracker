@@ -9,7 +9,7 @@ import UIKit
 import Foundation
 
 final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
-                                    TrackerCardCellDelegate {
+                                    TrackerCardCellDelegate, TrackerDataProviderDelegate {
     // MARK: - Definition
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private lazy var datePicker = UIDatePicker()
@@ -34,10 +34,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    private let dataProvider: TrackerDataProviderProtocol? = {
+    private lazy var dataProvider: TrackerDataProviderProtocol? = {
         let categoryStore = TrackerCategoryStore()
         let trackerStore = TrackerStore()
-        let dataProvider = try? TrackerDataProvider(categoryStore, trackerStore)
+        let dataProvider = try? TrackerDataProvider(categoryStore, trackerStore, delegate: self)
         return dataProvider
     }()
         
@@ -117,7 +117,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         }
         collectionView.reloadItems(at: [indexPath])
     }
-                
+    
+    // MARK: - TrackerDataProviderDelegate                
+    func didUpdate(_ update: TrackerStoreUpdate) {
+        collectionView.reloadData()
+    }
+    
     // MARK: - Private func
     private func configureUI() {
         // navigationController
@@ -245,16 +250,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 let newTrackers = oldCategory.trackers + category.trackers
                 oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
                 self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
-                
                 try? self.dataProvider?.addTrackerCategory(oldCategory)
             } else {
                 let trackers = category.trackers
                 let newCategory = TrackerCategory(header: category.header, trackers: trackers)
                 self.categories.append(newCategory)
-                
                 try? self.dataProvider?.addTrackerCategory(newCategory)
             }
-            self.collectionView.reloadData()
+//            self.collectionView.reloadData()
             self.updateStubIsHiddenStatus()
         }
         creationViewController.modalPresentationStyle = .pageSheet
