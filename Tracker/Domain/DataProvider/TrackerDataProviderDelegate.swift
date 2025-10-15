@@ -6,5 +6,5 @@
 //
 
 protocol TrackerDataProviderDelegate: AnyObject {
-    func update(_ update: TrackerUpdate)
+    func didUpdate(_ update: TrackerStoreUpdate)
 }
