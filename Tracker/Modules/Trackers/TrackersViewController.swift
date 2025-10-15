@@ -118,8 +118,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         collectionView.reloadItems(at: [indexPath])
     }
     
-    // MARK: - TrackerDataProviderDelegate                
-    func didUpdate(_ update: TrackerStoreUpdate) {
+    // MARK: - TrackerDataProviderDelegate
+    func store(_ store: TrackerDataProvider, didUpdate update: TrackerStoreUpdate) {
         collectionView.reloadData()
     }
     
