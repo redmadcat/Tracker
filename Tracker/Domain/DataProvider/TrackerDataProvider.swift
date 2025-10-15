@@ -8,9 +8,16 @@
 import Foundation
 import CoreData
 
-struct TrackerUpdate {
+struct TrackerStoreUpdate {
+    struct Move: Hashable {
+        let oldIndex: Int
+        let newIndex: Int
+    }
+    
     let insertedIndexes: IndexSet
     let deletedIndexes: IndexSet
+    let updatedIndexes: IndexSet
+    let movedIndexes: Set<Move>
 }
 
 final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, TrackerDataProviderProtocol {
@@ -22,8 +29,10 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
+    private var updatedIndexes: IndexSet?
+    private var movedIndexes: Set<TrackerStoreUpdate.Move>?
     
-    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
+    private lazy var fetchedCategoryResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
         
         fetchRequest.sortDescriptors = [
@@ -41,7 +50,40 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         return fetchedResultsController
     }()
     
-    init(_ categoryStore: TrackerCategoryStore, _ trackerStore: TrackerStore) throws {
+    private lazy var fetchedTrackerResultsController: NSFetchedResultsController<TrackerCoreData> = {
+        let fetchRequest = TrackerCoreData.fetchRequest()
+                
+        fetchRequest.sortDescriptors = [
+            NSSortDescriptor(key: "name", ascending: false)
+        ]
+        
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        
+        fetchedResultsController.delegate = self
+        try? fetchedResultsController.performFetch()
+        return fetchedResultsController
+    }()
+      
+    lazy var categories: [TrackerCategory] = {
+        guard let categoryObjects = self.fetchedCategoryResultsController.fetchedObjects,
+              let trackerObjects =  self.fetchedTrackerResultsController.fetchedObjects else { return [] }
+                      
+        let trackersByCategory = Dictionary(grouping: trackerObjects, by: { $0.category?.header })
+                
+        return categoryObjects.compactMap { categoryObject in
+            let header = categoryObject.header ?? ""
+            let trackersAtCategory = trackersByCategory[header] ?? []
+            let trackers: [Tracker] = trackersAtCategory.compactMap { try? trackerStore.transformToTracker(from: $0) }
+            return TrackerCategory(header: header, trackers: trackers)
+        }
+    }()
+        
+    init(_ categoryStore: TrackerCategoryStore, _ trackerStore: TrackerStore, delegate: TrackerDataProviderDelegate) throws {
+        self.delegate = delegate
         self.categoryStore = categoryStore
         self.trackerStore = trackerStore
         self.context = DomainDataLayer.shared.context
@@ -51,50 +93,31 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         insertedIndexes = IndexSet()
         deletedIndexes = IndexSet()
+        updatedIndexes = IndexSet()
+        movedIndexes = Set<TrackerStoreUpdate.Move>()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        delegate?.update(TrackerUpdate(
-            insertedIndexes: insertedIndexes!,
-            deletedIndexes: deletedIndexes!
+        delegate?.store(
+            self,
+            didUpdate: TrackerStoreUpdate(
+                insertedIndexes: insertedIndexes!,
+                deletedIndexes: deletedIndexes!,
+                updatedIndexes: updatedIndexes!,
+                movedIndexes: movedIndexes!
         ))
         insertedIndexes = nil
         deletedIndexes = nil
+        updatedIndexes = nil
+        movedIndexes = nil
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        switch type {
-        case .delete:
-            if let indexPath = indexPath {
-                deletedIndexes?.insert(indexPath.item)
-            }
-        case .insert:
-            if let indexPath = newIndexPath {
-                insertedIndexes?.insert(indexPath.item)
-            }
-        default:
-            break
-        }
-    }
-        
     // MARK: - TrackerDataProviderProtocol
-    var numberOfSections: Int {
-        fetchedResultsController.sections?.count ?? 0
-    }
-    
-    func numberOfRowsInSection(_ section: Int) -> Int {
-        fetchedResultsController.sections?[section].numberOfObjects ?? 0
-    }
-    
     func addTrackerCategory(_ category: TrackerCategory) throws {
         if let categoryCoreData = try? categoryStore.addTrackerCategory(category) {
             if let tracker = category.trackers.last {
-                try? addTracker(tracker, category: categoryCoreData)
+                try? trackerStore.addTracker(tracker, category: categoryCoreData)
             }
         }
-    }
-    
-    private func addTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
-        try? trackerStore.addTracker(tracker, category: category)
     }
 }
