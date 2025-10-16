@@ -19,10 +19,12 @@ final class TrackerRecordStore {
         self.context = context
     }
     
-    func addTrackerRecord(_ trackerRecord: TrackerRecord) throws {
+    func add(_ trackerRecord: TrackerRecord) throws {
         let tracker = TrackerRecordCoreData(context: context)
         tracker.trackerId = trackerRecord.trackerId
         tracker.date = trackerRecord.date
         try context.save()
     }
+    
+    
 }

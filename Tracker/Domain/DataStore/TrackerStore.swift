@@ -25,7 +25,7 @@ final class TrackerStore {
         self.context = context
     }
         
-    func addTracker(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
+    func add(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
         let newTracker = TrackerCoreData(context: context)
         newTracker.id = tracker.id
         newTracker.name = tracker.name
@@ -36,7 +36,7 @@ final class TrackerStore {
         try context.save()
     }
     
-    func transformToTracker(from coreDataObject: TrackerCoreData) throws -> Tracker {
+    func transform(from coreDataObject: TrackerCoreData) throws -> Tracker {
         guard let id = coreDataObject.id,
               let name = coreDataObject.name,
               let hexColor = coreDataObject.color,

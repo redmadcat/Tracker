@@ -77,7 +77,7 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         return categoryObjects.compactMap { categoryObject in
             let header = categoryObject.header ?? ""
             let trackersAtCategory = trackersByCategory[header] ?? []
-            let trackers: [Tracker] = trackersAtCategory.compactMap { try? trackerStore.transformToTracker(from: $0) }
+            let trackers: [Tracker] = trackersAtCategory.compactMap { try? trackerStore.transform(from: $0) }
             return TrackerCategory(header: header, trackers: trackers)
         }
     }()
@@ -114,9 +114,9 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     
     // MARK: - TrackerDataProviderProtocol
     func addTrackerCategory(_ category: TrackerCategory) throws {
-        if let categoryCoreData = try? categoryStore.addTrackerCategory(category) {
+        if let categoryCoreData = try? categoryStore.add(category) {
             if let tracker = category.trackers.last {
-                try? trackerStore.addTracker(tracker, category: categoryCoreData)
+                try? trackerStore.add(tracker, category: categoryCoreData)
             }
         }
     }
