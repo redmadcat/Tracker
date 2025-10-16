@@ -121,6 +121,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     // MARK: - TrackerDataProviderDelegate
     func store(_ store: TrackerDataProvider, didUpdate update: TrackerStoreUpdate) {
         collectionView.reloadData()
+        self.updateStubIsHiddenStatus()
     }
     
     // MARK: - Private func
@@ -257,8 +258,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 self.categories.append(newCategory)
                 try? self.dataProvider?.addTrackerCategory(newCategory)
             }
-//            self.collectionView.reloadData()
-            self.updateStubIsHiddenStatus()
         }
         creationViewController.modalPresentationStyle = .pageSheet
         navigationController?.present(creationViewController, animated: true, completion: nil)
