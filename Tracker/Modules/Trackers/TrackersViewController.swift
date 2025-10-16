@@ -23,7 +23,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
     private let defaultCategory = "Без категории"
     private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
     private var currentDate: Date = Date()
     
     var visibleCategories: [TrackerCategory] {
@@ -37,7 +36,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private lazy var dataProvider: TrackerDataProviderProtocol? = {
         let categoryStore = TrackerCategoryStore()
         let trackerStore = TrackerStore()
-        let dataProvider = try? TrackerDataProvider(categoryStore, trackerStore, delegate: self)
+        let recordStore = TrackerRecordStore()
+        let dataProvider = try? TrackerDataProvider(categoryStore, trackerStore, recordStore, delegate: self)
         return dataProvider
     }()
         
@@ -64,11 +64,11 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackerCardCell.reuseIdentifier, for: indexPath) as? TrackerCardCell else { return UICollectionViewCell() }
         if let category = visibleCategories[safe: indexPath.section] {
             let tracker = category.trackers[indexPath.row]
-            
-            let daysCounter = completedTrackers.filter { $0.trackerId == tracker.id }.count
-            let isCompleted = iTrackerCompletedToday(id: tracker.id)
-            
-            cell.configure(with: tracker, daysCounter: daysCounter, completion: isCompleted, date: currentDate, at: indexPath)
+                        
+            let daysCounter = dataProvider?.count(at: tracker.id)
+            let isCompleted = try? dataProvider?.isCompleted(for: tracker.id, at: currentDate)
+                        
+            cell.configure(with: tracker, daysCounter: daysCounter ?? 0, completion: isCompleted ?? false, date: currentDate, at: indexPath)
             cell.delegate = self
         }
         return cell
@@ -107,14 +107,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
     // MARK: - TrackerCardCellDelegate
     func setCompletionTo(completion: Bool, with id: UUID, at indexPath: IndexPath) {
-        if completion {
-            completedTrackers.removeAll { trackerRecord in
-                isSameTrackerRecord(trackerRecord: trackerRecord, id: id)
-            }
-        } else {
-            let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
-            completedTrackers.append(trackerRecord)
+        let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
+        
+        do {
+            completion ?
+                try dataProvider?.delete(trackerRecord) :
+                try dataProvider?.add(trackerRecord)
+        } catch {
+            showError("Не удалось сохранить изменения!")
+            return
         }
+        
         collectionView.reloadItems(at: [indexPath])
     }
     
@@ -214,18 +217,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         }
     }
     
-    private func iTrackerCompletedToday(id: UUID) -> Bool {
-        completedTrackers.contains { trackerRecord in
-            let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: currentDate)
-            return  trackerRecord.trackerId == id && isSameDay
-        }
-    }
-    
-    private func isSameTrackerRecord(trackerRecord: TrackerRecord, id: UUID) -> Bool {
-        let isSameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: currentDate)
-        return trackerRecord.trackerId == id && isSameDay
-    }
-    
     private func updateStubIsHiddenStatus() {
         let isHidden = visibleCategories.count > 0 ? true : false
         stubStackView.isHidden = isHidden
@@ -235,6 +226,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         return category.header.isEmpty ?
             categories.first(where: { $0.header == defaultCategory }) :
             categories.first(where: { $0.header == category.header })
+    }
+    
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Ошибка!", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in }))
+        present(alert, animated: true, completion: nil)
     }
         
     // MARK: - Actions
@@ -251,12 +248,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 let newTrackers = oldCategory.trackers + category.trackers
                 oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
                 self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
-                try? self.dataProvider?.addTrackerCategory(oldCategory)
+                try? self.dataProvider?.add(oldCategory)
             } else {
                 let trackers = category.trackers
                 let newCategory = TrackerCategory(header: category.header, trackers: trackers)
                 self.categories.append(newCategory)
-                try? self.dataProvider?.addTrackerCategory(newCategory)
+                try? self.dataProvider?.add(newCategory)
             }
         }
         creationViewController.modalPresentationStyle = .pageSheet
