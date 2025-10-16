@@ -34,4 +34,12 @@ extension Calendar {
     static let weekdayCount: Int = {
         return local.shortWeekdaySymbols.count
     }()
+    
+    static func range(for date: Date) -> (Date, Date)? {
+        let from = local.startOfDay(for: date)
+        guard let to = local.date(byAdding: .day, value: 1, to: from) else {
+            return nil
+        }
+        return (from, to)
+    }
 }
