@@ -26,6 +26,7 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     private let context: NSManagedObjectContext
     private let categoryStore: TrackerCategoryStore
     private let trackerStore: TrackerStore
+    private let recordStore: TrackerRecordStore
     
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
@@ -82,10 +83,12 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         }
     }()
         
-    init(_ categoryStore: TrackerCategoryStore, _ trackerStore: TrackerStore, delegate: TrackerDataProviderDelegate) throws {
+    init(_ categoryStore: TrackerCategoryStore, _ trackerStore: TrackerStore, _ recordStore: TrackerRecordStore,
+         delegate: TrackerDataProviderDelegate) throws {
         self.delegate = delegate
         self.categoryStore = categoryStore
         self.trackerStore = trackerStore
+        self.recordStore = recordStore
         self.context = DomainDataLayer.shared.context
     }
     
@@ -113,11 +116,27 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }
     
     // MARK: - TrackerDataProviderProtocol
-    func addTrackerCategory(_ category: TrackerCategory) throws {
+    func add(_ category: TrackerCategory) throws {
         if let categoryCoreData = try? categoryStore.add(category) {
             if let tracker = category.trackers.last {
                 try? trackerStore.add(tracker, category: categoryCoreData)
             }
         }
+    }
+    
+    func add(_ trackerRecord: TrackerRecord) throws {
+        try recordStore.add(trackerRecord)
+    }
+    
+    func delete(_ trackerRecord: TrackerRecord) throws {
+        try recordStore.delete(trackerRecord)
+    }
+    
+    func isCompleted(for trackerId: UUID, at date: Date) throws -> Bool? {
+        return try recordStore.isCompleted(for: trackerId, at: date)
+    }
+    
+    func count(at trackerId: UUID) -> Int {
+        return recordStore.count(at: trackerId)
     }
 }
