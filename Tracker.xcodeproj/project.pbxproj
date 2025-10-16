@@ -12,8 +12,6 @@
 		94124B6D2E96698400DC18A8 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B6C2E96697E00DC18A8 /* TrackerStore.swift */; };
 		94124B6F2E96699D00DC18A8 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B6E2E96699400DC18A8 /* TrackerCategoryStore.swift */; };
 		94124B712E9669BB00DC18A8 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B702E9669B300DC18A8 /* TrackerRecordStore.swift */; };
-		94124B732E97A09600DC18A8 /* TrackerRecordDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B722E97A08300DC18A8 /* TrackerRecordDataProvider.swift */; };
-		94124B7B2E97A61500DC18A8 /* TrackerRecordProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B7A2E97A60E00DC18A8 /* TrackerRecordProtocol.swift */; };
 		94124B832E97D21C00DC18A8 /* TrackerDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B822E97D21100DC18A8 /* TrackerDataProvider.swift */; };
 		94124B852E97E75100DC18A8 /* TrackerDataProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B842E97E74900DC18A8 /* TrackerDataProviderProtocol.swift */; };
 		94124B872E97EB5D00DC18A8 /* TrackerDataProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94124B862E97EB5400DC18A8 /* TrackerDataProviderDelegate.swift */; };
@@ -63,8 +61,6 @@
 		94124B6C2E96697E00DC18A8 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		94124B6E2E96699400DC18A8 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		94124B702E9669B300DC18A8 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
-		94124B722E97A08300DC18A8 /* TrackerRecordDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordDataProvider.swift; sourceTree = "<group>"; };
-		94124B7A2E97A60E00DC18A8 /* TrackerRecordProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordProtocol.swift; sourceTree = "<group>"; };
 		94124B822E97D21100DC18A8 /* TrackerDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataProvider.swift; sourceTree = "<group>"; };
 		94124B842E97E74900DC18A8 /* TrackerDataProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataProviderProtocol.swift; sourceTree = "<group>"; };
 		94124B862E97EB5400DC18A8 /* TrackerDataProviderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerDataProviderDelegate.swift; sourceTree = "<group>"; };
@@ -134,7 +130,6 @@
 			children = (
 				94124B7C2E97B4DA00DC18A8 /* DataProvider */,
 				94124B6B2E96697800DC18A8 /* DataStore */,
-				94124B7A2E97A60E00DC18A8 /* TrackerRecordProtocol.swift */,
 				94124B682E9654D200DC18A8 /* DomainDataLayer.swift */,
 			);
 			path = Domain;
@@ -156,7 +151,6 @@
 				94124B862E97EB5400DC18A8 /* TrackerDataProviderDelegate.swift */,
 				94124B842E97E74900DC18A8 /* TrackerDataProviderProtocol.swift */,
 				94124B822E97D21100DC18A8 /* TrackerDataProvider.swift */,
-				94124B722E97A08300DC18A8 /* TrackerRecordDataProvider.swift */,
 			);
 			path = DataProvider;
 			sourceTree = "<group>";
@@ -400,7 +394,6 @@
 				94ED0F872E82C01500D155C3 /* StringProtocol+Extensions.swift in Sources */,
 				94124B8A2E9E293100DC18A8 /* UIColorMarshalling.swift in Sources */,
 				94124B832E97D21C00DC18A8 /* TrackerDataProvider.swift in Sources */,
-				94124B732E97A09600DC18A8 /* TrackerRecordDataProvider.swift in Sources */,
 				94124B872E97EB5D00DC18A8 /* TrackerDataProviderDelegate.swift in Sources */,
 				94ED0F7F2E826E0E00D155C3 /* TrackerScheduleViewController.swift in Sources */,
 				943CC29F2E93A9640023BE15 /* Int+Extensions.swift in Sources */,
@@ -415,7 +408,6 @@
 				9440AFFD2E866C4700966482 /* RandomAccessCollection+Extensions.swift in Sources */,
 				9468BEB72E6EB52100419591 /* TrackersViewController.swift in Sources */,
 				949866442E928389005C5C42 /* Date+Extensions.swift in Sources */,
-				94124B7B2E97A61500DC18A8 /* TrackerRecordProtocol.swift in Sources */,
 				94F478782E7C079E00EE187D /* TrackerScheduleCell.swift in Sources */,
 				94FF96512E72C31200B75A0F /* TrackerCategory.swift in Sources */,
 				94ED0F852E82B98C00D155C3 /* Array+Extensions.swift in Sources */,
