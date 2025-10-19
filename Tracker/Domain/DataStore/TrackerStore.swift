@@ -24,6 +24,14 @@ final class TrackerStore {
     init(context: NSManagedObjectContext) {
         self.context = context
     }
+    
+    func fetch() -> [TrackerCoreData]? {
+        let request = TrackerCoreData.fetchRequest()
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \TrackerCoreData.name, ascending: false)
+        ]
+        return try? context.fetch(request)
+    }
         
     func add(_ tracker: Tracker, category: TrackerCategoryCoreData) throws {
         let newTracker = TrackerCoreData(context: context)

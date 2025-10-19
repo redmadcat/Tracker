@@ -16,11 +16,11 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     private let trackerStore: TrackerStore
     private let recordStore: TrackerRecordStore
         
-    private lazy var fetchedCategoryResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
+    private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
         
         fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "header", ascending: false)
+            NSSortDescriptor(keyPath: \TrackerCategoryCoreData.header, ascending: false)
         ]
         
         let fetchedResultsController = NSFetchedResultsController(
@@ -33,28 +33,10 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         try? fetchedResultsController.performFetch()
         return fetchedResultsController
     }()
-    
-    private lazy var fetchedTrackerResultsController: NSFetchedResultsController<TrackerCoreData> = {
-        let fetchRequest = TrackerCoreData.fetchRequest()
-                
-        fetchRequest.sortDescriptors = [
-            NSSortDescriptor(key: "name", ascending: false)
-        ]
-        
-        let fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: context,
-            sectionNameKeyPath: nil,
-            cacheName: nil)
-        
-        fetchedResultsController.delegate = self
-        try? fetchedResultsController.performFetch()
-        return fetchedResultsController
-    }()
-      
+          
     lazy var categories: [TrackerCategory] = {
-        guard let categoryObjects = self.fetchedCategoryResultsController.fetchedObjects,
-              let trackerObjects =  self.fetchedTrackerResultsController.fetchedObjects else { return [] }
+        guard let categoryObjects = self.fetchedResultsController.fetchedObjects,
+              let trackerObjects = self.trackerStore.fetch() else { return [] }
                       
         let trackersByCategory = Dictionary(grouping: trackerObjects, by: { $0.category?.header })
                 
@@ -76,14 +58,11 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }
     
     // MARK: - NSFetchedResultsControllerDelegate
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?,
+                for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         delegate?.store(self, newIndexPath: newIndexPath)
     }
-        
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        delegate?.store(self)
-//    }
-    
+            
     // MARK: - TrackerDataProviderProtocol
     func add(_ category: TrackerCategory) throws {
         if let categoryCoreData = try? categoryStore.add(category) {

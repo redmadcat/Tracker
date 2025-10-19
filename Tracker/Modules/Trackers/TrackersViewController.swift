@@ -123,8 +123,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     // MARK: - TrackerDataProviderDelegate
     func store(_ store: TrackerDataProvider?, newIndexPath: IndexPath?) {
-//        guard let indexPath = newIndexPath else { return }
-//        collectionView.reloadItems(at: [indexPath])
         collectionView.reloadData()
         self.updateStubIsHiddenStatus()
     }
