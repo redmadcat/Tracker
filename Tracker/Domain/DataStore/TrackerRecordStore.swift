@@ -7,7 +7,8 @@
 
 import CoreData
 
-final class TrackerRecordStore {
+final class TrackerRecordStore: TrackerRecordStoreProtocol {
+    // MARK: - Definition
     private let context: NSManagedObjectContext
     
     convenience init() {
@@ -19,6 +20,7 @@ final class TrackerRecordStore {
         self.context = context
     }
     
+    // MARK: - TrackerRecordStoreProtocol
     func add(_ trackerRecord: TrackerRecord) throws {
         let tracker = TrackerRecordCoreData(context: context)
         tracker.trackerId = trackerRecord.trackerId

@@ -12,9 +12,14 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     // MARK: - Definition
     private weak var delegate: TrackerDataProviderDelegate?
     private let context: NSManagedObjectContext
-    private let categoryStore: TrackerCategoryStore
-    private let trackerStore: TrackerStore
-    private let recordStore: TrackerRecordStore
+    private let colorMarshalling = UIColorMarshalling()
+    private let categoryStore: TrackerCategoryStoreProtocol
+    private let trackerStore: TrackerStoreProtocol
+    private let recordStore: TrackerRecordStoreProtocol
+    
+    enum TrackerTransformError: Error {
+        case transformErrorInvalidData
+    }
         
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData> = {
         let fetchRequest = TrackerCategoryCoreData.fetchRequest()
@@ -43,12 +48,12 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         return categoryObjects.compactMap { categoryObject in
             let header = categoryObject.header ?? ""
             let trackersAtCategory = trackersByCategory[header] ?? []
-            let trackers: [Tracker] = trackersAtCategory.compactMap { try? trackerStore.transform(from: $0) }
+            let trackers: [Tracker] = trackersAtCategory.compactMap { try? transform(from: $0) }
             return TrackerCategory(header: header, trackers: trackers)
         }
     }()
         
-    init(_ categoryStore: TrackerCategoryStore, _ trackerStore: TrackerStore, _ recordStore: TrackerRecordStore,
+    init(_ categoryStore: TrackerCategoryStoreProtocol, _ trackerStore: TrackerStoreProtocol, _ recordStore: TrackerRecordStoreProtocol,
          delegate: TrackerDataProviderDelegate) throws {
         self.delegate = delegate
         self.categoryStore = categoryStore
@@ -86,5 +91,20 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     
     func count(at trackerId: UUID) -> Int {
         return recordStore.count(at: trackerId)
+    }
+    
+    // MARK: - Private func
+    func transform(from coreDataObject: TrackerCoreData) throws -> Tracker {
+        guard let id = coreDataObject.id,
+              let name = coreDataObject.name,
+              let hexColor = coreDataObject.color,
+              let emoji = coreDataObject.emoji,
+              let values = coreDataObject.schedule
+        else { throw TrackerTransformError.transformErrorInvalidData }
+        
+        let schedule = values.compactMap { $0.wholeNumberValue }
+        let color = UIColorMarshalling().color(from: hexColor)
+        
+        return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
     }
 }

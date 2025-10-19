@@ -7,7 +7,8 @@
 
 import CoreData
 
-final class TrackerCategoryStore {
+final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
+    // MARK: - Definition
     private let context: NSManagedObjectContext
     
     convenience init() {
@@ -19,6 +20,7 @@ final class TrackerCategoryStore {
         self.context = context
     }
     
+    // MARK: - TrackerCategoryStoreProtocol
     func add(_ trackerCategory: TrackerCategory) throws -> TrackerCategoryCoreData {
         if let existingCategory = findAt(header: trackerCategory.header) { return existingCategory }
         let category = TrackerCategoryCoreData(context: context)
@@ -27,6 +29,7 @@ final class TrackerCategoryStore {
         return category
     }
     
+    // MARK: - Private func
     private func findAt(header: String) -> TrackerCategoryCoreData? {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
