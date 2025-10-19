@@ -54,7 +54,7 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }()
         
     init(_ categoryStore: TrackerCategoryStoreProtocol, _ trackerStore: TrackerStoreProtocol, _ recordStore: TrackerRecordStoreProtocol,
-         delegate: TrackerDataProviderDelegate) throws {
+         delegate: TrackerDataProviderDelegate) {
         self.delegate = delegate
         self.categoryStore = categoryStore
         self.trackerStore = trackerStore
@@ -89,8 +89,8 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         return try recordStore.isCompleted(for: trackerId, at: date)
     }
     
-    func count(at trackerId: UUID) -> Int {
-        return recordStore.count(at: trackerId)
+    func count(at trackerId: UUID) throws -> Int {
+        return try recordStore.count(at: trackerId)
     }
     
     // MARK: - Private func

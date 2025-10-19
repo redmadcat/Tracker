@@ -37,7 +37,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         let categoryStore = TrackerCategoryStore()
         let trackerStore = TrackerStore()
         let recordStore = TrackerRecordStore()
-        let dataProvider = try? TrackerDataProvider(categoryStore, trackerStore, recordStore, delegate: self)
+        let dataProvider = TrackerDataProvider(categoryStore, trackerStore, recordStore, delegate: self)
         return dataProvider
     }()
         
@@ -65,7 +65,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         if let category = visibleCategories[safe: indexPath.section] {
             let tracker = category.trackers[indexPath.row]
                         
-            let daysCounter = dataProvider?.count(at: tracker.id)
+            let daysCounter = try? dataProvider?.count(at: tracker.id)
             let isCompleted = try? dataProvider?.isCompleted(for: tracker.id, at: currentDate)
                         
             cell.configure(with: tracker, daysCounter: daysCounter ?? 0, completion: isCompleted ?? false, date: currentDate, at: indexPath)
@@ -233,6 +233,15 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in }))
         present(alert, animated: true, completion: nil)
     }
+    
+    private func add(_ trackerCategory: TrackerCategory) {
+        do {
+            try self.dataProvider?.add(trackerCategory)
+        } catch {
+            showError("Не удалось сохранить изменения!")
+            return
+        }
+    }
         
     // MARK: - Actions
     @objc private func dateChanged(_ sender: UIDatePicker) {
@@ -248,12 +257,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 let newTrackers = oldCategory.trackers + category.trackers
                 oldCategory = TrackerCategory(header: oldCategory.header, trackers: newTrackers)
                 self.categories = self.categories.map({ $0.header == oldCategory.header ? oldCategory : $0 })
-                try? self.dataProvider?.add(oldCategory)
+                self.add(oldCategory)
             } else {
                 let trackers = category.trackers
                 let newCategory = TrackerCategory(header: category.header, trackers: trackers)
                 self.categories.append(newCategory)
-                try? self.dataProvider?.add(newCategory)
+                self.add(newCategory)
             }
         }
         creationViewController.modalPresentationStyle = .pageSheet

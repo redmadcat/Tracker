@@ -26,15 +26,4 @@ final class DomainDataLayer {
     }
             
     private init() {}
-    
-    func saveContext() {
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                context.rollback()
-                fatalError("Unresolved error \(error)")
-            }
-        }
-    }
 }

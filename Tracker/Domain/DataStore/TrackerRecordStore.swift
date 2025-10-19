@@ -51,10 +51,10 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         return try context.count(for: request) > 0 ? true : false
     }
     
-    func count(at trackerId: UUID) -> Int {
+    func count(at trackerId: UUID) throws -> Int {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerRecordCoreData.trackerId), trackerId as CVarArg)
         
-        return try! context.count(for: request)
+        return try context.count(for: request)
     }
 }
