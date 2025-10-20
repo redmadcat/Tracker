@@ -35,7 +35,7 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         request.returnsObjectsAsFaults = false
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(TrackerCategoryCoreData.header), header)
         
-        let category = try! context.fetch(request)
+        guard let category = try? context.fetch(request) else { return nil }
         return category.count > 0 ? category.first : nil
     }
 }

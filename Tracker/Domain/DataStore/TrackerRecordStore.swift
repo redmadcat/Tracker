@@ -35,7 +35,7 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         request.predicate = NSPredicate(format: "trackerId == %@ AND (date >= %@ AND date < %@)",
                                         trackerRecord.trackerId as CVarArg, from as CVarArg, to as CVarArg)
         
-        if let record = try! context.fetch(request).first {
+        if let record = try? context.fetch(request).first {
             context.delete(record)
             try context.save()
         }
