@@ -35,7 +35,7 @@ final class TrackerStore: TrackerStoreProtocol {
         newTracker.id = tracker.id
         newTracker.name = tracker.name
         newTracker.emoji = tracker.emoji
-        newTracker.color = UIColorMarshalling().hexString(from: tracker.color)
+        newTracker.color = UIColorMarshalling.hexString(from: tracker.color)
         newTracker.schedule = tracker.schedule.map { String($0) }.joined(separator: "")
         newTracker.category = category
         try context.save()

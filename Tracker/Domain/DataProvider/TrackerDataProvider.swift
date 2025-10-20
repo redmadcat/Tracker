@@ -102,7 +102,7 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         else { throw TrackerTransformError.transformErrorInvalidData }
         
         let schedule = values.compactMap { $0.wholeNumberValue }
-        let color = UIColorMarshalling().color(from: hexColor)
+        let color = UIColorMarshalling.color(from: hexColor)
         
         return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
     }
