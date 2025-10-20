@@ -107,7 +107,7 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
     
     private func configureLayout() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
