@@ -39,8 +39,8 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }()
           
     lazy var categories: [TrackerCategory] = {
-        guard let categoryObjects = self.fetchedResultsController.fetchedObjects,
-              let trackerObjects = self.trackerStore.fetch() else { return [] }
+        guard let categoryObjects = fetchedResultsController.fetchedObjects,
+              let trackerObjects = trackerStore.fetch() else { return [] }
                       
         let trackersByCategory = Dictionary(grouping: trackerObjects, by: { $0.category?.header })
                 
