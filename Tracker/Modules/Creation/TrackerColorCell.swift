@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerColorCell: UICollectionViewCell {
     // MARK: - Definition
-    private let colorRect = UIView()
+    private lazy var colorRect = UIView()
     
     override var isSelected: Bool {
         didSet {

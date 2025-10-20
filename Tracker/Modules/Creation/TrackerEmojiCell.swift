@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerEmojiCell: UICollectionViewCell {
     // MARK: - Definition
-    private let label = UILabel()
+    private lazy var label = UILabel()
     
     override var isSelected: Bool {
         didSet {
