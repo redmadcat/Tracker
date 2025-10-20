@@ -5,7 +5,6 @@
 //  Created by Roman Yaschenkov on 09.10.2025.
 //
 
-import Foundation
 import CoreData
 
 final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, TrackerDataProviderProtocol {
