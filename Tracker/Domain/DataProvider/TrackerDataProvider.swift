@@ -11,7 +11,6 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     // MARK: - Definition
     private weak var delegate: TrackerDataProviderDelegate?
     private let context: NSManagedObjectContext
-    private let colorMarshalling = UIColorMarshalling()
     private let categoryStore: TrackerCategoryStoreProtocol
     private let trackerStore: TrackerStoreProtocol
     private let recordStore: TrackerRecordStoreProtocol
