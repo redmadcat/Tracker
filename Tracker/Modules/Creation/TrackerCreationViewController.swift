@@ -81,16 +81,14 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? TrackerScheduleCell  else { return }
-        let scheduleViewController = TrackerScheduleViewController()
-        scheduleViewController.setDays(selectedDays)
-        scheduleViewController.onScheduleSelected = { selectedDays in
-            cell.setDetailsBased(on: selectedDays)
-            self.selectedDays = selectedDays
-            self.updateCreateButtonStatus()
+        switch tableView.cellForRow(at: indexPath) {
+        case let cell as TrackerCategoryCell:
+            configureCell(at: cell)
+        case let cell as TrackerScheduleCell:
+            configureCell(at: cell)
+        default:
+            return
         }
-        scheduleViewController.modalPresentationStyle = .pageSheet
-        present(scheduleViewController, animated: true, completion: nil)
     }
     
     // MARK: - UITextFieldDelegate
@@ -199,6 +197,24 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
             createButton.widthAnchor.constraint(equalTo: cancelButton.widthAnchor),
             createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8)
         ])
+    }
+    
+    private func configureCell(at cell: TrackerCategoryCell) {
+        let categoryViewController = TrackerCategoryViewController()
+        categoryViewController.modalPresentationStyle = .pageSheet
+        present(categoryViewController, animated: true, completion: nil)
+    }
+    
+    private func configureCell(at cell: TrackerScheduleCell) {
+        let scheduleViewController = TrackerScheduleViewController()
+        scheduleViewController.setDays(selectedDays)
+        scheduleViewController.onScheduleSelected = { selectedDays in
+            cell.setDetailsBased(on: selectedDays)
+            self.selectedDays = selectedDays
+            self.updateCreateButtonStatus()
+        }
+        scheduleViewController.modalPresentationStyle = .pageSheet
+        present(scheduleViewController, animated: true, completion: nil)
     }
     
     private func updateWarningCellVisibilityTo(_ value: Bool, at indexPath: IndexPath = IndexPath(row: 1, section: 0)) {
