@@ -9,7 +9,7 @@ import CoreData
 
 final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, TrackerDataProviderProtocol {
     // MARK: - Definition
-    private weak var delegate: TrackerDataProviderDelegate?
+    weak var delegate: TrackerDataProviderDelegate?
     private let context: NSManagedObjectContext
     private let categoryStore: TrackerCategoryStoreProtocol
     private let trackerStore: TrackerStoreProtocol
@@ -52,12 +52,11 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }()
         
     init(_ categoryStore: TrackerCategoryStoreProtocol, _ trackerStore: TrackerStoreProtocol, _ recordStore: TrackerRecordStoreProtocol,
-         delegate: TrackerDataProviderDelegate) {
-        self.delegate = delegate
+         with context: NSManagedObjectContext) {
         self.categoryStore = categoryStore
         self.trackerStore = trackerStore
         self.recordStore = recordStore
-        self.context = DomainDataLayer.shared.context
+        self.context = context
     }
     
     // MARK: - NSFetchedResultsControllerDelegate
