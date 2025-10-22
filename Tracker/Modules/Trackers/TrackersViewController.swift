@@ -11,6 +11,7 @@ import Foundation
 final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
                                     TrackerCardCellDelegate, TrackerDataProviderDelegate {
     // MARK: - Definition
+    var dataProvider: TrackerDataProviderProtocol?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private lazy var datePicker = UIDatePicker()
     private lazy var stubStackView = UIStackView()
@@ -25,22 +26,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private var categories: [TrackerCategory] = []
     private var currentDate: Date = Date()
     
-    var visibleCategories: [TrackerCategory] {
+    private var visibleCategories: [TrackerCategory] {
         return categories.compactMap { category in
             guard let weekday = Calendar.weekdayNumber(for: currentDate) else { return nil }
             let filteredResults = category.trackers.filter { $0.schedule.contains(weekday) }
             return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
         }
     }
-    
-    private lazy var dataProvider: TrackerDataProviderProtocol? = {
-        let categoryStore = TrackerCategoryStore()
-        let trackerStore = TrackerStore()
-        let recordStore = TrackerRecordStore()
-        let dataProvider = TrackerDataProvider(categoryStore, trackerStore, recordStore, delegate: self)
-        return dataProvider
-    }()
-        
+            
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,6 +122,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     // MARK: - Private func
     private func configureUI() {
+        // dataProvider
+        dataProvider?.delegate = self
+        
         // navigationController
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Трекеры"
