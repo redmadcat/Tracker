@@ -14,7 +14,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private lazy var datePicker = UIDatePicker()
     private lazy var stubStackView = UIStackView()
-    private let imageView = UIImageView ()
+    private let imageView = UIImageView()
     private let stubLabel = UILabel(
         text: "Что будем отслеживать ?",
         textColor: .ypBlack,
@@ -124,7 +124,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     // MARK: - TrackerDataProviderDelegate
     func store(_ store: TrackerDataProvider?, newIndexPath: IndexPath?) {
         collectionView.reloadData()
-        self.updateStubIsHiddenStatus()
+        updateStubIsHiddenStatus()
     }
     
     // MARK: - Private func
@@ -272,5 +272,5 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
 
 @available(iOS 17.0, *)
 #Preview {
-    TrackerCreationViewController()
+    TrackersViewController()
 }
