@@ -9,6 +9,7 @@ import UIKit
 
 final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {    
     // MARK: - Definition
+    var dataProvider: TrackerDataProviderProtocol?
     private lazy var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
     private lazy var footerView = UIStackView()
     private lazy var cancelButton = UIButton()
@@ -201,6 +202,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     
     private func configureCell(at cell: TrackerCategoryCell) {
         let categoryViewController = TrackerCategoryViewController()
+        categoryViewController.dataProvider = dataProvider
         categoryViewController.modalPresentationStyle = .pageSheet
         present(categoryViewController, animated: true, completion: nil)
     }

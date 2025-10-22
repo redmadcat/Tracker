@@ -248,6 +248,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
     @objc private func addTracker() {
         let creationViewController = TrackerCreationViewController()
+        creationViewController.dataProvider = dataProvider
         creationViewController.onTrackerCreated = { category in
             if var oldCategory = self.checkExistingCategory(category: category) {
                 let newTrackers = oldCategory.trackers + category.trackers

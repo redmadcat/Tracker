@@ -9,6 +9,8 @@ import UIKit
 
 final class TrackerCategoryViewController: TrackerTableViewController {
     // MARK: - Definition
+    var dataProvider: TrackerDataProviderProtocol?
+    private lazy var categoryViewModel = TrackerCategoryViewModel(provider: self.dataProvider)
     private lazy var addButton = UIButton()
     private lazy var stubStackView = UIStackView()
     private let imageView = UIImageView()
@@ -33,7 +35,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return categoryViewModel.rows
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,8 +117,8 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     }
     
     private func updateStubIsHiddenStatus() {
-//        let isHidden = visibleCategories.count > 0 ? true : false
-//        stubStackView.isHidden = isHidden
+        let isHidden = categoryViewModel.rows > 0 ? true : false
+        stubStackView.isHidden = isHidden
     }
     
     // MARK: - Actions

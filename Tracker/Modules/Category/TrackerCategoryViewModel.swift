@@ -7,5 +7,11 @@
 
 final class TrackerCategoryViewModel {
     // MARK: - Definition
+    lazy var rows: Int = categories.count
+    private var dataProvider: TrackerDataProviderProtocol?
     private var categories: [TrackerCategory] = []
+    
+    init(provider dataProvider: TrackerDataProviderProtocol?) {
+        self.dataProvider = dataProvider
+    }
 }
