@@ -16,7 +16,10 @@ final class TabBarController: UITabBarController {
     }
     
     private func configureTabBarItems() {
+        let dataProvider = TrackerDataProvider(TrackerCategoryStore(), TrackerStore(), TrackerRecordStore(),
+                                               with: DomainDataLayer.shared.context)
         let trackersViewController = TrackersViewController()
+        trackersViewController.dataProvider = dataProvider
         let statsViewController = StatsViewController()
         let navigationController = UINavigationController(rootViewController: trackersViewController)
         
