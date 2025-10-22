@@ -12,13 +12,13 @@ final class TrackerCategoryEditableCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerCategoryEditableCell.reuseIdentifier) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .checkmark
-        
-        textLabel?.text = "Важное"
-        textLabel?.font = .systemFont(ofSize: 17, weight: .regular)
-        textLabel?.textColor = .ypBlack
-        textLabel?.translatesAutoresizingMaskIntoConstraints = false
-        
+                
         if let label = textLabel {
+            label.text = "Важное"
+            label.font = .systemFont(ofSize: 17, weight: .regular)
+            label.textColor = .ypBlack
+            label.translatesAutoresizingMaskIntoConstraints = false
+            
             NSLayoutConstraint.activate([
                 label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
                 label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
