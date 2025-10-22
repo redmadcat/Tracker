@@ -7,9 +7,8 @@
 
 import UIKit
 
-final class TrackerCategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class TrackerCategoryViewController: TrackerTableViewController {
     // MARK: - Definition
-    private lazy var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
     private lazy var addButton = UIButton()
     private lazy var stubStackView = UIStackView()
     private let imageView = UIImageView()
@@ -33,23 +32,23 @@ final class TrackerCategoryViewController: UIViewController, UITableViewDataSour
     }
     
     // MARK: - UITableViewDataSource
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return TrackerCategoryEditableCell()
+    }
+    
+    // MARK: - UITableViewDelegate
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
     }
     
     // MARK: - Private func
     private func configureUI() {
         // tableView
-        tableView.dataSource = self
-        tableView.delegate = self
-//        tableView.register(TrackerWeekdayCell.self, forCellReuseIdentifier: TrackerWeekdayCell.reuseIdentifier)
-        tableView.separatorStyle = .none
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .clear
+        tableView.register(TrackerCategoryEditableCell.self, forCellReuseIdentifier: TrackerCategoryEditableCell.reuseIdentifier)
         
         // addButton
         addButton.setTitle("Добавить категорию", for: .normal)
@@ -80,7 +79,6 @@ final class TrackerCategoryViewController: UIViewController, UITableViewDataSour
         stubStackView.addSubview(stubLabel)
         view.addSubview(headerLabel)
         view.addSubview(stubStackView)
-        view.addSubview(tableView)
         view.addSubview(addButton)
     }
     
