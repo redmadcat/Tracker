@@ -11,10 +11,9 @@ final class TrackerCategoryEditableCell: UITableViewCell {
     // MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerCategoryEditableCell.reuseIdentifier) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        accessoryType = .checkmark
+        selectionStyle = .none
                 
         if let label = textLabel {
-            label.text = "Важное"
             label.font = .systemFont(ofSize: 17, weight: .regular)
             label.textColor = .ypBlack
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -24,11 +23,14 @@ final class TrackerCategoryEditableCell: UITableViewCell {
                 label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
             ])
         }
-                
         contentView.superview?.backgroundColor = .ypBackground
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func configure(with text: String) {
+        textLabel?.text = text
     }
 }

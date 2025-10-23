@@ -10,6 +10,7 @@ import UIKit
 final class TrackerCategoryViewController: TrackerTableViewController {
     // MARK: - Definition
     var dataProvider: TrackerDataProviderProtocol?
+    private var indexPaths: [Int:Int] = [:]
     private lazy var categoryViewModel = TrackerCategoryViewModel(provider: self.dataProvider)
     private lazy var addButton = UIButton()
     private lazy var stubStackView = UIStackView()
@@ -26,11 +27,18 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         font:.systemFont(ofSize: 16, weight: .medium),
         textAlighment: .center)
     
+    var onCategorySelected: ((String, [Int:Int]) -> Void)?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureLayout()
+        updateStubIsHiddenStatus()
+    }
+    
+    func setCategory(at indexPaths: [Int:Int]) {
+        self.indexPaths = indexPaths
     }
     
     // MARK: - UITableViewDataSource
@@ -39,12 +47,41 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return TrackerCategoryEditableCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackerCategoryEditableCell.reuseIdentifier, for: indexPath) as? TrackerCategoryEditableCell
+        else { return UITableViewCell() }
+        if let category = categoryViewModel.object(at: indexPath) {
+            cell.configure(with: category.header)
+            cell.accessoryType = indexPaths[indexPath.section] == indexPath.row ?
+                .checkmark :
+                .none
+        }
+        return cell
     }
     
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+            
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    
+        let selectedFilterRow = indexPaths[indexPath.section]
+        if selectedFilterRow == indexPath.row {
+            return
+        }
+        
+        if let previousCell = tableView.cellForRow(at: IndexPath(row: selectedFilterRow ?? 0, section: indexPath.section)) {
+            previousCell.accessoryType = .none
+        }
+
+        indexPaths[indexPath.section] = indexPath.row
+        if let cell = tableView.cellForRow(at: indexPath) {
+            cell.accessoryType = .checkmark
+            if let category = cell.textLabel?.text {
+                onCategorySelected?(category, indexPaths)
+            }
+        }
     }
     
     // MARK: - Private func

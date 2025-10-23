@@ -23,7 +23,9 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         
     private let textLengthLimit = 38
     private var warningCellVisible: Bool = false
+    private var selectedCategory: String?
     private var selectedDays = [Int]()
+    private var indexPaths: [Int:Int] = [:]
     private var trackerName: String?
     private var trackerEmoji: String?
     private var trackerColor: UIColor?
@@ -202,7 +204,14 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     
     private func configureCell(at cell: TrackerCategoryCell) {
         let categoryViewController = TrackerCategoryViewController()
+//        categoryViewController.categoryViewModel = TrackerCategoryViewModel(provider: dataProvider)
         categoryViewController.dataProvider = dataProvider
+        categoryViewController.setCategory(at: indexPaths)
+        categoryViewController.onCategorySelected = { category, indexPaths in
+            cell.detailTextLabel?.text = category
+            self.indexPaths = indexPaths
+            self.selectedCategory = category
+        }
         categoryViewController.modalPresentationStyle = .pageSheet
         present(categoryViewController, animated: true, completion: nil)
     }
@@ -250,7 +259,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         if let trackerName, let trackerEmoji, let trackerColor {
             var trackers = [Tracker]()
             trackers.append(Tracker(id: UUID(), name: trackerName, color: trackerColor, emoji: trackerEmoji, schedule: selectedDays))
-            let category = TrackerCategory(header: "", trackers: trackers)
+            let category = TrackerCategory(header: selectedCategory ?? "", trackers: trackers)
             onTrackerCreated?(category)
         }
         dismiss(animated: true)
