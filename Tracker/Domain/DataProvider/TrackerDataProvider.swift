@@ -66,6 +66,11 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
     }
             
     // MARK: - TrackerDataProviderProtocol
+    func fetch() throws -> [TrackerCategory]? {
+        guard let result = try? categoryStore.fetch() else { return nil }
+        return result.compactMap { try? transform(from: $0) }
+    }
+    
     func add(_ category: TrackerCategory) throws {
         if let categoryCoreData = try? categoryStore.add(category) {
             if let tracker = category.trackers.last {
@@ -103,5 +108,10 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         let color = UIColorMarshalling.color(from: hexColor)
         
         return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
+    }
+    
+    func transform(from coreDataObject: TrackerCategoryCoreData) throws -> TrackerCategory {
+        guard let header = coreDataObject.header else { throw  TrackerTransformError.transformErrorInvalidData }
+        return TrackerCategory(header: header, trackers: [])
     }
 }

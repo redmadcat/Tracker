@@ -7,4 +7,5 @@
 
 protocol TrackerCategoryStoreProtocol {
     func add(_ trackerCategory: TrackerCategory) throws -> TrackerCategoryCoreData
+    func fetch() throws -> [TrackerCategoryCoreData]?
 }

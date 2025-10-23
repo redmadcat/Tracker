@@ -29,6 +29,14 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         return category
     }
     
+    func fetch() throws -> [TrackerCategoryCoreData]? {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \TrackerCategoryCoreData.header, ascending: false)
+        ]
+        return try? context.fetch(request)
+    }
+    
     // MARK: - Private func
     private func findAt(header: String) -> TrackerCategoryCoreData? {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
