@@ -9,9 +9,8 @@ import UIKit
 
 final class TrackerCategoryViewController: TrackerTableViewController {
     // MARK: - Definition
-    var dataProvider: TrackerDataProviderProtocol?
+    var categoryViewModel: TrackerCategoryViewModel?
     private var indexPaths: [Int:Int] = [:]
-    private lazy var categoryViewModel = TrackerCategoryViewModel(provider: self.dataProvider)
     private lazy var addButton = UIButton()
     private lazy var stubStackView = UIStackView()
     private let imageView = UIImageView()
@@ -43,19 +42,24 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryViewModel.rows
+        return categoryViewModel?.count() ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackerCategoryEditableCell.reuseIdentifier, for: indexPath) as? TrackerCategoryEditableCell
         else { return UITableViewCell() }
-        if let category = categoryViewModel.object(at: indexPath) {
+                
+        if let category = categoryViewModel?.object(at: indexPath) {
             cell.configure(with: category.header)
             cell.accessoryType = indexPaths[indexPath.section] == indexPath.row ?
                 .checkmark :
                 .none
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.roundTopBottomCornersFor(tableView, with: cell, at: indexPath)
     }
     
     // MARK: - UITableViewDelegate
@@ -80,8 +84,38 @@ final class TrackerCategoryViewController: TrackerTableViewController {
             cell.accessoryType = .checkmark
             if let category = cell.textLabel?.text {
                 onCategorySelected?(category, indexPaths)
+                dismiss(animated: true)
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let actionProvider: UIContextMenuActionProvider = { _ in
+            let editMenu = UIMenu(title: "", children: [
+                UIAction(title: "Редактировать") { _ in print("Edit action fired!") },
+                UIAction(title: "Удалить", attributes: .destructive) { _ in
+                    let deleteAlert = UIAlertController(title: "Эта категория точно не нужна?", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+
+                    let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { (action: UIAlertAction) in
+                        self.categoryViewModel?.remove(at: indexPath)
+                        self.tableView.reloadData()
+                        
+                        let selectedRow = self.indexPaths[indexPath.section]
+                        if selectedRow == indexPath.row {
+                            self.onCategorySelected?("", self.indexPaths)
+                        }
+                    }
+
+                    let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+
+                    deleteAlert.addAction(removeAction)
+                    deleteAlert.addAction(cancelAction)
+                    self.present(deleteAlert, animated: true, completion: nil)
+                }
+            ])
+            return editMenu
+        }
+        return UIContextMenuConfiguration(identifier: "unique-ID" as NSCopying, previewProvider: nil, actionProvider: actionProvider)
     }
     
     // MARK: - Private func
@@ -154,13 +188,26 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     }
     
     private func updateStubIsHiddenStatus() {
-        let isHidden = categoryViewModel.rows > 0 ? true : false
-        stubStackView.isHidden = isHidden
+        if let rows = categoryViewModel?.count() {
+            let isHidden = rows > 0 ? true : false
+            stubStackView.isHidden = isHidden
+        }
+    }
+    
+    func add(_ category: TrackerCategory) {
+        self.categoryViewModel?.append(category)
+        self.tableView.reloadData()
     }
     
     // MARK: - Actions
     @objc private func addButtonTapped() {
-        
+        let categoryCreationViewController = TrackerCategoryCreationViewController()
+        categoryCreationViewController.onCategoryCreated =  { category in
+            self.categoryViewModel?.append(category)
+            self.tableView.reloadData()
+        }
+        categoryCreationViewController.modalPresentationStyle = .pageSheet
+        present(categoryCreationViewController, animated: true, completion: nil)
     }
 }
 
