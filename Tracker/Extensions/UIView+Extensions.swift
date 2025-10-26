@@ -26,7 +26,7 @@ extension UIView {
         
         switch to {
         case .top:
-            border.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: borderWidth)
+            border.frame = CGRect(x: inset, y: 0, width: frame.size.width - (inset * 2.0), height: borderWidth)
             border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
         case .left:
             border.frame = CGRect(x: 0, y: 0, width: borderWidth, height: frame.size.height)
