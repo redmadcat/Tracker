@@ -29,6 +29,17 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         return category
     }
     
+    func delete(_ trackerCategory: TrackerCategory) throws {
+        let request = TrackerCategoryCoreData.fetchRequest()
+        request.predicate = NSPredicate(format: "header == %@", trackerCategory.header)
+        request.fetchLimit = 1
+                        
+        if let record = try? context.fetch(request).first {
+            context.delete(record)
+            try context.save()
+        }
+    }
+    
     func fetch() throws -> [TrackerCategoryCoreData]? {
         let request = TrackerCategoryCoreData.fetchRequest()
         request.sortDescriptors = [

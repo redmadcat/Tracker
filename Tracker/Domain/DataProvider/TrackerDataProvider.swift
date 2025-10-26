@@ -83,6 +83,10 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         try recordStore.add(trackerRecord)
     }
     
+    func delete(_ trackerCategory: TrackerCategory) throws {
+        try categoryStore.delete(trackerCategory)
+    }
+    
     func delete(_ trackerRecord: TrackerRecord) throws {
         try recordStore.delete(trackerRecord)
     }
