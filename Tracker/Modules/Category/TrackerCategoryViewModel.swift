@@ -9,9 +9,8 @@ import Foundation
 
 final class TrackerCategoryViewModel {
     // MARK: - Definition
-    lazy var rows: Int = categories.count
     private var dataProvider: TrackerDataProviderProtocol?
-    private var categories: [TrackerCategory] = []
+    var categories: [TrackerCategory] = []
     
     // MARK: - Lifecycle
     init(provider dataProvider: TrackerDataProviderProtocol?) {
@@ -19,10 +18,24 @@ final class TrackerCategoryViewModel {
         configureStartupData()
     }
     
+    func count() -> Int {
+        return categories.count
+    }
+    
     func object(at indexPath: IndexPath) -> TrackerCategory? {
         return categories[safe: indexPath.row]
     }
     
+    func remove(at indexPath: IndexPath) {
+        let category = categories.remove(at: indexPath.row)
+        try? dataProvider?.delete(category)
+    }
+    
+    func append(_ category: TrackerCategory) {
+        categories.append(category)
+        try? dataProvider?.add(category)
+    }
+        
     // MARK: - Private func
     private func configureStartupData() {
         do {
