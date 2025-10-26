@@ -54,8 +54,7 @@ final class TrackerNameCell: UITableViewCell {
             textField.topAnchor.constraint(equalTo: topAnchor),
             textField.leadingAnchor.constraint(equalTo: leadingAnchor),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor),
-            textField.bottomAnchor.constraint(equalTo: bottomAnchor),
-            textField.heightAnchor.constraint(equalToConstant: 36),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
