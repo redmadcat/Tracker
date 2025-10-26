@@ -204,8 +204,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     
     private func configureCell(at cell: TrackerCategoryCell) {
         let categoryViewController = TrackerCategoryViewController()
-//        categoryViewController.categoryViewModel = TrackerCategoryViewModel(provider: dataProvider)
-        categoryViewController.dataProvider = dataProvider
+        categoryViewController.categoryViewModel = TrackerCategoryViewModel(provider: self.dataProvider)
         categoryViewController.setCategory(at: indexPaths)
         categoryViewController.onCategorySelected = { category, indexPaths in
             cell.detailTextLabel?.text = category
