@@ -41,6 +41,8 @@
 		946A1E202EA8CF8C0072C166 /* TrackerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E1F2EA8CF820072C166 /* TrackerTableViewController.swift */; };
 		946A1E222EA8D6740072C166 /* TrackerCategoryEditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E212EA8D64F0072C166 /* TrackerCategoryEditableCell.swift */; };
 		946A1E242EA8E26C0072C166 /* TrackerCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E232EA8E2630072C166 /* TrackerCategoryViewModel.swift */; };
+		946A1E262EAA5BD10072C166 /* TrackerCategoryCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E252EAA5BC40072C166 /* TrackerCategoryCreationViewController.swift */; };
+		946A1E282EAE3B1E0072C166 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E272EAE3B120072C166 /* UITableViewCell+Extensions.swift */; };
 		949866442E928389005C5C42 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866432E928380005C5C42 /* Date+Extensions.swift */; };
 		9498664A2E92C69E005C5C42 /* TrackerCategory+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866492E92C693005C5C42 /* TrackerCategory+Mock.swift */; };
 		94C109BB2E8D1C9900589CB7 /* TrackerCardCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */; };
@@ -99,6 +101,8 @@
 		946A1E1F2EA8CF820072C166 /* TrackerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerTableViewController.swift; sourceTree = "<group>"; };
 		946A1E212EA8D64F0072C166 /* TrackerCategoryEditableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryEditableCell.swift; sourceTree = "<group>"; };
 		946A1E232EA8E2630072C166 /* TrackerCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewModel.swift; sourceTree = "<group>"; };
+		946A1E252EAA5BC40072C166 /* TrackerCategoryCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryCreationViewController.swift; sourceTree = "<group>"; };
+		946A1E272EAE3B120072C166 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		949866432E928380005C5C42 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		949866492E92C693005C5C42 /* TrackerCategory+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackerCategory+Mock.swift"; sourceTree = "<group>"; };
 		94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCardCellDelegate.swift; sourceTree = "<group>"; };
@@ -183,6 +187,7 @@
 		941ED38D2EA7ACF30054BCBB /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				946A1E252EAA5BC40072C166 /* TrackerCategoryCreationViewController.swift */,
 				946A1E232EA8E2630072C166 /* TrackerCategoryViewModel.swift */,
 				946A1E212EA8D64F0072C166 /* TrackerCategoryEditableCell.swift */,
 				941ED38E2EA7B0CC0054BCBB /* TrackerCategoryViewController.swift */,
@@ -247,6 +252,7 @@
 		9425F0962E6AC8A1009A884A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				946A1E272EAE3B120072C166 /* UITableViewCell+Extensions.swift */,
 				9468BEB82E6ED0B300419591 /* UIView+Extensions.swift */,
 				9468BEBA2E6ED9A400419591 /* UIButton+Extensions.swift */,
 				9468BEBC2E700FF100419591 /* UILabel+Extensions.swift */,
@@ -424,6 +430,7 @@
 				9498664A2E92C69E005C5C42 /* TrackerCategory+Mock.swift in Sources */,
 				9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */,
 				94124B852E97E75100DC18A8 /* TrackerDataProviderProtocol.swift in Sources */,
+				946A1E282EAE3B1E0072C166 /* UITableViewCell+Extensions.swift in Sources */,
 				9468BEBD2E700FFD00419591 /* UILabel+Extensions.swift in Sources */,
 				941ED38F2EA7B0DB0054BCBB /* TrackerCategoryViewController.swift in Sources */,
 				94F478742E7C06D900EE187D /* TrackerNameCell.swift in Sources */,
@@ -457,6 +464,7 @@
 				94ED0F852E82B98C00D155C3 /* Array+Extensions.swift in Sources */,
 				94124B712E9669BB00DC18A8 /* TrackerRecordStore.swift in Sources */,
 				9440AFF72E8535B100966482 /* TrackerHeaderView.swift in Sources */,
+				946A1E262EAA5BD10072C166 /* TrackerCategoryCreationViewController.swift in Sources */,
 				9452A5D42E952DD100F62A91 /* TrackerColorCell.swift in Sources */,
 				94C109BB2E8D1C9900589CB7 /* TrackerCardCellDelegate.swift in Sources */,
 				94F478722E7BDCC800EE187D /* TrackerCreationViewController.swift in Sources */,
