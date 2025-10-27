@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerCategoryViewController: TrackerTableViewController {
     // MARK: - Definition
-    var categoryViewModel: TrackerCategoryViewModel?
+    private var viewModel: TrackerCategoryViewModel?
     private var indexPaths: [Int:Int] = [:]
     private lazy var addButton = UIButton()
     private lazy var stubStackView = UIStackView()
@@ -36,20 +36,25 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         updateStubIsHiddenStatus()
     }
     
+    func initialize(viewModel: TrackerCategoryViewModel) {
+        self.viewModel = viewModel
+        bind()
+    }
+    
     func setCategory(at indexPaths: [Int:Int]) {
         self.indexPaths = indexPaths
     }
     
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryViewModel?.count() ?? 0
+        return viewModel?.count() ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TrackerCategoryEditableCell.reuseIdentifier, for: indexPath) as? TrackerCategoryEditableCell
         else { return UITableViewCell() }
                 
-        if let category = categoryViewModel?.object(at: indexPath) {
+        if let category = viewModel?.object(at: indexPath) {
             cell.configure(with: category.header)
             cell.accessoryType = indexPaths[indexPath.section] == indexPath.row ?
                 .checkmark :
@@ -93,17 +98,13 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         let actionProvider: UIContextMenuActionProvider = { _ in
             let editMenu = UIMenu(title: "", children: [
                 UIAction(title: "Редактировать") { _ in
-                    guard let category = self.categoryViewModel?.object(at: indexPath) else { return }
+                    guard let category = self.viewModel?.object(at: indexPath) else { return }
                     let categoryEditingViewController = TrackerCategoryEditingViewController()
                     categoryEditingViewController.editWith(category)
                     categoryEditingViewController.onCategoryEdited = { categoryResult in
-                        guard let viewModel = self.categoryViewModel else { return }
-                        
-                        if viewModel.exists(categoryResult) {
-                            print("Item \(categoryResult) alreasy exist")
-                        } else {
+                        guard let viewModel = self.viewModel else { return }
+                        if !viewModel.exists(categoryResult) {
                             viewModel.update(with: categoryResult, at: indexPath)
-                            self.tableView.reloadData()
                         }
                     }
                     categoryEditingViewController.modalPresentationStyle = .pageSheet
@@ -111,10 +112,8 @@ final class TrackerCategoryViewController: TrackerTableViewController {
                 },
                 UIAction(title: "Удалить", attributes: .destructive) { _ in
                     let deleteAlert = UIAlertController(title: "Эта категория точно не нужна?", message: nil, preferredStyle: UIAlertController.Style.actionSheet)
-
-                    let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { (action: UIAlertAction) in
-                        self.categoryViewModel?.remove(at: indexPath)
-                        self.tableView.reloadData()
+                    let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+                        self.viewModel?.remove(at: indexPath)
                         
                         let selectedRow = self.indexPaths[indexPath.section]
                         if selectedRow == indexPath.row {
@@ -123,7 +122,6 @@ final class TrackerCategoryViewController: TrackerTableViewController {
                     }
 
                     let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
-
                     deleteAlert.addAction(removeAction)
                     deleteAlert.addAction(cancelAction)
                     self.present(deleteAlert, animated: true, completion: nil)
@@ -131,10 +129,19 @@ final class TrackerCategoryViewController: TrackerTableViewController {
             ])
             return editMenu
         }
-        return UIContextMenuConfiguration(identifier: "unique-ID" as NSCopying, previewProvider: nil, actionProvider: actionProvider)
+        return UIContextMenuConfiguration(identifier: "CategoryViewControllerContextMenu" as NSCopying, previewProvider: nil, actionProvider: actionProvider)
     }
     
     // MARK: - Private func
+    private func bind() {
+        guard let viewModel = viewModel else { return }
+        
+        viewModel.onDataSourceChange = { [weak self ] in
+            self?.tableView.reloadData()
+            self?.updateStubIsHiddenStatus()
+        }
+    }
+    
     private func configureUI() {
         // tableView
         tableView.register(TrackerCategoryEditableCell.self, forCellReuseIdentifier: TrackerCategoryEditableCell.reuseIdentifier)
@@ -204,28 +211,23 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     }
     
     private func updateStubIsHiddenStatus() {
-        if let rows = categoryViewModel?.count() {
+        if let rows = viewModel?.count() {
             let isHidden = rows > 0 ? true : false
             stubStackView.isHidden = isHidden
         }
     }
     
     func add(_ category: TrackerCategory) {
-        self.categoryViewModel?.append(category)
-        self.tableView.reloadData()
+        self.viewModel?.append(category)
     }
     
     // MARK: - Actions
     @objc private func addButtonTapped() {
         let categoryCreationViewController = TrackerCategoryCreationViewController()
         categoryCreationViewController.onCategoryCreated =  { category in
-            guard let viewModel = self.categoryViewModel else { return }
-            if viewModel.exists(category) {
-                print("Item \(category) alreasy exist")
-            } else {
+            guard let viewModel = self.viewModel else { return }
+            if !viewModel.exists(category) {
                 viewModel.append(category)
-                self.tableView.reloadData()
-                self.updateStubIsHiddenStatus()
             }
         }
         categoryCreationViewController.modalPresentationStyle = .pageSheet

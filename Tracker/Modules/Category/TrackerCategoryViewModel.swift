@@ -7,10 +7,13 @@
 
 import Foundation
 
+typealias Binding = () -> Void
+
 final class TrackerCategoryViewModel {
     // MARK: - Definition
     private var dataProvider: TrackerDataProviderProtocol?
     private var categories: [TrackerCategory] = []
+    var onDataSourceChange: Binding?
     
     // MARK: - Lifecycle
     init(provider dataProvider: TrackerDataProviderProtocol?) {
@@ -29,11 +32,13 @@ final class TrackerCategoryViewModel {
     func remove(at indexPath: IndexPath) {
         let category = categories.remove(at: indexPath.row)
         try? dataProvider?.delete(category)
+        onDataSourceChange?()
     }
     
     func append(_ category: TrackerCategory) {
         categories.append(category)
         try? dataProvider?.add(category)
+        onDataSourceChange?()
     }
     
     func exists(_ category: TrackerCategory) -> Bool {
@@ -44,6 +49,7 @@ final class TrackerCategoryViewModel {
         if let oldCategory = object(at: indexPath) {
             self.categories = self.categories.map({ $0.header == oldCategory.header ? category : $0 })
             try? dataProvider?.update(oldCategory, with: category.header)
+            onDataSourceChange?()
         }
     }
         
@@ -54,7 +60,7 @@ final class TrackerCategoryViewModel {
                 categories = result
             }
         } catch {
-            print("Cannot load data")
+            print("Не удалось загрузить список категорий!")
         }
     }
 }
