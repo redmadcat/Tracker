@@ -44,6 +44,10 @@
 		946A1E282EAE3B1E0072C166 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E272EAE3B120072C166 /* UITableViewCell+Extensions.swift */; };
 		946A1E2A2EAF3A1C0072C166 /* TrackerCategoryEditingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E292EAF3A0B0072C166 /* TrackerCategoryEditingViewController.swift */; };
 		946A1E2D2EAF6D910072C166 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E2C2EAF6D870072C166 /* SplashScreenViewController.swift */; };
+		946A1E312EAF7DE70072C166 /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E302EAF7DDD0072C166 /* OnboardingPageViewController.swift */; };
+		946A1E332EAF7E800072C166 /* OnboardingFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E322EAF7E690072C166 /* OnboardingFirstViewController.swift */; };
+		946A1E352EAF7EAC0072C166 /* OnboardingSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E342EAF7EA00072C166 /* OnboardingSecondViewController.swift */; };
+		946A1E372EAF91D80072C166 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E362EAF91CA0072C166 /* OnboardingViewController.swift */; };
 		949866442E928389005C5C42 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866432E928380005C5C42 /* Date+Extensions.swift */; };
 		9498664A2E92C69E005C5C42 /* TrackerCategory+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866492E92C693005C5C42 /* TrackerCategory+Mock.swift */; };
 		94C109BB2E8D1C9900589CB7 /* TrackerCardCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */; };
@@ -105,6 +109,10 @@
 		946A1E272EAE3B120072C166 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		946A1E292EAF3A0B0072C166 /* TrackerCategoryEditingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryEditingViewController.swift; sourceTree = "<group>"; };
 		946A1E2C2EAF6D870072C166 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
+		946A1E302EAF7DDD0072C166 /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
+		946A1E322EAF7E690072C166 /* OnboardingFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirstViewController.swift; sourceTree = "<group>"; };
+		946A1E342EAF7EA00072C166 /* OnboardingSecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSecondViewController.swift; sourceTree = "<group>"; };
+		946A1E362EAF91CA0072C166 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		949866432E928380005C5C42 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		949866492E92C693005C5C42 /* TrackerCategory+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackerCategory+Mock.swift"; sourceTree = "<group>"; };
 		94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCardCellDelegate.swift; sourceTree = "<group>"; };
@@ -243,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				946A1E2B2EAF6D4E0072C166 /* Splash */,
+				946A1E2F2EAF7DBA0072C166 /* Onboarding */,
 				946A1E1E2EA8CF790072C166 /* Common */,
 				941ED38D2EA7ACF30054BCBB /* Category */,
 				9468BEB22E6EB46600419591 /* Trackers */,
@@ -342,6 +351,17 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		946A1E2F2EAF7DBA0072C166 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				946A1E362EAF91CA0072C166 /* OnboardingViewController.swift */,
+				946A1E342EAF7EA00072C166 /* OnboardingSecondViewController.swift */,
+				946A1E322EAF7E690072C166 /* OnboardingFirstViewController.swift */,
+				946A1E302EAF7DDD0072C166 /* OnboardingPageViewController.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		94FF964D2E72C0F800B75A0F /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -436,9 +456,11 @@
 				9468BEBB2E6ED9B100419591 /* UIButton+Extensions.swift in Sources */,
 				94124B6F2E96699D00DC18A8 /* TrackerCategoryStore.swift in Sources */,
 				946A1E222EA8D6740072C166 /* TrackerCategoryEditableCell.swift in Sources */,
+				946A1E312EAF7DE70072C166 /* OnboardingPageViewController.swift in Sources */,
 				94FF964F2E72C10E00B75A0F /* Tracker.swift in Sources */,
 				946A1E2A2EAF3A1C0072C166 /* TrackerCategoryEditingViewController.swift in Sources */,
 				9498664A2E92C69E005C5C42 /* TrackerCategory+Mock.swift in Sources */,
+				946A1E372EAF91D80072C166 /* OnboardingViewController.swift in Sources */,
 				9425F0982E6AC8AE009A884A /* UIViewController+Extensions.swift in Sources */,
 				94124B852E97E75100DC18A8 /* TrackerDataProviderProtocol.swift in Sources */,
 				946A1E282EAE3B1E0072C166 /* UITableViewCell+Extensions.swift in Sources */,
@@ -461,10 +483,12 @@
 				9452A5CE2E94F6A900F62A91 /* TrackerEmojiListCell.swift in Sources */,
 				94ED0F8D2E8408A600D155C3 /* TrackerTextField.swift in Sources */,
 				94124B602E963A2500DC18A8 /* Tracker.xcdatamodeld in Sources */,
+				946A1E352EAF7EAC0072C166 /* OnboardingSecondViewController.swift in Sources */,
 				9452A5D22E952B7500F62A91 /* TrackerColorListCell.swift in Sources */,
 				9468BEB52E6EB4D700419591 /* StatsViewController.swift in Sources */,
 				946A1E2D2EAF6D910072C166 /* SplashScreenViewController.swift in Sources */,
 				9425F08F2E69B592009A884A /* TabBarController.swift in Sources */,
+				946A1E332EAF7E800072C166 /* OnboardingFirstViewController.swift in Sources */,
 				94F478762E7C076700EE187D /* TrackerCategoryCell.swift in Sources */,
 				94ED0F8F2E840FC200D155C3 /* TrackerStubCell.swift in Sources */,
 				9440AFFD2E866C4700966482 /* RandomAccessCollection+Extensions.swift in Sources */,
@@ -499,6 +523,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -527,6 +552,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
