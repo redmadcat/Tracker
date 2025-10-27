@@ -92,9 +92,25 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let actionProvider: UIContextMenuActionProvider = { _ in
             let editMenu = UIMenu(title: "", children: [
-                UIAction(title: "Редактировать") { _ in print("Edit action fired!") },
+                UIAction(title: "Редактировать") { _ in
+                    guard let category = self.categoryViewModel?.object(at: indexPath) else { return }
+                    let categoryEditingViewController = TrackerCategoryEditingViewController()
+                    categoryEditingViewController.editWith(category)
+                    categoryEditingViewController.onCategoryEdited = { categoryResult in
+                        guard let viewModel = self.categoryViewModel else { return }
+                        
+                        if viewModel.exists(categoryResult) {
+                            print("Item \(categoryResult) alreasy exist")
+                        } else {
+                            viewModel.update(with: categoryResult, at: indexPath)
+                            self.tableView.reloadData()
+                        }
+                    }
+                    categoryEditingViewController.modalPresentationStyle = .pageSheet
+                    self.present(categoryEditingViewController, animated: true, completion: nil)
+                },
                 UIAction(title: "Удалить", attributes: .destructive) { _ in
-                    let deleteAlert = UIAlertController(title: "Эта категория точно не нужна?", message: "", preferredStyle: UIAlertController.Style.actionSheet)
+                    let deleteAlert = UIAlertController(title: "Эта категория точно не нужна?", message: nil, preferredStyle: UIAlertController.Style.actionSheet)
 
                     let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { (action: UIAlertAction) in
                         self.categoryViewModel?.remove(at: indexPath)
@@ -203,8 +219,14 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     @objc private func addButtonTapped() {
         let categoryCreationViewController = TrackerCategoryCreationViewController()
         categoryCreationViewController.onCategoryCreated =  { category in
-            self.categoryViewModel?.append(category)
-            self.tableView.reloadData()
+            guard let viewModel = self.categoryViewModel else { return }
+            if viewModel.exists(category) {
+                print("Item \(category) alreasy exist")
+            } else {
+                viewModel.append(category)
+                self.tableView.reloadData()
+                self.updateStubIsHiddenStatus()
+            }
         }
         categoryCreationViewController.modalPresentationStyle = .pageSheet
         present(categoryCreationViewController, animated: true, completion: nil)
