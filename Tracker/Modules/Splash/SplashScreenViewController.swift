@@ -8,36 +8,48 @@
 import UIKit
 
 final class SplashScreenViewController: UIViewController {
-    private lazy var logoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "SplashScreenLogo")
-        return imageView
-    }()
+    // MARK: - Definition
+    private lazy var imageView = UIImageView()
     
     // MARK: - Lifecycle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         configureUI()
         configureLayout()
-        
-        let tabBarController = TabBarController()
-        tabBarController.modalPresentationStyle = .fullScreen
-        present(tabBarController, animated: true, completion: nil)
+        configureStartUp()
     }
     
     // MARK: - Private func
     private func configureUI() {
+        // imageView
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "SplashScreenLogo")
+        
         view.backgroundColor = .ypBlue
         
         // hierarchy
-        view.addSubview(logoImageView)
+        view.addSubview(imageView)
     }
     
     private func configureLayout() {
         NSLayoutConstraint.activate([
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
+    
+    private func configureStartUp() {
+        let viewController = UserDefaults.standard.bool(forKey: "skipFurther") ? TabBarController() : OnboardingPageViewController()
+        goTo(viewController)
+    }
+    
+    private func goTo(_ viewController: UIViewController) {
+        viewController.modalPresentationStyle = .fullScreen
+        present(viewController, animated: true, completion: nil)
+    }
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    SplashScreenViewController()
 }
