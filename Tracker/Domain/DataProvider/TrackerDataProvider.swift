@@ -91,6 +91,10 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         try recordStore.delete(trackerRecord)
     }
     
+    func update(_ trackerCategory: TrackerCategory, with header: String) throws {
+        try categoryStore.update(trackerCategory, with: header)
+    }
+    
     func isCompleted(for trackerId: UUID, at date: Date) throws -> Bool? {
         return try recordStore.isCompleted(for: trackerId, at: date)
     }

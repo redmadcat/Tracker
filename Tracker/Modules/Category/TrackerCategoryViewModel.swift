@@ -10,7 +10,7 @@ import Foundation
 final class TrackerCategoryViewModel {
     // MARK: - Definition
     private var dataProvider: TrackerDataProviderProtocol?
-    var categories: [TrackerCategory] = []
+    private var categories: [TrackerCategory] = []
     
     // MARK: - Lifecycle
     init(provider dataProvider: TrackerDataProviderProtocol?) {
@@ -34,6 +34,17 @@ final class TrackerCategoryViewModel {
     func append(_ category: TrackerCategory) {
         categories.append(category)
         try? dataProvider?.add(category)
+    }
+    
+    func exists(_ category: TrackerCategory) -> Bool {
+        return categories.contains(where: { $0.header == category.header })
+    }
+    
+    func update(with category: TrackerCategory, at indexPath: IndexPath) {
+        if let oldCategory = object(at: indexPath) {
+            self.categories = self.categories.map({ $0.header == oldCategory.header ? category : $0 })
+            try? dataProvider?.update(oldCategory, with: category.header)
+        }
     }
         
     // MARK: - Private func

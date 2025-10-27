@@ -40,6 +40,13 @@ final class TrackerCategoryStore: TrackerCategoryStoreProtocol {
         }
     }
     
+    func update(_ trackerCategory: TrackerCategory, with header: String) throws {
+        if let existingCategory = findAt(header: trackerCategory.header) {
+            existingCategory.header = header
+            try context.save()
+        }
+    }
+    
     func fetch() throws -> [TrackerCategoryCoreData]? {
         let request = TrackerCategoryCoreData.fetchRequest()
         request.sortDescriptors = [
