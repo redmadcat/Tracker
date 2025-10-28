@@ -9,6 +9,9 @@ import UIKit
 
 final class SplashScreenViewController: UIViewController {
     // MARK: - Definition
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
     private lazy var imageView = UIImageView()
     
     // MARK: - Lifecycle

@@ -9,6 +9,9 @@ import UIKit
 
 final class OnboardingPageViewController: UIPageViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     // MARK: - Definition
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
     private lazy var pageControl = UIPageControl()
     private lazy var onboardingPages: [UIViewController] =
         [OnboardingFirstViewController(), OnboardingSecondViewController()]
