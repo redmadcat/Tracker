@@ -13,7 +13,7 @@ final class OnboardingFirstViewController: OnboardingViewController {
     private lazy var label = UILabel()
     
     private lazy var imageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "OnBoardingImage1"))
+        let imageView = UIImageView(image: UIImage(named: "Onboarding1"))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
