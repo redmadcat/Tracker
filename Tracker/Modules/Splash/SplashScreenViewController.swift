@@ -42,7 +42,9 @@ final class SplashScreenViewController: UIViewController {
     }
     
     private func configureStartUp() {
-        let viewController = UserDefaults.standard.bool(forKey: "skipFurther") ? TabBarController() : OnboardingPageViewController()
+        let viewController = UserDefaultsService.shared.isSkipFutherCompleted ?
+            TabBarController() :
+            OnboardingPageViewController()
         goTo(viewController)
     }
     

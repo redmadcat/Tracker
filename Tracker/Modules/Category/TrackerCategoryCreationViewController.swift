@@ -32,7 +32,7 @@ final class TrackerCategoryCreationViewController: UIViewController, UITextField
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else { return true }
         categoryHeader = text
-        doneButton.isEnabled = !text.isEmpty ? true : false
+        doneButton.isEnabled = !text.isEmpty
         updateDoneButtonStatus()
         return true
     }

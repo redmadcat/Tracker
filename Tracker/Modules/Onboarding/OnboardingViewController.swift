@@ -15,7 +15,7 @@ class OnboardingViewController: UIViewController {
             
     // MARK: - Actions
     @objc func doneButtonTapped() {
-        UserDefaults.standard.setValue(true, forKey: "skipFurther")
+        UserDefaultsService.shared.isSkipFutherCompleted = true
         let tabBarController = TabBarController()
         tabBarController.modalPresentationStyle = .fullScreen
         present(tabBarController, animated: true, completion: nil)

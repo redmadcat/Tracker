@@ -134,7 +134,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     
     // MARK: - Private func
     private func bind() {
-        guard let viewModel = viewModel else { return }
+        guard let viewModel else { return }
         
         viewModel.onDataSourceChange = { [weak self ] in
             self?.tableView.reloadData()
@@ -163,7 +163,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "DizzyScreenLogo")
+        imageView.image = UIImage(resource: .dizzyScreenLogo)
         
         // stubLabel
         stubLabel.numberOfLines = 2
@@ -212,8 +212,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
     
     private func updateStubIsHiddenStatus() {
         if let rows = viewModel?.count() {
-            let isHidden = rows > 0 ? true : false
-            stubStackView.isHidden = isHidden
+            stubStackView.isHidden = rows > 0
         }
     }
     
