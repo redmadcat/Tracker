@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Roman Yaschenkov on 30.10.2025.
+  
+*/
+
+"empty_trackers_stub" = "What will be tracked?";
+"title_trackers" = "Trackers";
+"search_placeholder" = "Search";
+"search_cancellation" = "Cancel";
+"title_error" = "Error!";
+"action_ok" = "OK";
+"save_changes_error" = "Couldn't save changes!";
+"default_category" = "No Category";
