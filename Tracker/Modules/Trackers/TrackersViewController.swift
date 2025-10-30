@@ -17,12 +17,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private lazy var stubStackView = UIStackView()
     private let imageView = UIImageView()
     private let stubLabel = UILabel(
-        text: "Что будем отслеживать ?",
+        text: NSLocalizedString("empty_trackers_stub", comment: "Empty trackers list stub label"),
         textColor: .ypBlack,
         font:.systemFont(ofSize: 12, weight: .medium),
         textAlighment: .center)
         
-    private let defaultCategory = "Без категории"
+    private let defaultCategory = NSLocalizedString("default_category", comment: "Default category header")
     private var categories: [TrackerCategory] = []
     private var currentDate: Date = Date()
     
@@ -107,7 +107,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 try dataProvider?.delete(trackerRecord) :
                 try dataProvider?.add(trackerRecord)
         } catch {
-            showError("Не удалось сохранить изменения!")
+            showError(NSLocalizedString("save_changes_error", comment: "Save changes error message"))
             return
         }
         
@@ -127,7 +127,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
         // navigationController
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Трекеры"
+        title = NSLocalizedString("title_trackers", comment: "Trackers title label")
         
         // leftButton
         let leftButton = UIBarButtonItem(title: "", style: .plain, target: self, action: #selector(addTracker))
@@ -141,9 +141,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         // searchBar
         let searchBar = UISearchController(searchResultsController: nil)
         searchBar.obscuresBackgroundDuringPresentation = false
-        searchBar.searchBar.placeholder = "Поиск"
+        searchBar.searchBar.placeholder = NSLocalizedString("search_placeholder", comment: "Search bar placeholder")
         searchBar.hidesNavigationBarDuringPresentation = false
-        searchBar.searchBar.setValue("Отменить", forKey: "cancelButtonText")
+        searchBar.searchBar.setValue(NSLocalizedString("search_cancellation", comment: "Search cancellation button"), forKey: "cancelButtonText")
         
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
@@ -225,8 +225,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     private func showError(_ message: String) {
-        let alert = UIAlertController(title: "Ошибка!", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in }))
+        let alert = UIAlertController(title: NSLocalizedString("title_error", comment: "Errro alert title"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("action_ok", comment: "OK alert action"), style: .default, handler: { _ in }))
         present(alert, animated: true, completion: nil)
     }
     
@@ -234,7 +234,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         do {
             try self.dataProvider?.add(trackerCategory)
         } catch {
-            showError("Не удалось сохранить изменения!")
+            showError(NSLocalizedString("save_changes_error", comment: "Save changes error message"))
             return
         }
     }
