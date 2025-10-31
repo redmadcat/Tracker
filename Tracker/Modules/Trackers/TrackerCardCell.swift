@@ -37,8 +37,11 @@ final class TrackerCardCell: UICollectionViewCell {
         trackerId = tracker.id
         emojiLabel.text = tracker.emoji
         titleLabel.text = tracker.name
-        countLabel.text = counter.daysWordForm
-                    
+        
+        let daysString = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: "Number of days"), counter)
+        countLabel.text = daysString
+                            
         self.isCompletedToday = isCompletedToday
         self.indexPath = indexPath
                 
