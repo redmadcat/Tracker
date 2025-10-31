@@ -16,6 +16,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private lazy var datePicker = UIDatePicker()
     private lazy var stubStackView = UIStackView()
     private let imageView = UIImageView()
+    private lazy var filterButton = UIButton()
     private let stubLabel = UILabel(
         text: NSLocalizedString("empty_trackers_stub", comment: "Empty trackers list stub label"),
         textColor: .ypBlack,
@@ -33,6 +34,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
         }
     }
+    
+    private let analyticsService = AnalyticsService()
             
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -42,6 +45,16 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         configureLayout()
         configureStartupData()
         updateStubIsHiddenStatus()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analyticsService.report(event: "didAppearTrackersViewController", params: ["event":"open", "screen":"Main"])
+    }
+        
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.report(event: "didDisappearTrackersViewController", params: ["event":"close", "screen":"Main"])
     }
     
     // MARK: - UICollectionViewDataSource
@@ -104,11 +117,13 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         return UIContextMenuConfiguration(actionProvider: { [weak self] action in
             guard let self else { return nil }
             return UIMenu(children: [
-                UIAction(title: "Edit") { [weak self] _ in
+                UIAction(title: NSLocalizedString("menu_action_edit", comment: "Edit menu action")) { [weak self] _ in
                     guard let self else { return }
+                    self.analyticsService.report(event: "didSelectEditTracker", params: ["event":"click", "screen":"Main", "item":"edit"])
                 },
-                UIAction(title: "Delete", attributes: .destructive) { [weak self] _ in
+                UIAction(title: NSLocalizedString("menu_action_delete", comment: "Delete menu action"), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
+                    self.analyticsService.report(event: "didSelectDeleteTracker", params: ["event":"click", "screen":"Main", "item":"delete"])
                 },
             ])
         })
@@ -116,6 +131,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
     // MARK: - TrackerCardCellDelegate
     func setCompletionTo(completion: Bool, with id: UUID, at indexPath: IndexPath) {
+        analyticsService.report(event: "didTapTrackButton", params: ["event":"click", "screen":"Main", "item":"track"])
         let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
         
         do {
@@ -161,6 +177,14 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         searchBar.hidesNavigationBarDuringPresentation = false
         searchBar.searchBar.setValue(NSLocalizedString("search_cancellation", comment: "Search cancellation button"), forKey: "cancelButtonText")
         
+        // filterButton
+        filterButton.setTitle(NSLocalizedString("title_filters", comment: "Filters button title"), for: .normal)
+        filterButton.titleLabel?.font = .systemFont(ofSize: 17)
+        filterButton.backgroundColor = .ypBlue
+        filterButton.layer.cornerRadius = 16
+        filterButton.addTarget(self, action: #selector(didTapFilterButton), for: .touchUpInside)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.searchController = searchBar
@@ -197,6 +221,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         stubStackView.addSubview(stubLabel)
         view.addSubview(stubStackView)
         view.addSubview(collectionView)
+        view.addSubview(filterButton)
     }
     
     private func configureLayout() {
@@ -218,7 +243,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             
             stubLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             stubLabel.leadingAnchor.constraint(equalTo: stubStackView.leadingAnchor, constant: 16),
-            stubLabel.trailingAnchor.constraint(equalTo: stubStackView.trailingAnchor, constant: -16)
+            stubLabel.trailingAnchor.constraint(equalTo: stubStackView.trailingAnchor, constant: -16),
+                                                                                    
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
     
@@ -263,6 +293,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
         
     @objc private func addTracker() {
+        analyticsService.report(event: "didTapAddTrackerButton", params: ["event":"click", "screen":"Main", "item":"add_track"])
         let creationViewController = TrackerCreationViewController()
         creationViewController.dataProvider = dataProvider
         creationViewController.onTrackerCreated = { category in
@@ -280,6 +311,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         }
         creationViewController.modalPresentationStyle = .pageSheet
         navigationController?.present(creationViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func didTapFilterButton() {
+        analyticsService.report(event: "didTapFilterButton", params: ["event":"click", "screen":"Main", "item":"filter"])
     }
 }
 
