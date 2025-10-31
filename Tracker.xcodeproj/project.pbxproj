@@ -19,6 +19,12 @@
 		9417CD132EB372D200588583 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417CD122EB372CB00588583 /* UserDefaultsService.swift */; };
 		9417CD162EB384F800588583 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9417CD142EB384F800588583 /* Localizable.strings */; };
 		9417CD1A2EB4BBA800588583 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 9417CD182EB4BBA800588583 /* Localizable.stringsdict */; };
+		9417CD222EB4D28900588583 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417CD212EB4D27900588583 /* AnalyticsService.swift */; };
+		9417CD252EB4D37A00588583 /* AppMetricaAdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 9417CD242EB4D37A00588583 /* AppMetricaAdSupport */; };
+		9417CD272EB4D37A00588583 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9417CD262EB4D37A00588583 /* AppMetricaCore */; };
+		9417CD292EB4D37A00588583 /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = 9417CD282EB4D37A00588583 /* AppMetricaCrashes */; };
+		9417CD2B2EB4D37A00588583 /* AppMetricaIDSync in Frameworks */ = {isa = PBXBuildFile; productRef = 9417CD2A2EB4D37A00588583 /* AppMetricaIDSync */; };
+		9417CD2D2EB4D37A00588583 /* AppMetricaLibraryAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 9417CD2C2EB4D37A00588583 /* AppMetricaLibraryAdapter */; };
 		941ED38F2EA7B0DB0054BCBB /* TrackerCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941ED38E2EA7B0CC0054BCBB /* TrackerCategoryViewController.swift */; };
 		942058B72EA537A300BD2AEE /* TrackerRecordStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942058B62EA5379B00BD2AEE /* TrackerRecordStoreProtocol.swift */; };
 		942058B92EA5385600BD2AEE /* TrackerCategoryStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942058B82EA5384C00BD2AEE /* TrackerCategoryStoreProtocol.swift */; };
@@ -86,6 +92,7 @@
 		9417CD172EB3857B00588583 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9417CD192EB4BBA800588583 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		9417CD1B2EB4BCC700588583 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		9417CD212EB4D27900588583 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		941ED38E2EA7B0CC0054BCBB /* TrackerCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryViewController.swift; sourceTree = "<group>"; };
 		942058B62EA5379B00BD2AEE /* TrackerRecordStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStoreProtocol.swift; sourceTree = "<group>"; };
 		942058B82EA5384C00BD2AEE /* TrackerCategoryStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStoreProtocol.swift; sourceTree = "<group>"; };
@@ -145,6 +152,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9417CD2B2EB4D37A00588583 /* AppMetricaIDSync in Frameworks */,
+				9417CD2D2EB4D37A00588583 /* AppMetricaLibraryAdapter in Frameworks */,
+				9417CD292EB4D37A00588583 /* AppMetricaCrashes in Frameworks */,
+				9417CD252EB4D37A00588583 /* AppMetricaAdSupport in Frameworks */,
+				9417CD272EB4D37A00588583 /* AppMetricaCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +215,7 @@
 		9417CD112EB372B500588583 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				9417CD212EB4D27900588583 /* AnalyticsService.swift */,
 				9417CD122EB372CB00588583 /* UserDefaultsService.swift */,
 			);
 			path = Services;
@@ -406,6 +419,11 @@
 			);
 			name = Tracker;
 			packageProductDependencies = (
+				9417CD242EB4D37A00588583 /* AppMetricaAdSupport */,
+				9417CD262EB4D37A00588583 /* AppMetricaCore */,
+				9417CD282EB4D37A00588583 /* AppMetricaCrashes */,
+				9417CD2A2EB4D37A00588583 /* AppMetricaIDSync */,
+				9417CD2C2EB4D37A00588583 /* AppMetricaLibraryAdapter */,
 			);
 			productName = Tracker;
 			productReference = 9425F06B2E69B548009A884A /* Tracker.app */;
@@ -436,6 +454,9 @@
 			);
 			mainGroup = 9425F0622E69B548009A884A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9425F06C2E69B548009A884A /* Products */;
 			projectDirPath = "";
@@ -490,6 +511,7 @@
 				94FF96532E72C36800B75A0F /* TrackerRecord.swift in Sources */,
 				9425F08D2E69B592009A884A /* AppDelegate.swift in Sources */,
 				9425F08E2E69B592009A884A /* SceneDelegate.swift in Sources */,
+				9417CD222EB4D28900588583 /* AnalyticsService.swift in Sources */,
 				94124B692E9654EF00DC18A8 /* DomainDataLayer.swift in Sources */,
 				94ED0F872E82C01500D155C3 /* StringProtocol+Extensions.swift in Sources */,
 				94124B8A2E9E293100DC18A8 /* UIColorMarshalling.swift in Sources */,
@@ -751,6 +773,45 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9417CD242EB4D37A00588583 /* AppMetricaAdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaAdSupport;
+		};
+		9417CD262EB4D37A00588583 /* AppMetricaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCore;
+		};
+		9417CD282EB4D37A00588583 /* AppMetricaCrashes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCrashes;
+		};
+		9417CD2A2EB4D37A00588583 /* AppMetricaIDSync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaIDSync;
+		};
+		9417CD2C2EB4D37A00588583 /* AppMetricaLibraryAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9417CD232EB4D37A00588583 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaLibraryAdapter;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		94124B5E2E963A2500DC18A8 /* Tracker.xcdatamodeld */ = {
