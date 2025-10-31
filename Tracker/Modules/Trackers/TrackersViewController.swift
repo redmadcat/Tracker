@@ -97,6 +97,22 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 46)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let indexPath = indexPaths.first else { return nil }
+        
+        return UIContextMenuConfiguration(actionProvider: { [weak self] action in
+            guard let self else { return nil }
+            return UIMenu(children: [
+                UIAction(title: "Edit") { [weak self] _ in
+                    guard let self else { return }
+                },
+                UIAction(title: "Delete", attributes: .destructive) { [weak self] _ in
+                    guard let self else { return }
+                },
+            ])
+        })
+    }
         
     // MARK: - TrackerCardCellDelegate
     func setCompletionTo(completion: Bool, with id: UUID, at indexPath: IndexPath) {
