@@ -8,9 +8,12 @@
 
 "empty_trackers_stub" = "What will be tracked?";
 "title_trackers" = "Trackers";
+"title_filters" = "Filters";
 "search_placeholder" = "Search";
 "search_cancellation" = "Cancel";
 "title_error" = "Error!";
 "action_ok" = "OK";
 "save_changes_error" = "Couldn't save changes!";
 "default_category" = "No Category";
+"menu_action_edit" = "Edit";
+"menu_action_delete" = "Delete";

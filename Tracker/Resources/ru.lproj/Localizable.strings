@@ -8,9 +8,12 @@
 
 "empty_trackers_stub" = "Что будем отслеживать?";
 "title_trackers" = "Трекеры";
+"title_filters" = "Фильтры";
 "search_placeholder" = "Поиск";
 "search_cancellation" = "Отменить";
 "title_error" = "Ошибка!";
 "action_ok" = "ОК";
 "save_changes_error" = "Не удалось сохранить изменения!";
 "default_category" = "Без категории";
+"menu_action_edit" = "Редактировать";
+"menu_action_delete" = "Удалить";
