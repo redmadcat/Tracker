@@ -40,4 +40,14 @@ final class TrackerStore: TrackerStoreProtocol {
         newTracker.category = category
         try context.save()
     }
+    
+    func delete(_ tracker: Tracker) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        if let record = try? context.fetch(request).first {
+            context.delete(record)
+            try context.save()
+        }
+    }
 }

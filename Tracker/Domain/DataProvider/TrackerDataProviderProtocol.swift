@@ -15,6 +15,7 @@ protocol TrackerDataProviderProtocol {
     func add(_ trackerRecord: TrackerRecord) throws
     func delete(_ trackerCategory: TrackerCategory) throws
     func delete(_ trackerRecord: TrackerRecord) throws
+    func delete(_ tracker: Tracker) throws
     func update(_ trackerCategory: TrackerCategory, with header: String) throws
     func isCompleted(for trackerId: UUID, at date: Date) throws -> Bool?
     func count(at trackerId: UUID) throws -> Int

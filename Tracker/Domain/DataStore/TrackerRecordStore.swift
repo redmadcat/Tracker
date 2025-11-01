@@ -41,6 +41,16 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         }
     }
     
+    func delete(trackerRecordAt id: UUID) throws {
+        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        request.predicate = NSPredicate(format: "trackerId == %@", id as CVarArg)
+        
+        try? context.fetch(request).forEach { trackerRecord in
+            context.delete(trackerRecord)
+        }
+        try context.save()
+    }
+    
     func isCompleted(for trackerId: UUID, at date: Date) throws -> Bool? {
         guard let (from, to) = Calendar.range(for: date) else { return nil }
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
