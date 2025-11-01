@@ -115,7 +115,6 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         guard let indexPath = indexPaths.first else { return nil }
         
         return UIContextMenuConfiguration(actionProvider: { [weak self] action in
-            guard let self else { return nil }
             return UIMenu(children: [
                 UIAction(title: NSLocalizedString("menu_action_edit", comment: "Edit menu action")) { [weak self] _ in
                     guard let self else { return }
@@ -124,6 +123,24 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 UIAction(title: NSLocalizedString("menu_action_delete", comment: "Delete menu action"), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
                     self.analyticsService.report(event: "didSelectDeleteTracker", params: ["event":"click", "screen":"Main", "item":"delete"])
+                    
+                    let deleteAlert = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+                    let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+                        if var category = self.visibleCategories[safe: indexPath.section] {
+                            var trackers = category.trackers
+                            let tracker = trackers.remove(at: indexPath.row)
+                            try? self.dataProvider?.delete(tracker)
+                                                            
+                            category = TrackerCategory(header: category.header, trackers: trackers)
+                            self.categories = self.categories.map({ $0.header == category.header ? category : $0 })
+                            self.collectionView.reloadData()
+                        }
+                    }
+
+                    let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+                    deleteAlert.addAction(removeAction)
+                    deleteAlert.addAction(cancelAction)
+                    self.present(deleteAlert, animated: true, completion: nil)
                 },
             ])
         })
