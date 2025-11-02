@@ -10,13 +10,14 @@ import UIKit
 final class TrackerCreationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {    
     // MARK: - Definition
     var dataProvider: TrackerDataProviderProtocol?
+    private var editMode: Bool = false
     private lazy var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
     private lazy var footerView = UIStackView()
     private lazy var cancelButton = UIButton()
     private lazy var createButton = UIButton()
     
-    private let headerLabel = UILabel(
-        text: "Новая привычка",
+    private lazy var headerLabel = UILabel(
+        text:  self.editMode ? "Редактирование привычки" : "Новая привычка",
         textColor: .ypBlack,
         font:.systemFont(ofSize: 16, weight: .medium),
         textAlighment: .center)
@@ -25,7 +26,6 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     private var warningCellVisible: Bool = false
     private var selectedCategory: String?
     private var selectedDays = [Int]()
-    private var indexPaths: [Int:Int] = [:]
     private var trackerName: String?
     private var trackerEmoji: String?
     private var trackerColor: UIColor?
@@ -39,6 +39,13 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         configureUI()
         configureLayout()
         updateCreateButtonStatus()
+    }
+    
+    func edit(_ tracker: Tracker, with category: TrackerCategory) {
+        editMode = true
+        trackerName = tracker.name
+        selectedCategory = category.header
+        
     }
     
     // MARK: - UITableViewDataSource
@@ -58,7 +65,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
                 TrackerStubCell(style: .default)
         case 1:
             return indexPath.row == 0 ?
-                TrackerCategoryCell(style: .subtitle) :
+                TrackerCategoryCell(style: .subtitle, categoryHeader: selectedCategory) :
                 TrackerScheduleCell(style: .subtitle)
         case 2:
             return indexPath.row == 0 ?
@@ -155,7 +162,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         
         // createButton
-        createButton.setTitle("Создать", for: .normal)
+        createButton.setTitle(editMode ? "Сохранить" : "Создать", for: .normal)
         createButton.setTitleColor(.ypWhite, for: .normal)
         createButton.backgroundColor = .ypBlack
         createButton.layer.cornerRadius = 16
@@ -175,7 +182,6 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     private func configureLayout() {
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34),
-            headerLabel.widthAnchor.constraint(equalToConstant: 133),
             headerLabel.heightAnchor.constraint(equalToConstant: 22),
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -206,10 +212,9 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         let categoryViewController = TrackerCategoryViewController()
         let viewModel = TrackerCategoryViewModel(provider: self.dataProvider)
         categoryViewController.initialize(viewModel: viewModel)
-        categoryViewController.setCategory(at: indexPaths)
-        categoryViewController.onCategorySelected = { category, indexPaths in
+        categoryViewController.setCategory(selectedCategory)
+        categoryViewController.onCategorySelected = { category in
             cell.detailTextLabel?.text = category
-            self.indexPaths = indexPaths
             self.selectedCategory = category
         }
         categoryViewController.modalPresentationStyle = .pageSheet
