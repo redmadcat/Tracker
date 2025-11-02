@@ -11,6 +11,7 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
     // MARK: - Definition
     private weak var delegate: TrackerCreationViewController?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var selectedEmoji: String?
     
     private var emojis: [String] = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -19,9 +20,10 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
     ]
     
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerEmojiListCell.reuseIdentifier, delegate: TrackerCreationViewController?) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerEmojiListCell.reuseIdentifier, delegate: TrackerCreationViewController?, emoji: String? = nil) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.delegate = delegate
+        selectedEmoji = emoji
         configureUI()
         configureLayout()
     }
@@ -40,6 +42,11 @@ final class TrackerEmojiListCell: UITableViewCell, UICollectionViewDataSource, U
         
         let emoji = emojis[indexPath.row]
         cell.configure(text: emoji)
+        
+        if selectedEmoji == emoji {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+        }
+                
         return cell
     }
     
