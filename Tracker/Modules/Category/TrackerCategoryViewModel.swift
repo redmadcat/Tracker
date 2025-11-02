@@ -29,6 +29,11 @@ final class TrackerCategoryViewModel {
         return categories[safe: indexPath.row]
     }
     
+    func indexPaths(at categoryHeader: String) -> [Int:Int] {
+        guard let index = categories.firstIndex(where: { $0.header == categoryHeader }) else { return [0:0] }
+        return [0:index]
+    }
+    
     func remove(at indexPath: IndexPath) {
         let category = categories.remove(at: indexPath.row)
         try? dataProvider?.delete(category)
