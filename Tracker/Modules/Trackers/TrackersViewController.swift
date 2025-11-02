@@ -119,6 +119,16 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                 UIAction(title: NSLocalizedString("menu_action_edit", comment: "Edit menu action")) { [weak self] _ in
                     guard let self else { return }
                     self.analyticsService.report(event: "didSelectEditTracker", params: ["event":"click", "screen":"Main", "item":"edit"])
+                    
+                    if let category = self.visibleCategories[safe: indexPath.section],
+                       let tracker = category.trackers[safe: indexPath.item] {
+                    
+                        let creationViewController = TrackerCreationViewController()
+                        creationViewController.dataProvider = dataProvider
+                        creationViewController.edit(tracker, with: category)
+                        creationViewController.modalPresentationStyle = .pageSheet
+                        navigationController?.present(creationViewController, animated: true, completion: nil)
+                    }
                 },
                 UIAction(title: NSLocalizedString("menu_action_delete", comment: "Delete menu action"), attributes: .destructive) { [weak self] _ in
                     guard let self else { return }
