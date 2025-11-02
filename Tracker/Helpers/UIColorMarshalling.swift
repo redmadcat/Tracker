@@ -31,4 +31,8 @@ final class UIColorMarshalling {
             alpha: CGFloat(1.0)
         )
     }
+    
+    static func compare(color1: UIColor, color2: UIColor) -> Bool {
+        return UIColorMarshalling.hexString(from: color1) == UIColorMarshalling.hexString(from: color2)
+    }
 }
