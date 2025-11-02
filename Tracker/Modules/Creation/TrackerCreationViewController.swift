@@ -44,8 +44,10 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     func edit(_ tracker: Tracker, with category: TrackerCategory) {
         editMode = true
         trackerName = tracker.name
+        selectedDays = tracker.schedule
+        trackerEmoji = tracker.emoji
+        trackerColor = tracker.color
         selectedCategory = category.header
-        
     }
     
     // MARK: - UITableViewDataSource
@@ -66,11 +68,11 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         case 1:
             return indexPath.row == 0 ?
                 TrackerCategoryCell(style: .subtitle, categoryHeader: selectedCategory) :
-                TrackerScheduleCell(style: .subtitle)
+                TrackerScheduleCell(style: .subtitle, schedule: selectedDays)
         case 2:
             return indexPath.row == 0 ?
-                TrackerEmojiListCell(style: .default, delegate: self) :
-                TrackerColorListCell(style: .default, delegate: self)
+                TrackerEmojiListCell(style: .default, delegate: self, emoji: trackerEmoji) :
+                TrackerColorListCell(style: .default, delegate: self, color: trackerColor)
         default:
             return UITableViewCell()
         }
