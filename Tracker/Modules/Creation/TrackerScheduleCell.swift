@@ -9,7 +9,7 @@ import UIKit
 
 final class TrackerScheduleCell: UITableViewCell {
     // MARK: - Lifecycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerScheduleCell.reuseIdentifier) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerScheduleCell.reuseIdentifier, schedule: [Int]? = nil) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
         selectionStyle = .none
@@ -18,6 +18,9 @@ final class TrackerScheduleCell: UITableViewCell {
         detailTextLabel?.font = .systemFont(ofSize: 17)
         detailTextLabel?.textColor = .ypGray
         contentView.superview?.backgroundColor = .ypBackground
+        if let schedule {
+            setDetailsBased(on: schedule)
+        }
     }
     
     required init?(coder: NSCoder) {
