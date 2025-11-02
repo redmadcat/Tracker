@@ -26,7 +26,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         font:.systemFont(ofSize: 16, weight: .medium),
         textAlighment: .center)
     
-    var onCategorySelected: ((String, [Int:Int]) -> Void)?
+    var onCategorySelected: ((String) -> Void)?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -41,8 +41,10 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         bind()
     }
     
-    func setCategory(at indexPaths: [Int:Int]) {
-        self.indexPaths = indexPaths
+    func setCategory(_ categoryHeader: String?) {
+        guard let viewModel,
+              let categoryHeader else { return }
+        self.indexPaths = viewModel.indexPaths(at: categoryHeader)
     }
     
     // MARK: - UITableViewDataSource
@@ -88,7 +90,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.accessoryType = .checkmark
             if let category = cell.textLabel?.text {
-                onCategorySelected?(category, indexPaths)
+                onCategorySelected?(category)
                 dismiss(animated: true)
             }
         }
@@ -117,7 +119,7 @@ final class TrackerCategoryViewController: TrackerTableViewController {
                         
                         let selectedRow = self.indexPaths[indexPath.section]
                         if selectedRow == indexPath.row {
-                            self.onCategorySelected?("", self.indexPaths)
+                            self.onCategorySelected?("")
                         }
                     }
 
