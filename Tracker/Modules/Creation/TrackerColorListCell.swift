@@ -12,6 +12,7 @@ final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, U
     // MARK: - Definition
     private weak var delegate: TrackerCreationViewController?
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private var selectedColor: UIColor?
     
     private var colors: [UIColor] = [
         .ypSelection1, .ypSelection2, .ypSelection3, .ypSelection4, .ypSelection5, .ypSelection6,
@@ -20,9 +21,11 @@ final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, U
     ]
     
     // MARK: - Lifecycle
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerColorListCell.reuseIdentifier, delegate: TrackerCreationViewController?) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerColorListCell.reuseIdentifier, delegate: TrackerCreationViewController?,
+         color: UIColor? = nil) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.delegate = delegate
+        selectedColor = color
         configureUI()
         configureLayout()
     }
@@ -41,6 +44,13 @@ final class TrackerColorListCell: UITableViewCell, UICollectionViewDataSource, U
         
         let color = colors[indexPath.row]
         cell.configure(color: color)
+                
+        if let selectedColor {
+            if UIColorMarshalling.compare(color1: selectedColor, color2: color) {
+                collectionView.selectItem(at: indexPath, animated: false, scrollPosition: UICollectionView.ScrollPosition.centeredHorizontally)
+            }
+        }
+                                        
         return cell
     }
     
