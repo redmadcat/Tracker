@@ -9,11 +9,12 @@ import UIKit
 
 final class TrackerCategoryCell: UITableViewCell {
     // MARK: - Lifecycle
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerCategoryCell.reuseIdentifier) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String? = TrackerCategoryCell.reuseIdentifier, categoryHeader: String? = nil) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
         selectionStyle = .none
         textLabel?.text = "Категория"
+        detailTextLabel?.text = categoryHeader
         textLabel?.textColor = .ypBlack
         detailTextLabel?.font = .systemFont(ofSize: 17)
         detailTextLabel?.textColor = .ypGray
