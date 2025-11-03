@@ -122,10 +122,18 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                     
                     if let category = self.visibleCategories[safe: indexPath.section],
                        let tracker = category.trackers[safe: indexPath.item] {
-                    
+                        let daysCounter = try? dataProvider?.count(at: tracker.id)
+                        
                         let creationViewController = TrackerCreationViewController()
                         creationViewController.dataProvider = dataProvider
-                        creationViewController.edit(tracker, with: category)
+                        creationViewController.edit(tracker, with: category, daysCount: daysCounter ?? 0)
+                        creationViewController.onTrackerEdited = { newCategory, oldCategory in
+                            guard let tracker = newCategory.trackers.first,
+                                  let oldCategory else { return }
+                            self.removeTracker(tracker, from: oldCategory)
+                            self.updateTracker(tracker, for: newCategory)
+                            try? self.dataProvider?.update(tracker, category: newCategory)
+                        }
                         creationViewController.modalPresentationStyle = .pageSheet
                         navigationController?.present(creationViewController, animated: true, completion: nil)
                     }
@@ -139,11 +147,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                         if var category = self.visibleCategories[safe: indexPath.section] {
                             var trackers = category.trackers
                             let tracker = trackers.remove(at: indexPath.row)
-                            try? self.dataProvider?.delete(tracker)
-                                                            
+                                                                                        
                             category = TrackerCategory(header: category.header, trackers: trackers)
                             self.categories = self.categories.map({ $0.header == category.header ? category : $0 })
-                            self.collectionView.reloadData()
+                            try? self.dataProvider?.delete(tracker)
                         }
                     }
 
@@ -155,7 +162,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             ])
         })
     }
-        
+    
     // MARK: - TrackerCardCellDelegate
     func setCompletionTo(completion: Bool, with id: UUID, at indexPath: IndexPath) {
         analyticsService.report(event: "didTapTrackButton", params: ["event":"click", "screen":"Main", "item":"track"])
@@ -310,6 +317,31 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             showError(NSLocalizedString("save_changes_error", comment: "Save changes error message"))
             return
         }
+    }
+    
+    private func removeTracker(_ tracker: Tracker, from previousCategory: TrackerCategory) {
+        let tempCategory = self.categories.first(where: { $0.header == previousCategory.header })
+        if var trackers = tempCategory?.trackers,
+            let tempCategory {
+            trackers.removeAll(where: { $0.id == tracker.id })
+            let updatedCategory = TrackerCategory(header: tempCategory.header, trackers: trackers)
+            self.categories = self.categories.map({ $0.header == updatedCategory.header ? updatedCategory : $0 })
+        }
+    }
+    
+    private func updateTracker(_ tracker: Tracker, for newCategory: TrackerCategory) {
+        if let existCategory = self.checkExistingCategory(category: newCategory) {
+            var trackers = existCategory.trackers
+            trackers.removeAll(where: { $0.id == tracker.id })
+            trackers.append(tracker)
+            let category = TrackerCategory(header: existCategory.header, trackers: trackers)
+            self.categories = self.categories.map({ $0.header == category.header ? category : $0 })
+        } else {
+            let trackers = newCategory.trackers
+            let newCategory = TrackerCategory(header: newCategory.header, trackers: trackers)
+            self.categories.append(newCategory)
+        }
+        collectionView.reloadData()
     }
         
     // MARK: - Actions
