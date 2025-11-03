@@ -11,19 +11,28 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     // MARK: - Definition
     var dataProvider: TrackerDataProviderProtocol?
     private var editMode: Bool = false
+    private var oldCategory: TrackerCategory?
     private lazy var tableView = UITableView.init(frame: .zero, style: UITableView.Style.plain)
     private lazy var footerView = UIStackView()
+    
     private lazy var cancelButton = UIButton()
     private lazy var createButton = UIButton()
     
     private lazy var headerLabel = UILabel(
-        text:  self.editMode ? "Редактирование привычки" : "Новая привычка",
+        text: self.editMode ? "Редактирование привычки" : "Новая привычка",
         textColor: .ypBlack,
         font:.systemFont(ofSize: 16, weight: .medium),
         textAlighment: .center)
-        
+    
+    private let counterLabel = UILabel(
+        text: "",
+        textColor: .ypBlack,
+        font:.systemFont(ofSize: 32, weight: .bold),
+        textAlighment: .center)
+            
     private let textLengthLimit = 38
     private var warningCellVisible: Bool = false
+    private var trackerId: UUID?
     private var selectedCategory: String?
     private var selectedDays = [Int]()
     private var trackerName: String?
@@ -31,6 +40,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     private var trackerColor: UIColor?
         
     var onTrackerCreated: ((TrackerCategory) -> Void)?
+    var onTrackerEdited: ((TrackerCategory, TrackerCategory?) -> Void)?
             
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -41,8 +51,12 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
         updateCreateButtonStatus()
     }
     
-    func edit(_ tracker: Tracker, with category: TrackerCategory) {
+    func edit(_ tracker: Tracker, with category: TrackerCategory, daysCount: Int) {
         editMode = true
+        counterLabel.text = String.localizedStringWithFormat(
+            NSLocalizedString("numberOfDays", comment: "Number of days"), daysCount)
+        oldCategory = category
+        trackerId = tracker.id
         trackerName = tracker.name
         selectedDays = tracker.schedule
         trackerEmoji = tracker.emoji
@@ -182,12 +196,22 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     private func configureLayout() {
+        if editMode {
+            view.addSubview(counterLabel)
+            
+            NSLayoutConstraint.activate([
+                counterLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 38),
+                counterLabel.heightAnchor.constraint(equalToConstant: 38),
+                counterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            ])
+        }
+                                
         NSLayoutConstraint.activate([
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 34),
             headerLabel.heightAnchor.constraint(equalToConstant: 22),
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            tableView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 38),
+                                                            
+            tableView.topAnchor.constraint(equalTo: editMode ? counterLabel.bottomAnchor : headerLabel.bottomAnchor, constant: 38),
             tableView.bottomAnchor.constraint(equalTo: footerView.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -265,9 +289,9 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     @objc private func createButtonTapped() {
         if let trackerName, let trackerEmoji, let trackerColor {
             var trackers = [Tracker]()
-            trackers.append(Tracker(id: UUID(), name: trackerName, color: trackerColor, emoji: trackerEmoji, schedule: selectedDays))
+            trackers.append(Tracker(id: trackerId ?? UUID(), name: trackerName, color: trackerColor, emoji: trackerEmoji, schedule: selectedDays))
             let category = TrackerCategory(header: selectedCategory ?? "", trackers: trackers)
-            onTrackerCreated?(category)
+            editMode ? onTrackerEdited?(category, oldCategory) : onTrackerCreated?(category)
         }
         dismiss(animated: true)
     }
