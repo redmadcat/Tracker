@@ -50,4 +50,18 @@ final class TrackerStore: TrackerStoreProtocol {
             try context.save()
         }
     }
+    
+    func update(_ tracker: Tracker, with category: TrackerCategoryCoreData) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", tracker.id as CVarArg)
+        
+        if let record = try? context.fetch(request).first {
+            record.name = tracker.name
+            record.emoji = tracker.emoji
+            record.color = UIColorMarshalling.hexString(from: tracker.color)
+            record.schedule = tracker.schedule.map { String($0) }.joined(separator: "")
+            record.category = category
+            try context.save()
+        }
+    }
 }
