@@ -142,8 +142,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                     guard let self else { return }
                     self.analyticsService.report(event: "didSelectDeleteTracker", params: ["event":"click", "screen":"Main", "item":"delete"])
                     
-                    let deleteAlert = UIAlertController(title: "Уверены что хотите удалить трекер?", message: nil, preferredStyle: UIAlertController.Style.actionSheet)
-                    let removeAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+                    let deleteAlert = UIAlertController(title: NSLocalizedString("delete_alert_title", comment: "Delete alert title"), message: nil, preferredStyle: UIAlertController.Style.actionSheet)
+                    let removeAction = UIAlertAction(title: NSLocalizedString("delete_action", comment: "Delete action"), style: .destructive) { _ in
                         if var category = self.visibleCategories[safe: indexPath.section] {
                             var trackers = category.trackers
                             let tracker = trackers.remove(at: indexPath.row)
@@ -154,7 +154,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                         }
                     }
 
-                    let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+                    let cancelAction = UIAlertAction(title: NSLocalizedString("cancel_action", comment: "Cancel action"), style: .cancel, handler: nil)
                     deleteAlert.addAction(removeAction)
                     deleteAlert.addAction(cancelAction)
                     self.present(deleteAlert, animated: true, completion: nil)

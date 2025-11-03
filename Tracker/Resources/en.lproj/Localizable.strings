@@ -17,3 +17,6 @@
 "default_category" = "No Category";
 "menu_action_edit" = "Edit";
 "menu_action_delete" = "Delete";
+"delete_alert_title" = "Are you sure want to delete the tracker?";
+"delete_action" = "Delete";
+"cancel_action" = "Cancel";

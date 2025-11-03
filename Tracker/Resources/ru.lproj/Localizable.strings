@@ -17,3 +17,6 @@
 "default_category" = "Без категории";
 "menu_action_edit" = "Редактировать";
 "menu_action_delete" = "Удалить";
+"delete_alert_title" = "Уверены что хотите удалить трекер?";
+"delete_action" = "Удалить";
+"cancel_action" = "Отменить";
