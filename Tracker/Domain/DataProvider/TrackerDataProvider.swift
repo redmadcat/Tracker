@@ -100,6 +100,12 @@ final class TrackerDataProvider: NSObject, NSFetchedResultsControllerDelegate, T
         try categoryStore.update(trackerCategory, with: header)
     }
     
+    func update(_ tracker: Tracker, category: TrackerCategory) throws {
+        let categoryCoreData = try categoryStore.add(category)
+        try trackerStore.update(tracker, with: categoryCoreData)
+    }
+        
+    
     func isCompleted(for trackerId: UUID, at date: Date) throws -> Bool? {
         return try recordStore.isCompleted(for: trackerId, at: date)
     }
