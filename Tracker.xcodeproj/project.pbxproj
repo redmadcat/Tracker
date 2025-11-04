@@ -262,6 +262,7 @@
 				94124B5C2E9639BA00DC18A8 /* CoreData */,
 				9425F0962E6AC8A1009A884A /* Extensions */,
 				9425F0952E69B6BA009A884A /* Modules */,
+				9468BEB12E6EB43300419591 /* TabBar */,
 				9425F0942E69B5A9009A884A /* Resources */,
 			);
 			path = Tracker;
@@ -325,7 +326,6 @@
 				94ED0F7E2E826E0400D155C3 /* TrackerScheduleViewController.swift */,
 				94ED0F822E8281FA00D155C3 /* TrackerWeekdayCell.swift */,
 				94ED0F8A2E82CF2100D155C3 /* TrackerWeekdayCellDelegate.swift */,
-				9468BEB12E6EB43300419591 /* TabBar */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";

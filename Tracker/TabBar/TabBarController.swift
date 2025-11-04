@@ -15,12 +15,14 @@ final class TabBarController: UITabBarController {
         configureTabBar()
     }
     
+    // MARK: - Private func
     private func configureTabBarItems() {
         let dataProvider = TrackerDataProvider(TrackerCategoryStore(), TrackerStore(), TrackerRecordStore(),
                                                with: DomainDataLayer.shared.context)
         let trackersViewController = TrackersViewController()
         trackersViewController.dataProvider = dataProvider
         let statsViewController = StatsViewController()
+        statsViewController.recordStore = TrackerRecordStore()
         let navigationController = UINavigationController(rootViewController: trackersViewController)
         
         navigationController.tabBarItem = UITabBarItem(
