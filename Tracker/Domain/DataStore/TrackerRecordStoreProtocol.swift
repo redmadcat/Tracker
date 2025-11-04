@@ -13,4 +13,5 @@ protocol TrackerRecordStoreProtocol {
     func delete(trackerRecordAt id: UUID) throws
     func isCompleted(for trackerId: UUID, at date: Date) throws -> Bool?
     func count(at trackerId: UUID) throws -> Int
+    func completedCount() throws -> Int
 }

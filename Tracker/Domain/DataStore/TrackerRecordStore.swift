@@ -67,4 +67,9 @@ final class TrackerRecordStore: TrackerRecordStoreProtocol {
         
         return try context.count(for: request)
     }
+    
+    func completedCount() throws -> Int {
+        let fetchRequest = TrackerRecordCoreData.fetchRequest()
+        return try context.count(for: fetchRequest)
+    }
 }
