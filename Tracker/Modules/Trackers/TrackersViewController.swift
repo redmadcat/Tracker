@@ -229,6 +229,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         collectionView.register(TrackerCardCell.self, forCellWithReuseIdentifier: TrackerCardCell.reuseIdentifier)
         collectionView.register(TrackerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackerHeaderView.reuseIdentifier)
         collectionView.backgroundColor = .clear
+        collectionView.contentInset.bottom = 100
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         // datePicker
