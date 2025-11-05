@@ -287,7 +287,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         // datePicker
         datePicker.preferredDatePickerStyle = .compact
         datePicker.datePickerMode = .date
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = Locale.current
         datePicker.addTarget(self, action: #selector (dateChanged(_:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         
