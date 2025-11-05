@@ -56,6 +56,8 @@
 		946A1E332EAF7E800072C166 /* OnboardingFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E322EAF7E690072C166 /* OnboardingFirstViewController.swift */; };
 		946A1E352EAF7EAC0072C166 /* OnboardingSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E342EAF7EA00072C166 /* OnboardingSecondViewController.swift */; };
 		946A1E372EAF91D80072C166 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946A1E362EAF91CA0072C166 /* OnboardingViewController.swift */; };
+		94896DF72EBB372E00205374 /* TrackerFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94896DF62EBB371E00205374 /* TrackerFilterViewController.swift */; };
+		94896DF92EBB38A600205374 /* TrackerFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94896DF82EBB389E00205374 /* TrackerFilterCell.swift */; };
 		949866442E928389005C5C42 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866432E928380005C5C42 /* Date+Extensions.swift */; };
 		9498664A2E92C69E005C5C42 /* TrackerCategory+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949866492E92C693005C5C42 /* TrackerCategory+Mock.swift */; };
 		94C109BB2E8D1C9900589CB7 /* TrackerCardCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */; };
@@ -143,6 +145,8 @@
 		946A1E322EAF7E690072C166 /* OnboardingFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirstViewController.swift; sourceTree = "<group>"; };
 		946A1E342EAF7EA00072C166 /* OnboardingSecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSecondViewController.swift; sourceTree = "<group>"; };
 		946A1E362EAF91CA0072C166 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		94896DF62EBB371E00205374 /* TrackerFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerFilterViewController.swift; sourceTree = "<group>"; };
+		94896DF82EBB389E00205374 /* TrackerFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerFilterCell.swift; sourceTree = "<group>"; };
 		949866432E928380005C5C42 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		949866492E92C693005C5C42 /* TrackerCategory+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrackerCategory+Mock.swift"; sourceTree = "<group>"; };
 		94C109BA2E8D1C9000589CB7 /* TrackerCardCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCardCellDelegate.swift; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 		9425F0952E69B6BA009A884A /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				94896DF52EBB370400205374 /* Filter */,
 				94F0661E2EB95FC4004321B8 /* Stats */,
 				946A1E2B2EAF6D4E0072C166 /* Splash */,
 				946A1E2F2EAF7DBA0072C166 /* Onboarding */,
@@ -423,6 +428,15 @@
 				946A1E302EAF7DDD0072C166 /* OnboardingPageViewController.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		94896DF52EBB370400205374 /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				94896DF82EBB389E00205374 /* TrackerFilterCell.swift */,
+				94896DF62EBB371E00205374 /* TrackerFilterViewController.swift */,
+			);
+			path = Filter;
 			sourceTree = "<group>";
 		};
 		94F0661E2EB95FC4004321B8 /* Stats */ = {
@@ -623,8 +637,10 @@
 				94ED0F872E82C01500D155C3 /* StringProtocol+Extensions.swift in Sources */,
 				94124B8A2E9E293100DC18A8 /* UIColorMarshalling.swift in Sources */,
 				94124B832E97D21C00DC18A8 /* TrackerDataProvider.swift in Sources */,
+				94896DF72EBB372E00205374 /* TrackerFilterViewController.swift in Sources */,
 				94124B872E97EB5D00DC18A8 /* TrackerDataProviderDelegate.swift in Sources */,
 				942058BC2EA5391600BD2AEE /* TrackerStoreProtocol.swift in Sources */,
+				94896DF92EBB38A600205374 /* TrackerFilterCell.swift in Sources */,
 				94ED0F7F2E826E0E00D155C3 /* TrackerScheduleViewController.swift in Sources */,
 				946A1E202EA8CF8C0072C166 /* TrackerTableViewController.swift in Sources */,
 				942058B72EA537A300BD2AEE /* TrackerRecordStoreProtocol.swift in Sources */,
