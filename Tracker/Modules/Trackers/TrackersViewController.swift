@@ -16,10 +16,18 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private lazy var datePicker = UIDatePicker()
     private lazy var stubStackView = UIStackView()
+    private lazy var stubStackView2 = UIStackView()
     private let imageView = UIImageView()
+    private let imageView2 = UIImageView()
     private lazy var filterButton = UIButton()
     private let stubLabel = UILabel(
         text: NSLocalizedString("empty_trackers_stub", comment: "Empty trackers list stub label"),
+        textColor: .ypBlack,
+        font:.systemFont(ofSize: 12, weight: .medium),
+        textAlighment: .center)
+    
+    private let stubLabel2 = UILabel(
+        text: NSLocalizedString("empty_trackers_search_stub", comment: "Empty trackers list search stub label"),
         textColor: .ypBlack,
         font:.systemFont(ofSize: 12, weight: .medium),
         textAlighment: .center)
@@ -93,21 +101,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         if let searchText = searchController.searchBar.text, !searchText.isEmpty {
             self.searchText = searchText
             collectionView.reloadData()
-//            filteredData = data.filter { $0.lowercased().contains(searchText.lowercased()) }
         } else {
             self.searchText = ""
             collectionView.reloadData()
-//            filteredData = data
         }
-//        collectionView.reloadData()
+        updateStubIsHiddenStatus()
     }
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        print("search bar button click")
-//    }
-//        
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        print("search bar textDidChange")
-//    }
     
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -229,6 +228,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             return
         }
         collectionView.reloadData()
+        updateStubIsHiddenStatus()
     }
     
     // MARK: - TrackerDataProviderDelegate
@@ -297,16 +297,29 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         stubStackView.backgroundColor = .clear
         stubStackView.translatesAutoresizingMaskIntoConstraints = false
         
+        // stubStackView2
+        stubStackView2.distribution = .equalCentering
+        stubStackView2.axis = .vertical
+        stubStackView2.backgroundColor = .clear
+        stubStackView2.translatesAutoresizingMaskIntoConstraints = false
+        
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "DizzyScreenLogo")
+        
+        // imageView2
+        imageView2.translatesAutoresizingMaskIntoConstraints = false
+        imageView2.image = UIImage(named: "NoResultsScreenLogo")
         
         view.backgroundColor = .ypWhite
         
         // hierarchy
         stubStackView.addSubview(imageView)
         stubStackView.addSubview(stubLabel)
+        stubStackView2.addSubview(imageView2)
+        stubStackView2.addSubview(stubLabel2)
         view.addSubview(stubStackView)
+        view.addSubview(stubStackView2)
         view.addSubview(collectionView)
         view.addSubview(filterButton)
     }
@@ -316,6 +329,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             stubStackView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             stubStackView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             stubStackView.heightAnchor.constraint(equalToConstant: 106),
+            
+            stubStackView2.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stubStackView2.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            stubStackView2.heightAnchor.constraint(equalToConstant: 106),
             
             datePicker.heightAnchor.constraint(equalToConstant: 34),
                         
@@ -328,9 +345,17 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             imageView.widthAnchor.constraint(equalToConstant: 80),
             imageView.heightAnchor.constraint(equalToConstant: 80),
             
+            imageView2.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView2.widthAnchor.constraint(equalToConstant: 80),
+            imageView2.heightAnchor.constraint(equalToConstant: 80),
+            
             stubLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             stubLabel.leadingAnchor.constraint(equalTo: stubStackView.leadingAnchor, constant: 16),
             stubLabel.trailingAnchor.constraint(equalTo: stubStackView.trailingAnchor, constant: -16),
+            
+            stubLabel2.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            stubLabel2.leadingAnchor.constraint(equalTo: stubStackView.leadingAnchor, constant: 16),
+            stubLabel2.trailingAnchor.constraint(equalTo: stubStackView.trailingAnchor, constant: -16),
                                                                                     
             filterButton.heightAnchor.constraint(equalToConstant: 50),
             filterButton.widthAnchor.constraint(equalToConstant: 114),
@@ -347,8 +372,15 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     private func updateStubIsHiddenStatus() {
-        let isHidden = visibleCategories.count > 0 ? true : false
-        stubStackView.isHidden = isHidden
+        stubStackView.isHidden = true
+        stubStackView2.isHidden = true
+        
+        if !categories.isEmpty && visibleCategories.isEmpty {
+            stubStackView2.isHidden = false
+        }
+        if categories.isEmpty {
+            stubStackView.isHidden = false
+        }
     }
     
     private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
@@ -395,6 +427,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             self.categories.append(newCategory)
         }
         collectionView.reloadData()
+        updateStubIsHiddenStatus()
     }
     
     private func highlightFilter() {
@@ -447,6 +480,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             }
             self.highlightFilter()
             self.collectionView.reloadData()
+            self.updateStubIsHiddenStatus()
         }
         filterViewController.modalPresentationStyle = .pageSheet
         navigationController?.present(filterViewController, animated: true, completion: {

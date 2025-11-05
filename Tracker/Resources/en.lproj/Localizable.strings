@@ -7,6 +7,7 @@
 */
 
 "empty_trackers_stub" = "What will be tracked?";
+"empty_trackers_search_stub" = "Nothing was found";
 "title_trackers" = "Trackers";
 "title_filters" = "Filters";
 "search_placeholder" = "Search";
