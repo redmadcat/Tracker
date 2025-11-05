@@ -9,6 +9,7 @@
 "empty_trackers_stub" = "Что будем отслеживать?";
 "empty_trackers_search_stub" = "Ничего не найдено";
 "title_trackers" = "Трекеры";
+"title_stats" = "Статистика";
 "title_filters" = "Фильтры";
 "search_placeholder" = "Поиск";
 "search_cancellation" = "Отменить";

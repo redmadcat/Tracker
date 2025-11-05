@@ -60,7 +60,7 @@ final class StatsViewController: UIViewController, UITableViewDataSource, UITabl
         // titleLabel
         titleLabel.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         titleLabel.textColor = .ypBlack
-        titleLabel.text = "Статистика"
+        titleLabel.text = NSLocalizedString("title_stats", comment: "Stats title label")
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // tableView

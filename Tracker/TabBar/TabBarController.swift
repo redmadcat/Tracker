@@ -26,13 +26,13 @@ final class TabBarController: UITabBarController {
         let navigationController = UINavigationController(rootViewController: trackersViewController)
         
         navigationController.tabBarItem = UITabBarItem(
-            title: "Трекеры",
+            title: NSLocalizedString("title_trackers", comment: "Trackers title label"),
             image: UIImage(named: "TrackersNoActive"),
             selectedImage: nil
         )
         
         statsViewController.tabBarItem = UITabBarItem(
-            title: "Статистика",
+            title: NSLocalizedString("title_stats", comment: "Stats title label"),
             image: UIImage(named: "StatsNoActive"),
             selectedImage: nil
         )
