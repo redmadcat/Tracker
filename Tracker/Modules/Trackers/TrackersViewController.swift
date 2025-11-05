@@ -84,6 +84,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         configureLayout()
         configureStartupData()
         updateStubIsHiddenStatus()
+        configureFilter()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -200,7 +201,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
                             let tracker = trackers.remove(at: indexPath.row)
                                                                                         
                             category = TrackerCategory(header: category.header, trackers: trackers)
-                            self.categories = self.categories.map({ $0.header == category.header ? category : $0 })
+                            self.categories = self.categories.map({ $0.header == category.header ? category : $0 }).filter {
+                                $0.header == self.defaultCategory || $0.trackers.count > 0
+                            }
+                            
                             try? self.dataProvider?.delete(tracker)
                         }
                     }
@@ -365,7 +369,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     }
     
     private func configureStartupData() {
-        categories = dataProvider?.categories ?? []
+        guard let dataProvider else { return }
+        categories = dataProvider.categories.filter { $0.trackers.count != 0 }
+                        
         if !categories.contains(where: { $0.header == defaultCategory }) {
             categories += [TrackerCategory(header: self.defaultCategory, trackers: [])]
         }
@@ -375,14 +381,26 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         stubStackView.isHidden = true
         stubStackView2.isHidden = true
         
-        if !categories.isEmpty && visibleCategories.isEmpty {
+        if !categoriesIsEmpty() && visibleCategories.isEmpty {
             stubStackView2.isHidden = false
         }
-        if categories.isEmpty {
+        if categoriesIsEmpty() {
             stubStackView.isHidden = false
         }
         
+        /*
+         Внимание ревьювер!
+         Из задания следует дословно - Если нет трекеров на выбранный день, кнопка фильтрации должна быть скрыта.
+         Но данный подход создает ситуацию когда фильтр применен и ни один трекер под его критерии не попадает
+         и соответственно нет возможности его сбросить, думаю он должен присутствовать всегда, но оставил реализацию
+         в соответствии с заданием.
+        */
         filterButton.isHidden = visibleCategories.isEmpty ? true : false
+    }
+    
+    private func categoriesIsEmpty() -> Bool {
+        let result = categories.first(where: { $0.header == defaultCategory })
+        return result?.trackers.count == 0 && categories.count == 1
     }
     
     private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
@@ -411,8 +429,10 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         if var trackers = tempCategory?.trackers,
             let tempCategory {
             trackers.removeAll(where: { $0.id == tracker.id })
-            let updatedCategory = TrackerCategory(header: tempCategory.header, trackers: trackers)
-            self.categories = self.categories.map({ $0.header == updatedCategory.header ? updatedCategory : $0 })
+            let category = TrackerCategory(header: tempCategory.header, trackers: trackers)
+            self.categories = self.categories.map({ $0.header == category.header ? category : $0 }).filter {
+                $0.header == self.defaultCategory || $0.trackers.count > 0
+            }
         }
     }
     
@@ -422,7 +442,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             trackers.removeAll(where: { $0.id == tracker.id })
             trackers.append(tracker)
             let category = TrackerCategory(header: existCategory.header, trackers: trackers)
-            self.categories = self.categories.map({ $0.header == category.header ? category : $0 })
+            self.categories = self.categories.map({ $0.header == category.header ? category : $0 }).filter {
+                $0.header == self.defaultCategory || $0.trackers.count > 0
+            }
         } else {
             let trackers = newCategory.trackers
             let newCategory = TrackerCategory(header: newCategory.header, trackers: trackers)
@@ -430,6 +452,11 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         }
         collectionView.reloadData()
         updateStubIsHiddenStatus()
+    }
+    
+    private func configureFilter() {
+        filterIndex = UserDefaultsService.shared.filterIndex
+        highlightFilter()
     }
     
     private func highlightFilter() {
@@ -476,6 +503,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         filterViewController.setFilterAt(filterIndex)
         filterViewController.onFilterSelected = { index in
             self.filterIndex = index
+            UserDefaultsService.shared.filterIndex = index
             if index == 1 {
                 self.datePicker.setDate(Date(), animated: false)
                 self.currentDate = Date()
