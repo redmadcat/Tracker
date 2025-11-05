@@ -9,6 +9,7 @@ import UIKit
 import Foundation
 
 final class TrackersViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
+                                    UISearchResultsUpdating,
                                     TrackerCardCellDelegate, TrackerDataProviderDelegate {
     // MARK: - Definition
     var dataProvider: TrackerDataProviderProtocol?
@@ -26,12 +27,42 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     private let defaultCategory = NSLocalizedString("default_category", comment: "Default category header")
     private var categories: [TrackerCategory] = []
     private var currentDate: Date = Date()
-    
+    private var filterIndex: Int = 0
+    private var searchText: String = ""
+        
     private var visibleCategories: [TrackerCategory] {
-        return categories.compactMap { category in
-            guard let weekday = Calendar.weekdayNumber(for: currentDate) else { return nil }
-            let filteredResults = category.trackers.filter { $0.schedule.contains(weekday) }
-            return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
+        switch filterIndex {
+        case 0, 1:
+            return categories.compactMap { category in
+                guard let weekday = Calendar.weekdayNumber(for: currentDate) else { return nil }
+                let filteredResults = category.trackers.filter {
+                    let textPredicate = self.searchText.isEmpty || $0.name.lowercased().localizedStandardContains(searchText)
+                    return $0.schedule.contains(weekday) && textPredicate
+                }
+                return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
+            }
+        case 2:
+            return categories.compactMap { category in
+                let filteredResults = category.trackers.filter {
+                    let completedToday = try? dataProvider?.isCompleted(for: $0.id, at: currentDate)
+                    let textPredicate = self.searchText.isEmpty || $0.name.lowercased().localizedStandardContains(searchText)
+                    return completedToday ?? false && textPredicate
+                }
+                return filteredResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: filteredResults)
+            }
+        case 3:
+            return categories.compactMap { category in
+                guard let weekday = Calendar.weekdayNumber(for: currentDate) else { return nil }
+                let filteredResults = category.trackers.filter { $0.schedule.contains(weekday) }
+                let finalResults = filteredResults.filter {
+                    let completedToday = try? dataProvider?.isCompleted(for: $0.id, at: currentDate)
+                    let textPredicate = self.searchText.isEmpty || $0.name.lowercased().localizedStandardContains(searchText)
+                    return completedToday == nil ?? false && textPredicate
+                }
+                return finalResults.isEmpty ? nil : TrackerCategory(header: category.header, trackers: finalResults)
+            }
+        default:
+            return [TrackerCategory(header: "", trackers: [])]
         }
     }
     
@@ -56,6 +87,27 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         super.viewDidDisappear(animated)
         analyticsService.report(event: "didDisappearTrackersViewController", params: ["event":"close", "screen":"Main"])
     }
+    
+    // MARK: - UISearchResultsUpdating
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+            self.searchText = searchText
+            collectionView.reloadData()
+//            filteredData = data.filter { $0.lowercased().contains(searchText.lowercased()) }
+        } else {
+            self.searchText = ""
+            collectionView.reloadData()
+//            filteredData = data
+        }
+//        collectionView.reloadData()
+    }
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        print("search bar button click")
+//    }
+//        
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        print("search bar textDidChange")
+//    }
     
     // MARK: - UICollectionViewDataSource
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -176,8 +228,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
             showError(NSLocalizedString("save_changes_error", comment: "Save changes error message"))
             return
         }
-        
-        collectionView.reloadItems(at: [indexPath])
+        collectionView.reloadData()
     }
     
     // MARK: - TrackerDataProviderDelegate
@@ -205,11 +256,12 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         let rightButton = UIBarButtonItem(customView: datePicker)
         
         // searchBar
-        let searchBar = UISearchController(searchResultsController: nil)
-        searchBar.obscuresBackgroundDuringPresentation = false
-        searchBar.searchBar.placeholder = NSLocalizedString("search_placeholder", comment: "Search bar placeholder")
-        searchBar.hidesNavigationBarDuringPresentation = false
-        searchBar.searchBar.setValue(NSLocalizedString("search_cancellation", comment: "Search cancellation button"), forKey: "cancelButtonText")
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = NSLocalizedString("search_placeholder", comment: "Search bar placeholder")
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.setValue(NSLocalizedString("search_cancellation", comment: "Search cancellation button"), forKey: "cancelButtonText")
         
         // filterButton
         filterButton.setTitle(NSLocalizedString("title_filters", comment: "Filters button title"), for: .normal)
@@ -221,7 +273,7 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
-        navigationItem.searchController = searchBar
+        navigationItem.searchController = searchController
         
         // collectionView
         collectionView.dataSource = self
@@ -344,6 +396,15 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         }
         collectionView.reloadData()
     }
+    
+    private func highlightFilter() {
+        switch self.filterIndex {
+        case 2, 3:
+            self.filterButton.titleLabel?.textColor = .ypRed
+        default:
+            self.filterButton.titleLabel?.textColor = .ypWhite
+        }
+    }
         
     // MARK: - Actions
     @objc private func dateChanged(_ sender: UIDatePicker) {
@@ -375,6 +436,22 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
     
     @objc private func didTapFilterButton() {
         analyticsService.report(event: "didTapFilterButton", params: ["event":"click", "screen":"Main", "item":"filter"])
+        
+        let filterViewController = TrackerFilterViewController()
+        filterViewController.setFilterAt(filterIndex)
+        filterViewController.onFilterSelected = { index in
+            self.filterIndex = index
+            if index == 1 {
+                self.datePicker.setDate(Date(), animated: false)
+                self.currentDate = Date()
+            }
+            self.highlightFilter()
+            self.collectionView.reloadData()
+        }
+        filterViewController.modalPresentationStyle = .pageSheet
+        navigationController?.present(filterViewController, animated: true, completion: {
+            self.highlightFilter()
+        })
     }
 }
 
