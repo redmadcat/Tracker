@@ -381,6 +381,8 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         if categories.isEmpty {
             stubStackView.isHidden = false
         }
+        
+        filterButton.isHidden = visibleCategories.isEmpty ? true : false
     }
     
     private func checkExistingCategory(category: TrackerCategory) -> TrackerCategory? {
