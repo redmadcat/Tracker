@@ -74,7 +74,7 @@ final class TrackerCardCell: UICollectionViewCell {
         
         // titleLabel
         titleLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        titleLabel.textColor = .ypWhite
+        titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
