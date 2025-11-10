@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Foundation
 
 final class StatsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     // MARK: - Definition
@@ -79,7 +78,7 @@ final class StatsViewController: UIViewController, UITableViewDataSource, UITabl
         
         // imageView
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "EmptyScreenLogo")
+        imageView.image = UIImage(resource: .emptyScreenLogo)
         
         view.backgroundColor = .ypWhite
         

@@ -33,7 +33,7 @@ final class UIColorMarshalling {
     }
     
     static func compare(color1: UIColor, color2: UIColor) -> Bool {
-        return UIColorMarshalling.hexString(from: color1) == UIColorMarshalling.hexString(from: color2)
+        UIColorMarshalling.hexString(from: color1) == UIColorMarshalling.hexString(from: color2)
     }
     
     static let gradient = [

@@ -384,18 +384,9 @@ final class TrackersViewController: UIViewController, UICollectionViewDataSource
         if !categoriesIsEmpty() && visibleCategories.isEmpty {
             stubStackView2.isHidden = false
         }
-        if categoriesIsEmpty() {
-            stubStackView.isHidden = false
-        }
         
-        /*
-         Внимание ревьювер!
-         Из задания следует дословно - Если нет трекеров на выбранный день, кнопка фильтрации должна быть скрыта.
-         Но данный подход создает ситуацию когда фильтр применен и ни один трекер под его критерии не попадает
-         и соответственно нет возможности его сбросить, думаю он должен присутствовать всегда, но оставил реализацию
-         в соответствии с заданием.
-        */
-        filterButton.isHidden = visibleCategories.isEmpty ? true : false
+        stubStackView.isHidden = !categoriesIsEmpty()
+        filterButton.isHidden = visibleCategories.isEmpty
     }
     
     private func categoriesIsEmpty() -> Bool {

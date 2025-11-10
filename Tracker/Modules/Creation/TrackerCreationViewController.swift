@@ -248,7 +248,7 @@ final class TrackerCreationViewController: UIViewController, UITableViewDataSour
     }
     
     private func configureCell(at cell: TrackerScheduleCell) {
-        if editMode { return }
+        guard editMode else { return }
         let scheduleViewController = TrackerScheduleViewController()
         scheduleViewController.setDays(selectedDays)
         scheduleViewController.onScheduleSelected = { selectedDays in
