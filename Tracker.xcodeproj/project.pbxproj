@@ -453,17 +453,9 @@
 			path = TrackerTests;
 			sourceTree = "<group>";
 		};
-		94F066462EBA9144004321B8 /* TrackerTests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TrackerTests;
-			sourceTree = "<group>";
-		};
 		94F066472EBA9144004321B8 /* __Snapshots__ */ = {
 			isa = PBXGroup;
 			children = (
-				94F066462EBA9144004321B8 /* TrackerTests */,
 			);
 			path = __Snapshots__;
 			sourceTree = "<group>";
